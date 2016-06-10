@@ -24,8 +24,8 @@
       <file leaf-file-name="OptionsData" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/OptionsData">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="12" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="12" />
+            <state relative-caret-position="60">
+              <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -34,9 +34,19 @@
       <file leaf-file-name="State" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/State">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="542">
-              <caret line="307" column="38" selection-start-line="307" selection-start-column="38" selection-end-line="307" selection-end-column="38" />
-              <folding />
+            <state relative-caret-position="527">
+              <caret line="419" column="27" selection-start-line="419" selection-start-column="27" selection-end-line="419" selection-end-column="27" />
+              <folding>
+                <element signature="e#30#864#0" expanded="false" />
+                <element signature="e#885#1106#0" expanded="false" />
+                <element signature="e#1186#1346#0" expanded="false" />
+                <element signature="e#1409#1536#0" expanded="false" />
+                <element signature="e#1592#1765#0" expanded="false" />
+                <element signature="e#1850#2412#0" expanded="false" />
+                <element signature="e#2484#2924#0" expanded="false" />
+                <element signature="e#2960#4311#0" expanded="false" />
+                <element signature="e#4378#7842#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -68,9 +78,9 @@
       <list>
         <option value="$PROJECT_DIR$/data" />
         <option value="$PROJECT_DIR$/rewardData" />
+        <option value="$PROJECT_DIR$/transitionData" />
         <option value="$PROJECT_DIR$/OptionsData" />
         <option value="$PROJECT_DIR$/State" />
-        <option value="$PROJECT_DIR$/transitionData" />
       </list>
     </option>
   </component>
@@ -374,7 +384,7 @@
           <properties exception="BaseException" />
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="7" />
+      <option name="time" value="8" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -459,14 +469,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/OptionsData">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="12" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/State.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -475,10 +477,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rewardData">
+    <entry file="file://$PROJECT_DIR$/OptionsData">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="3" selection-start-line="3" selection-start-column="3" selection-end-line="3" selection-end-column="3" />
+        <state relative-caret-position="60">
+          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -491,11 +493,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/rewardData">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="3" selection-start-line="3" selection-start-column="3" selection-end-line="3" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENSE">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/State">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="542">
-          <caret line="307" column="38" selection-start-line="307" selection-start-column="38" selection-end-line="307" selection-end-column="38" />
-          <folding />
+        <state relative-caret-position="527">
+          <caret line="419" column="27" selection-start-line="419" selection-start-column="27" selection-end-line="419" selection-end-column="27" />
+          <folding>
+            <element signature="e#30#864#0" expanded="false" />
+            <element signature="e#885#1106#0" expanded="false" />
+            <element signature="e#1186#1346#0" expanded="false" />
+            <element signature="e#1409#1536#0" expanded="false" />
+            <element signature="e#1592#1765#0" expanded="false" />
+            <element signature="e#1850#2412#0" expanded="false" />
+            <element signature="e#2484#2924#0" expanded="false" />
+            <element signature="e#2960#4311#0" expanded="false" />
+            <element signature="e#4378#7842#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
