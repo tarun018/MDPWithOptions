@@ -148,10 +148,10 @@ class MDP:
     def calculateRewardForOption(self, state, option):
 
         sums = 0
-        print "State: " + str(state)
-        print "Option: " + str(option)
+        # print "State: " + str(state)
+        # print "Option: " + str(option)
         if state not in self.options[option].getInitiationSet():
-            print "Not in Initiation Set."
+            # print "Not in Initiation Set."
             return  0
 
         actionsavail = self.states[state].getPossibleActions()
@@ -161,9 +161,9 @@ class MDP:
 
         for act in actionsavail:
 
-            print
-            print "State: " + str(state)
-            print "Action: " + str(act.getIndex())
+            # print
+            # print "State: " + str(state)
+            # print "Action: " + str(act.getIndex())
             sumForAction = 0
             probOfAction = 0
             immReward = 0
@@ -175,7 +175,7 @@ class MDP:
                     probOfAction = x[2]
                     break
 
-            print "Prob Of Action: " + str(probOfAction)
+            # print "Prob Of Action: " + str(probOfAction)
 
             # if probOfAction == 0:
             #     avail = self.states[state].getPossibleActions()
@@ -189,14 +189,18 @@ class MDP:
                     immReward = x[1]
                     break
 
-            print "Imm Reward: " + str(immReward)
+            # print "Imm Reward: " + str(immReward)
 
             if probOfAction != 0:
 
                 transitions = self.states[state].getTransition()
+
+                # print "Transition Function for " + str(state) + " is: " + str(transitions)
                 for x in transitions:
                     if x[0] == act.getIndex() and x[2] != 0:
                         possibleStates.append((x[1], x[2]))
+
+                # print "Possible States from " + str(state) + " are: " + str(possibleStates)
 
                 for x in possibleStates:
 
@@ -205,37 +209,37 @@ class MDP:
                         product = 0
                         break
 
-                    print "Possible State: " + str(x)
+                    # print "Possible State: " + str(x)
 
 
                     sdash = self.states[x[0]]
                     prob = float(x[1])
 
-                    print "Sdash: " +str(sdash.getIndex())
-                    print "prob: " + str(prob)
+                    # print "Sdash: " +str(sdash.getIndex())
+                    # print "prob: " + str(prob)
 
                     beta_sdash = float(self.options[option].getBeta()[x[0]])
 
-                    print "Beta_sdash: " + str(1-beta_sdash)
+                    # print "Beta_sdash: " + str(1-beta_sdash)
 
                     if prob != 0 and (1-beta_sdash) != 0:
                         product = prob * (1 - float(beta_sdash)) * self.calculateRewardForOption(sdash.getIndex(), option)
 
-                    print "Product for this state: " + str(product)
+                    # print "Product for this state: " + str(product)
                     sumForAction += product
 
 
-                print "Sum for Action: " + str(sumForAction)
+                # print "Sum for Action: " + str(sumForAction)
 
                 sumForAction += immReward
 
                 sumForAction *= probOfAction
 
-                print "Final Sum For Action: " + str(sumForAction)
-                print
+                # print "Final Sum For Action: " + str(sumForAction)
+                # print
 
             else:
-                print "Prob of action is 0."
+                # print "Prob of action is 0."
                 sumForAction = 0
 
             # print immReward
@@ -246,11 +250,121 @@ class MDP:
             #     self.states[state].setPossibleActions(avail)
 
             sums += sumForAction
-            print "Sums: " + str(sums)
-            print
+            # print "Sums: " + str(sums)
+            # print
 
         return sums
 
+    def calculateTransitionForOption(self, state, option, statedash):
+
+        sums = 0
+        # print "State: " + str(state)
+        # print "Option: " + str(option)
+        # print "Statedash: " + str(statedash)
+        if state not in self.options[option].getInitiationSet():
+            # print "Not in Initiation Set."
+            return 0
+
+        actionsavail = self.states[state].getPossibleActions()
+
+        if len(actionsavail) == 0:
+            return 0
+
+        for act in actionsavail:
+
+            # print
+            # print "State: " + str(state)
+            # print "Action: " + str(act.getIndex())
+            sumForAction = 0
+            probOfAction = 0
+            possibleStates = []
+            actionSet = self.options[option].getPolicy()
+
+            for x in actionSet:
+                if x[0] == state and x[1] == act.getIndex():
+                    probOfAction = x[2]
+                    break
+
+            # print "Prob Of Action: " + str(probOfAction)
+
+            # if probOfAction == 0:
+            #     avail = self.states[state].getPossibleActions()
+            #     avail = filter(lambda a: a != act.getIndex(), avail)
+            #     self.states[state].setPossibleActions(avail)
+            #     continue
+
+            if probOfAction != 0:
+
+                transitions = self.states[state].getTransition()
+
+                # print "Transition Function for " + str(state) + " is: " + str(transitions)
+                for x in transitions:
+                    if x[0] == act.getIndex() and x[2] != 0:
+                        possibleStates.append((x[1], x[2]))
+
+                # print "Possible States from " + str(state) + " are: " + str(possibleStates)
+
+                for x in possibleStates:
+
+                    product = 0
+                    if len(possibleStates) == 0:
+                        break
+
+                    # print "Possible State: " + str(x)
+
+
+                    sdash = self.states[x[0]]
+                    prob = float(x[1])
+
+                    # print "Sdash: " +str(sdash.getIndex())
+                    # print "prob: " + str(prob)
+
+                    beta_sdash = float(self.options[option].getBeta()[x[0]])
+
+                    # print "1-Beta_sdash: " + str(1-beta_sdash)
+
+                    if prob != 0 and float(1 - beta_sdash) != 0:
+                        product += ((1 - float(beta_sdash)) * self.calculateTransitionForOption(sdash.getIndex(),
+                                                                                                 option, statedash))
+
+                    if prob != 0 and float(beta_sdash) != 0:
+                        product += (beta_sdash * self.delta(float(sdash.getIndex()), float(statedash)))
+
+                    product *= prob
+
+                    # print "Product for this state: " + str(product)
+                    sumForAction += product
+
+                # print "Sum for Action: " + str(sumForAction)
+
+                sumForAction *= probOfAction
+
+                # print "Final Sum For Action: " + str(sumForAction)
+                # print
+
+            else:
+                # print "Prob of action is 0."
+                sumForAction = 0
+
+            # print immReward
+            # print probOfAction
+            # if sumForAction <= 0:
+            #     avail = self.states[state].getPossibleActions()
+            #     avail.remove(act.getIndex())
+            #     self.states[state].setPossibleActions(avail)
+
+            sums += sumForAction
+            # print "Sums: " + str(sums)
+            # print
+
+        return sums
+
+
+    def delta(self, state, statedash):
+        if state == statedash:
+            return 1
+        else:
+            return 0
 
     def getStates(self):
         return self.states
@@ -298,4 +412,10 @@ class Driver:
     a.autoTransitionFunction()
     a.autoRewardFunction()
     a.setOptions()
-    print a.calculateRewardForOption(0,0)
+    # print a.calculateRewardForOption(3,0)
+    # print a.calculateRewardForOption(2,0)
+    # print a.calculateRewardForOption(1,0)
+    # print a.calculateRewardForOption(0,0)
+    for x in xrange(0,4):
+        for y in xrange(0,4):
+            print a.calculateTransitionForOption(x,0,y)
