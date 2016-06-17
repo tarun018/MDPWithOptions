@@ -72,6 +72,7 @@ class MDP:
     def __init__(self, numberOfStates, numberOfActions):
         self.numberOfStates = numberOfStates
         self.numberOfActions = numberOfActions
+        self.numberOfOptions = 0
         self.states = []
         self.actions = []
         self.options = []
@@ -92,177 +93,9 @@ class MDP:
         self.states[7].setTerminating(True)
         self.states[7].setUtility(-1)
 
-    # def northTransition(self):
-    #     tosend = []
-    #
-    #     a = self.actions[0]
-    #     for s in self.states:
-    #
-    #         if s.isTerminating():
-    #             continue
-    #
-    #         ind = s.getIndex()
-    #         if ind + 3 < self.numberOfStates:
-    #             triple = (a.getIndex(), ind + 3, 0.8)
-    #             triplet = (a.getIndex(), ind + 3, 0)
-    #         else:
-    #             triple = [a.getIndex(), ind, 0.8]
-    #             triplet = (a.getIndex(), ind, 0)
-    #         s.getTransition().remove(triplet)
-    #         s.getTransition().append(triple)
-    #
-    #         if ind % 3 == 2:
-    #             triple = (a.getIndex(), ind, 0.1)
-    #             triplet = (a.getIndex(), ind, 0)
-    #         else:
-    #             triple = (a.getIndex(), ind + 1, 0.1)
-    #             triplet = (a.getIndex(), ind+1, 0)
-    #         s.getTransition().remove(triplet)
-    #         s.getTransition().append(triple)
-    #
-    #         if ind % 3 == 0:
-    #             triple = (a.getIndex(), ind, 0.1)
-    #             triplet = (a.getIndex(), ind, 0)
-    #         else:
-    #             triple = (a.getIndex(), ind - 1, 0.1)
-    #             triplet = (a.getIndex(), ind - 1, 0)
-    #         if triplet in s.getTransition():
-    #             s.getTransition().remove(triplet)
-    #         s.getTransition().append(triple)
-    #
-    #
-    # def southTransition(self):
-    #     tosend = []
-    #     a = self.actions[2]
-    #     for s in self.states:
-    #
-    #         if s.isTerminating():
-    #             continue
-    #
-    #         ind = s.getIndex()
-    #         if ind - 3 >= 0:
-    #             triple = (a.getIndex(), ind - 3, 0.8)
-    #             triplet = (a.getIndex(), ind-3, 0)
-    #         else:
-    #             triple = (a.getIndex(), ind, 0.8)
-    #             triplet = (a.getIndex(), ind, 0)
-    #         s.getTransition().remove(triplet)
-    #         s.getTransition().append(triple)
-    #
-    #         if ind % 3 == 2:
-    #             triple = (a.getIndex(), ind, 0.1)
-    #             triplet = (a.getIndex(), ind, 0)
-    #         else:
-    #             triple = (a.getIndex(), ind + 1, 0.1)
-    #             triplet = (a.getIndex(), ind+1, 0)
-    #         if triplet in s.getTransition():
-    #             s.getTransition().remove(triplet)
-    #         s.getTransition().append(triple)
-    #
-    #         if ind % 3 == 0:
-    #             triple = (a.getIndex(), ind, 0.1)
-    #             triplet = (a.getIndex(), ind, 0)
-    #         else:
-    #             triple = (a.getIndex(), ind - 1, 0.1)
-    #             triplet = (a.getIndex(), ind-1, 0)
-    #         if triplet in s.getTransition():
-    #             s.getTransition().remove(triplet)
-    #         s.getTransition().append(triple)
-    #
-    #
-    # def westTransition(self):
-    #     tosend = []
-    #     a = self.actions[3]
-    #     for s in self.states:
-    #
-    #         if s.isTerminating():
-    #             continue
-    #
-    #         ind = s.getIndex()
-    #         if ind + 3 < self.numberOfStates:
-    #             triple = (a.getIndex(), ind + 3, 0.1)
-    #             triplet = (a.getIndex(), ind+3, 0)
-    #         else:
-    #             triple = (a.getIndex(), ind, 0.1)
-    #             triplet = (a.getIndex(), ind, 0)
-    #         s.getTransition().remove(triplet)
-    #         s.getTransition().append(triple)
-    #
-    #         if ind - 3 >= 0:
-    #             triple = (a.getIndex(), ind - 3, 0.1)
-    #             triplet = (a.getIndex(), ind-3, 0)
-    #         else:
-    #             triple = (a.getIndex(), ind, 0.1)
-    #             triplet = (a.getIndex(), ind, 0)
-    #         s.getTransition().remove(triplet)
-    #         s.getTransition().append(triple)
-    #
-    #         if ind % 3 == 0:
-    #             triple = (a.getIndex(), ind, 0.8)
-    #             triplet = (a.getIndex(), ind, 0)
-    #         else:
-    #             triple = (a.getIndex(), ind - 1, 0.8)
-    #             triplet = (a.getIndex(), ind-1, 0)
-    #         if triplet in s.getTransition():
-    #             s.getTransition().remove(triplet)
-    #         s.getTransition().append(triple)
-    #
-    #
-    # def eastTransition(self):
-    #     tosend = []
-    #     a = self.actions[1]
-    #     for s in self.states:
-    #
-    #         if s.isTerminating():
-    #             continue
-    #
-    #         ind = s.getIndex()
-    #         if ind + 3 < self.numberOfStates:
-    #             triple = (a.getIndex(), ind + 3, 0.1)
-    #             triplet = (a.getIndex(), ind+3, 0)
-    #         else:
-    #             triple = (a.getIndex(), ind, 0.1)
-    #             triplet = (a.getIndex(), ind, 0)
-    #         s.getTransition().remove(triplet)
-    #         s.getTransition().append(triple)
-    #
-    #         if ind - 3 >= 0:
-    #             triple = (a.getIndex(), ind - 3, 0.1)
-    #             triplet = (a.getIndex(), ind-3, 0)
-    #         else:
-    #             triple = (a.getIndex(), ind, 0.1)
-    #             triplet = (a.getIndex(), ind, 0)
-    #         s.getTransition().remove(triplet)
-    #         s.getTransition().append(triple)
-    #
-    #         if ind % 3 == 2:
-    #             triple = (a.getIndex(), ind, 0.8)
-    #             triplet = (a.getIndex(), ind, 0)
-    #
-    #         else:
-    #             triple = (a.getIndex(), ind + 1, 0.8)
-    #             triplet = (a.getIndex(), ind+1, 0)
-    #         if triplet in s.getTransition():
-    #             s.getTransition().remove(triplet)
-    #         s.getTransition().append(triple)
-
-
-
     # Leave one line space after each transition table for each action in the data file.
-    # TransitionFunction For Actions
-    def autoTransitionFunction(self, readfromFile=False):
-
-        # if readfromFile == False:
-        #     for a in self.actions:
-        #         for s in self.states:
-        #             for sd in self.states:
-        #                 triple = (a.getIndex(), sd.getIndex(), 0)
-        #                 s.getTransition().append(triple)
-        #     self.northTransition()
-        #     # self.southTransition()
-        #     # self.westTransition()
-        #     # self.eastTransition()
-        # else:
+    # TransitionFunction For Acti
+    def autoTransitionFunction(self):
         stateIndex = 0
         actionIndex = 0
         with open('transitionData', 'rb') as csvfile:
@@ -276,9 +109,6 @@ class MDP:
                     triple = (actionIndex, sp, float(row[sp]))
                     self.states[stateIndex].getTransition().append(triple)
                 stateIndex += 1
-
-        # print len(self.states[6].getTransition())
-
 
     # RewardFunctions For Actions
     def autoRewardFunction(self):
@@ -302,6 +132,8 @@ class MDP:
         with open('rewardData', 'rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
+                if len(row)==0:
+                    continue
                 for ap in xrange(0, self.numberOfActions):
                     triple = (ap, float(row[ap]))
                     tosend.append(triple)
@@ -314,8 +146,6 @@ class MDP:
         if readFromFile == False:
             return
         else:
-            global optionIndex
-            optionIndex = 0
             actionIndex = 0
             counter = 0
             tosend = []
@@ -327,18 +157,16 @@ class MDP:
                     if len(row) == 0:
 
                         o.setPolicy(tosend)
-                        optionIndex = optionIndex + 1
+                        self.numberOfOptions += 1
 
                         counter = 0
                         actionIndex = 0
                         continue
 
                     if counter == 1:
-                        o = Option(optionIndex)
+                        o = Option(self.numberOfOptions)
                         self.options.append(o)
                         #Initiation
-                        # for x in xrange(0, len(row)):
-                        #     pass
                         initset = []
                         for x in row:
                             initset.append(int(x))
@@ -361,221 +189,221 @@ class MDP:
                         actionIndex += 1
 
 
-    def calculateRewardForOption(self, state, option, gamma, delta):
-
-        # print gamma
-        sums = 0
-        # print "State: " + str(state)
-        # print "Option: " + str(option)
-        if state not in self.options[option].getInitiationSet():
-            # print "Not in Initiation Set."
-            return  0
-
-        actionsavail = self.states[state].getPossibleActions()
-
-        if len(actionsavail) == 0:
-            return 0
-
-        for act in actionsavail:
-
-            # print
-            # print "State: " + str(state)
-            # print "Action: " + str(act.getIndex())
-            sumForAction = 0
-            probOfAction = 0
-            immReward = 0
-            possibleStates = []
-            actionSet = self.options[option].getPolicy()
-
-            for x in actionSet:
-                if x[0] == state and x[1] == act.getIndex():
-                    probOfAction = x[2]
-                    break
-
-            # print "Prob Of Action: " + str(probOfAction)
-
-            # if probOfAction == 0:
-            #     avail = self.states[state].getPossibleActions()
-            #     avail = filter(lambda a: a != act.getIndex(), avail)
-            #     self.states[state].setPossibleActions(avail)
-            #     continue
-
-            rewards = self.states[state].getReward()
-            for x in rewards:
-                if x[0] == act.getIndex():
-                    immReward = x[1]
-                    break
-
-            # print "Imm Reward: " + str(immReward)
-
-            if probOfAction != 0 and gamma > delta:
-
-                transitions = self.states[state].getTransition()
-
-                # print "Transition Function for " + str(state) + " is: " + str(transitions)
-                for x in transitions:
-                    if x[0] == act.getIndex() and x[2] != 0:
-                        possibleStates.append((x[1], x[2]))
-
-                # print "Possible States from " + str(state) + " are: " + str(possibleStates)
-
-                for x in possibleStates:
-
-                    product = 0
-                    if len(possibleStates) == 0:
-                        break
-
-                    # print "Possible State: " + str(x)
-
-
-                    sdash = self.states[x[0]]
-                    prob = float(x[1])
-
-                    # print "Sdash: " +str(sdash.getIndex())
-                    # print "prob: " + str(prob)
-
-                    beta_sdash = float(self.options[option].getBeta()[x[0]])
-
-                    # print "Beta_sdash: " + str(1-beta_sdash)
-
-                    if prob != 0 and (1-beta_sdash) != 0:
-                        product = prob * (1 - float(beta_sdash)) * self.calculateRewardForOption(sdash.getIndex(), option, gamma, delta)
-
-                    # print "Product for this state: " + str(product)
-                    sumForAction += product
-
-
-                # print "Sum for Action: " + str(sumForAction)
-                sumForAction *= gamma
-
-                sumForAction += immReward
-
-                sumForAction *= probOfAction
-
-                # print "Final Sum For Action: " + str(sumForAction)
-                # print
-
-            else:
-                # print "Prob of action is 0."
-                sumForAction = 0
-
-            # print immReward
-            # print probOfAction
-            # if sumForAction <= 0:
-            #     avail = self.states[state].getPossibleActions()
-            #     avail.remove(act.getIndex())
-            #     self.states[state].setPossibleActions(avail)
-
-            sums += sumForAction
-            # print "Sums: " + str(sums)
-            # print
-
-        return sums
-
-    def calculateTransitionForOption(self, state, option, statedash, gamma, delta):
-
-        sums = 0
-        # print "State: " + str(state)
-        # print "Option: " + str(option)
-        # print "Statedash: " + str(statedash)
-        if state not in self.options[option].getInitiationSet():
-            # print "Not in Initiation Set."
-            return 0
-
-        actionsavail = self.states[state].getPossibleActions()
-
-        if len(actionsavail) == 0:
-            return 0
-
-        for act in actionsavail:
-
-            # print
-            # print "State: " + str(state)
-            # print "Action: " + str(act.getIndex())
-            sumForAction = 0
-            probOfAction = 0
-            possibleStates = []
-            actionSet = self.options[option].getPolicy()
-
-            for x in actionSet:
-                if x[0] == state and x[1] == act.getIndex():
-                    probOfAction = x[2]
-                    break
-
-            # print "Prob Of Action: " + str(probOfAction)
-
-            # if probOfAction == 0:
-            #     avail = self.states[state].getPossibleActions()
-            #     avail = filter(lambda a: a != act.getIndex(), avail)
-            #     self.states[state].setPossibleActions(avail)
-            #     continue
-
-            if probOfAction != 0 and gamma > delta:
-
-                transitions = self.states[state].getTransition()
-
-                # print "Transition Function for " + str(state) + " is: " + str(transitions)
-                for x in transitions:
-                    if x[0] == act.getIndex() and x[2] != 0:
-                        possibleStates.append((x[1], x[2]))
-
-                # print "Possible States from " + str(state) + " are: " + str(possibleStates)
-
-                for x in possibleStates:
-
-                    product = 0
-                    if len(possibleStates) == 0:
-                        break
-
-                    # print "Possible State: " + str(x)
-
-
-                    sdash = self.states[x[0]]
-                    prob = float(x[1])
-
-                    # print "Sdash: " +str(sdash.getIndex())
-                    # print "prob: " + str(prob)
-
-                    beta_sdash = float(self.options[option].getBeta()[x[0]])
-
-                    # print "1-Beta_sdash: " + str(1-beta_sdash)
-
-                    if prob != 0 and float(1 - beta_sdash) != 0:
-                        product += ((1 - float(beta_sdash)) * self.calculateTransitionForOption(sdash.getIndex(),
-                                                                                                 option, statedash, gamma, delta))
-
-                    if prob != 0 and float(beta_sdash) != 0:
-                        product += (beta_sdash * self.delta(float(sdash.getIndex()), float(statedash)))
-
-                    product *= prob
-
-                    # print "Product for this state: " + str(product)
-                    sumForAction += product
-
-                # print "Sum for Action: " + str(sumForAction)
-
-                sumForAction *= gamma
-                sumForAction *= probOfAction
-
-                # print "Final Sum For Action: " + str(sumForAction)
-                # print
-
-            else:
-                # print "Prob of action is 0."
-                sumForAction = 0
-
-            # print immReward
-            # print probOfAction
-            # if sumForAction <= 0:
-            #     avail = self.states[state].getPossibleActions()
-            #     avail.remove(act.getIndex())
-            #     self.states[state].setPossibleActions(avail)
-
-            sums += sumForAction
-            # print "Sums: " + str(sums)
-            # print
-
-        return sums
+    # def calculateRewardForOption(self, state, option, gamma, delta):
+    #
+    #     # print gamma
+    #     sums = 0
+    #     # print "State: " + str(state)
+    #     # print "Option: " + str(option)
+    #     if state not in self.options[option].getInitiationSet():
+    #         # print "Not in Initiation Set."
+    #         return  0
+    #
+    #     actionsavail = self.states[state].getPossibleActions()
+    #
+    #     if len(actionsavail) == 0:
+    #         return 0
+    #
+    #     for act in actionsavail:
+    #
+    #         # print
+    #         # print "State: " + str(state)
+    #         # print "Action: " + str(act.getIndex())
+    #         sumForAction = 0
+    #         probOfAction = 0
+    #         immReward = 0
+    #         possibleStates = []
+    #         actionSet = self.options[option].getPolicy()
+    #
+    #         for x in actionSet:
+    #             if x[0] == state and x[1] == act.getIndex():
+    #                 probOfAction = x[2]
+    #                 break
+    #
+    #         # print "Prob Of Action: " + str(probOfAction)
+    #
+    #         # if probOfAction == 0:
+    #         #     avail = self.states[state].getPossibleActions()
+    #         #     avail = filter(lambda a: a != act.getIndex(), avail)
+    #         #     self.states[state].setPossibleActions(avail)
+    #         #     continue
+    #
+    #         rewards = self.states[state].getReward()
+    #         for x in rewards:
+    #             if x[0] == act.getIndex():
+    #                 immReward = x[1]
+    #                 break
+    #
+    #         # print "Imm Reward: " + str(immReward)
+    #
+    #         if probOfAction != 0 and gamma > delta:
+    #
+    #             transitions = self.states[state].getTransition()
+    #
+    #             # print "Transition Function for " + str(state) + " is: " + str(transitions)
+    #             for x in transitions:
+    #                 if x[0] == act.getIndex() and x[2] != 0:
+    #                     possibleStates.append((x[1], x[2]))
+    #
+    #             # print "Possible States from " + str(state) + " are: " + str(possibleStates)
+    #
+    #             for x in possibleStates:
+    #
+    #                 product = 0
+    #                 if len(possibleStates) == 0:
+    #                     break
+    #
+    #                 # print "Possible State: " + str(x)
+    #
+    #
+    #                 sdash = self.states[x[0]]
+    #                 prob = float(x[1])
+    #
+    #                 # print "Sdash: " +str(sdash.getIndex())
+    #                 # print "prob: " + str(prob)
+    #
+    #                 beta_sdash = float(self.options[option].getBeta()[x[0]])
+    #
+    #                 # print "Beta_sdash: " + str(1-beta_sdash)
+    #
+    #                 if prob != 0 and (1-beta_sdash) != 0:
+    #                     product = prob * (1 - float(beta_sdash)) * self.calculateRewardForOption(sdash.getIndex(), option, gamma, delta)
+    #
+    #                 # print "Product for this state: " + str(product)
+    #                 sumForAction += product
+    #
+    #
+    #             # print "Sum for Action: " + str(sumForAction)
+    #             sumForAction *= gamma
+    #
+    #             sumForAction += immReward
+    #
+    #             sumForAction *= probOfAction
+    #
+    #             # print "Final Sum For Action: " + str(sumForAction)
+    #             # print
+    #
+    #         else:
+    #             # print "Prob of action is 0."
+    #             sumForAction = 0
+    #
+    #         # print immReward
+    #         # print probOfAction
+    #         # if sumForAction <= 0:
+    #         #     avail = self.states[state].getPossibleActions()
+    #         #     avail.remove(act.getIndex())
+    #         #     self.states[state].setPossibleActions(avail)
+    #
+    #         sums += sumForAction
+    #         # print "Sums: " + str(sums)
+    #         # print
+    #
+    #     return sums
+    #
+    # def calculateTransitionForOption(self, state, option, statedash, gamma, delta):
+    #
+    #     sums = 0
+    #     # print "State: " + str(state)
+    #     # print "Option: " + str(option)
+    #     # print "Statedash: " + str(statedash)
+    #     if state not in self.options[option].getInitiationSet():
+    #         # print "Not in Initiation Set."
+    #         return 0
+    #
+    #     actionsavail = self.states[state].getPossibleActions()
+    #
+    #     if len(actionsavail) == 0:
+    #         return 0
+    #
+    #     for act in actionsavail:
+    #
+    #         # print
+    #         # print "State: " + str(state)
+    #         # print "Action: " + str(act.getIndex())
+    #         sumForAction = 0
+    #         probOfAction = 0
+    #         possibleStates = []
+    #         actionSet = self.options[option].getPolicy()
+    #
+    #         for x in actionSet:
+    #             if x[0] == state and x[1] == act.getIndex():
+    #                 probOfAction = x[2]
+    #                 break
+    #
+    #         # print "Prob Of Action: " + str(probOfAction)
+    #
+    #         # if probOfAction == 0:
+    #         #     avail = self.states[state].getPossibleActions()
+    #         #     avail = filter(lambda a: a != act.getIndex(), avail)
+    #         #     self.states[state].setPossibleActions(avail)
+    #         #     continue
+    #
+    #         if probOfAction != 0 and gamma > delta:
+    #
+    #             transitions = self.states[state].getTransition()
+    #
+    #             # print "Transition Function for " + str(state) + " is: " + str(transitions)
+    #             for x in transitions:
+    #                 if x[0] == act.getIndex() and x[2] != 0:
+    #                     possibleStates.append((x[1], x[2]))
+    #
+    #             # print "Possible States from " + str(state) + " are: " + str(possibleStates)
+    #
+    #             for x in possibleStates:
+    #
+    #                 product = 0
+    #                 if len(possibleStates) == 0:
+    #                     break
+    #
+    #                 # print "Possible State: " + str(x)
+    #
+    #
+    #                 sdash = self.states[x[0]]
+    #                 prob = float(x[1])
+    #
+    #                 # print "Sdash: " +str(sdash.getIndex())
+    #                 # print "prob: " + str(prob)
+    #
+    #                 beta_sdash = float(self.options[option].getBeta()[x[0]])
+    #
+    #                 # print "1-Beta_sdash: " + str(1-beta_sdash)
+    #
+    #                 if prob != 0 and float(1 - beta_sdash) != 0:
+    #                     product += ((1 - float(beta_sdash)) * self.calculateTransitionForOption(sdash.getIndex(),
+    #                                                                                              option, statedash, gamma, delta))
+    #
+    #                 if prob != 0 and float(beta_sdash) != 0:
+    #                     product += (beta_sdash * self.delta(float(sdash.getIndex()), float(statedash)))
+    #
+    #                 product *= prob
+    #
+    #                 # print "Product for this state: " + str(product)
+    #                 sumForAction += product
+    #
+    #             # print "Sum for Action: " + str(sumForAction)
+    #
+    #             sumForAction *= gamma
+    #             sumForAction *= probOfAction
+    #
+    #             # print "Final Sum For Action: " + str(sumForAction)
+    #             # print
+    #
+    #         else:
+    #             # print "Prob of action is 0."
+    #             sumForAction = 0
+    #
+    #         # print immReward
+    #         # print probOfAction
+    #         # if sumForAction <= 0:
+    #         #     avail = self.states[state].getPossibleActions()
+    #         #     avail.remove(act.getIndex())
+    #         #     self.states[state].setPossibleActions(avail)
+    #
+    #         sums += sumForAction
+    #         # print "Sums: " + str(sums)
+    #         # print
+    #
+    #     return sums
 
     def modelActionAsOptions(self, action):
         global optionIndex
@@ -585,23 +413,22 @@ class MDP:
 
         for s in self.states:
             policy.append((s.getIndex(), action.getIndex(), float(1)))
-            if s.isTerminating() == True:
-                beta.append(float(1))
-            else:
-                beta.append(float(0))
+            beta.append(float(1))
             if action in s.getPossibleActions():
                 initset.append(s.getIndex())
 
-        o = Option(optionIndex)
+        o = Option(self.numberOfOptions)
         self.options.append(o)
         o.setInitiationSet(initset)
         o.setBeta(beta)
         o.setPolicy(policy)
-        optionIndex += 1
+        self.numberOfOptions += 1
 
     def iterativeRewardCalculation(self, option, gamma, delta):
 
         values = [0]*len(self.states)
+        values[3] = 1
+        values[7] = -1
         while(True):
 
             # print "Values : " + str(values)
@@ -618,6 +445,9 @@ class MDP:
 
                 # print "Considering state: " + str(s.getIndex())
                 # print
+                if s.isTerminating():
+                    dummy[s.getIndex()] = prevValues[s.getIndex()]
+                    continue
 
                 sums = 0
                 s = s.getIndex()
@@ -700,8 +530,9 @@ class MDP:
             if max_difference > delta:
                 values = deepcopy(dummy)
             else:
-                return  values
                 break
+
+        return values
 
     def iterativeTransitionCalculation(self, option, statedash, gamma, delta):
 
@@ -796,9 +627,9 @@ class MDP:
             if max_difference > delta:
                 values = deepcopy(dummy)
             else:
-                return values
                 break
 
+        return values
 
     def actionsVI(self, gamma, delta):
 
@@ -849,6 +680,91 @@ class MDP:
                 break
 
         return values, bestactions
+
+    def rewardOption(self, state, option):
+        global absGamma
+        x = self.iterativeRewardCalculation(option, absGamma, 0.0001)
+        return x[state]
+
+    def transitionOption(self, state, option, statedash):
+        global absGamma
+        x = self.iterativeTransitionCalculation(option, statedash, absGamma, 0.0001)
+        return x[state]
+
+    def optionsVI(self, gamma, delta):
+
+        global absGamma
+        values = [0]*len(self.states)
+        values[3] = 1
+        values[7] = -1
+        optionsbest = [None]*len(self.states)
+
+        rso = []
+        for o in self.options:
+            x = self.iterativeRewardCalculation(o.getIndex(), absGamma, 0.0001)
+            triple = (o.getIndex() , x)
+            rso.append(triple)
+
+        psxo = []
+        for o in self.options:
+            for s in self.states:
+                x = self.iterativeTransitionCalculation(o.getIndex(), s.getIndex(), absGamma, 0.0001)
+                triple = (o.getIndex(), s.getIndex(), x)
+                psxo.append(triple)
+
+        while(True):
+
+            # print values
+            prevvalues = deepcopy(values)
+            dummy = [0] * len(self.states)
+            dummyoptionsbest = [None]*len(self.states)
+
+            max_difference = 0
+            for s in self.states:
+
+                print "State: " + str(s.getIndex())
+                if s.isTerminating():
+                    dummy[s.getIndex()] = prevvalues[s.getIndex()]
+                    continue
+
+                max_value = float('-INF')
+                optionsavailable = [o for o in self.options if s.getIndex() in o.getInitiationSet()]
+                for o in optionsavailable:
+
+                    print "Avaialable Option: " + str(o.getIndex())
+                    sum = 0
+                    reward = [r[1][s.getIndex()] for r in rso if r[0] == o.getIndex()][0]
+                    possible = [(self.states[p[1]], p[2][s.getIndex()]) for p in psxo if p[0] == o.getIndex() and p[2][s.getIndex()] != 0]
+
+                    for x in possible:
+
+                        prob = float(x[1])
+                        sd = x[0]
+                        sum += (prob * prevvalues[sd.getIndex()])
+
+                    sum *= gamma
+                    sum += reward
+                    print "Final Value for This Option: " + str(sum)
+
+                    if sum > max_value:
+                        max_value = sum
+                        dummyoptionsbest[s.getIndex()] = o.getIndex()
+
+
+                dummy[s.getIndex()] = max_value
+                difference = abs(dummy[s.getIndex()] - values[s.getIndex()])
+                if difference > max_difference:
+                    max_difference = difference
+
+            print "Values: " + str(values)
+            print "Dummy Values: " + str(dummy)
+
+            if max_difference > delta:
+                values = deepcopy(dummy)
+                optionsbest = deepcopy(dummyoptionsbest)
+            else:
+                break
+        return values, optionsbest
 
 
     def delta(self, state, statedash):
@@ -906,8 +822,8 @@ class Driver:
     a.initializeStates()
     a.autoTransitionFunction()
     a.autoRewardFunction()
-    a.setOptions()
-    global absGamma, optionIndex
+    a.setOptions(readFromFile=True)
+    global absGamma
     absGamma = 1
 
         # print x.getReward()
@@ -919,10 +835,19 @@ class Driver:
     for x in a.getActions():
         a.modelActionAsOptions(x)
     # o = a.getOptions()
+    # for x in o:
+    #     print x.getPolicy()
+    #     print x.getBeta()
+    #     print x.getInitiationSet()
+    print a.iterativeRewardCalculation(0, absGamma, 0.001)
+    print a.iterativeRewardCalculation(1, absGamma, 0.001)
+    print a.iterativeRewardCalculation(2, absGamma, 0.001)
+    print a.iterativeRewardCalculation(3, absGamma, 0.001)
+    print a.iterativeRewardCalculation(4, absGamma, 0.001)
+    # print a.iterativeTransitionCalculation(1,0,absGamma, 0.001)
 
-    # print a.iterativeRewardCalculation(0, absGamma, 0.01)
-    # for x in xrange(0,4):
-    #     print a.calculateRewardForOption(x, 0, absGamma, 0.01)
+    # for x in xrange(0,12):
+    #     print a.calculateRewardForOption(x, 0, absGamma, 0.001)
     # print a.iterativeTransitionCalculation(0, 1, absGamma, 0.0001)
     # s = a.getStates()
     # print s[4].getTransition()
@@ -934,3 +859,10 @@ class Driver:
             print None,
         else:
             print x.getIndex(),
+
+    print
+    print
+
+    v,o = a.optionsVI(absGamma, 0.0001)
+    print v
+    print o
