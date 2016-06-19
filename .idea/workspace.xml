@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="59d3106a-70ef-477f-a148-a105708777e4" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OptionsData" afterPath="$PROJECT_DIR$/OptionsData" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/State" afterPath="$PROJECT_DIR$/State" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rewardData" afterPath="$PROJECT_DIR$/rewardData" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/State.py" afterPath="$PROJECT_DIR$/State.py" />
     </list>
     <ignored path="MDPWithOptions.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -56,11 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="State" pinned="false" current-in-tab="true">
+      <file leaf-file-name="State" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/State">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="43">
-              <caret line="833" column="18" selection-start-line="833" selection-start-column="18" selection-end-line="833" selection-end-column="18" />
+            <state relative-caret-position="223">
+              <caret line="845" column="12" selection-start-line="845" selection-start-column="12" selection-end-line="845" selection-end-column="12" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
                 <element signature="e#84#1286#0" expanded="false" />
@@ -82,6 +79,31 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="State.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/State.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="478">
+              <caret line="876" column="11" selection-start-line="876" selection-start-column="11" selection-end-line="876" selection-end-column="11" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+                <element signature="e#84#1286#0" expanded="false" />
+                <element signature="e#1307#1528#0" expanded="false" />
+                <element signature="e#1608#1801#0" expanded="false" />
+                <element signature="e#1864#1991#0" expanded="false" />
+                <element signature="e#3167#3194#0" expanded="false" />
+                <element signature="e#4348#5899#0" expanded="false" />
+                <element signature="e#5899#5965#0" expanded="false" />
+                <element signature="e#13818#14320#0" expanded="false" />
+                <element signature="e#14395#18091#0" expanded="false" />
+                <element signature="e#18181#21433#0" expanded="false" />
+                <element signature="e#21483#23147#0" expanded="false" />
+                <element signature="e#23200#23309#0" expanded="false" />
+                <element signature="e#23377#23501#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="Git.Settings">
@@ -91,13 +113,13 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/data" />
-        <option value="$PROJECT_DIR$/State.py" />
         <option value="$PROJECT_DIR$/transitionData" />
         <option value="$PROJECT_DIR$/transitionDataSimple.txt" />
         <option value="$PROJECT_DIR$/rewardDataSimple.txt" />
         <option value="$PROJECT_DIR$/rewardData" />
         <option value="$PROJECT_DIR$/OptionsData" />
         <option value="$PROJECT_DIR$/State" />
+        <option value="$PROJECT_DIR$/State.py" />
       </list>
     </option>
   </component>
@@ -352,7 +374,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.42274678" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.42274678" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -879,13 +901,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/State.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="117" column="31" selection-start-line="117" selection-start-column="31" selection-end-line="117" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/transitionDataSimple.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -926,8 +941,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/State">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="833" column="18" selection-start-line="833" selection-start-column="18" selection-end-line="833" selection-end-column="18" />
+        <state relative-caret-position="223">
+          <caret line="845" column="12" selection-start-line="845" selection-start-column="12" selection-end-line="845" selection-end-column="12" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
             <element signature="e#84#1286#0" expanded="false" />
@@ -944,6 +959,29 @@
             <element signature="e#23200#23309#0" expanded="false" />
             <element signature="e#23377#23501#0" expanded="false" />
             <marker date="1466357232579" expanded="true" signature="27993:28056" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/State.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="478">
+          <caret line="876" column="11" selection-start-line="876" selection-start-column="11" selection-end-line="876" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#84#1286#0" expanded="false" />
+            <element signature="e#1307#1528#0" expanded="false" />
+            <element signature="e#1608#1801#0" expanded="false" />
+            <element signature="e#1864#1991#0" expanded="false" />
+            <element signature="e#3167#3194#0" expanded="false" />
+            <element signature="e#4348#5899#0" expanded="false" />
+            <element signature="e#5899#5965#0" expanded="false" />
+            <element signature="e#13818#14320#0" expanded="false" />
+            <element signature="e#14395#18091#0" expanded="false" />
+            <element signature="e#18181#21433#0" expanded="false" />
+            <element signature="e#21483#23147#0" expanded="false" />
+            <element signature="e#23200#23309#0" expanded="false" />
+            <element signature="e#23377#23501#0" expanded="false" />
           </folding>
         </state>
       </provider>
