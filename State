@@ -536,7 +536,7 @@ class MDP:
 
     def iterativeTransitionCalculation(self, option, statedash, gamma, delta):
 
-        values = [0]*len(self.states)
+        values = [2]*len(self.states)
         while (True):
 
             # print "Values : " + str(values)
@@ -550,7 +550,7 @@ class MDP:
             max_difference = 0
             for s in self.states:
 
-                # print "Considering state: " + str(s)
+                # print "Considering state: " + str(s.getIndex())
                 # print
 
                 s = s.getIndex()
@@ -573,10 +573,10 @@ class MDP:
                             break
 
                     # print "Probofaction: " + str(probOfAction)
-                    # print "immReward: " +str(immReward)
+
                     transitions = self.states[s].getTransition()
 
-                    # print "Transition Function for " + str(state) + " is: " + str(transitions)
+                    # print "Transition Function for " + str(s) + " is: " + str(transitions)
                     for x in transitions:
                         if x[0] == actions.getIndex() and x[2] != 0:
                             possibleStates.append((x[1], x[2]))
@@ -602,6 +602,7 @@ class MDP:
                         valforaction += product
 
                     # print "Value For Action: " + str(valforaction)
+                    # if option == 0:
                     valforaction *= gamma
                     valforaction *= probOfAction
 
@@ -633,10 +634,12 @@ class MDP:
 
     def actionsVI(self, gamma, delta):
 
+        iter = 0
         values = [x.getUtility() for x in self.states]
         bestactions = [None]*len(self.states)
 
         while(True):
+            iter += 1
             prevvalues = deepcopy(values)
             dummy = [0] * len(self.states)
             dummyActions = [None]*len(self.states)
@@ -662,6 +665,7 @@ class MDP:
 
                     sum *= gamma
                     sum += float(reward)
+                    sum = round(sum, 15)
 
                     if sum >= max_value:
                         max_value = sum
@@ -677,6 +681,7 @@ class MDP:
                 values = deepcopy(dummy)
                 bestactions = deepcopy(dummyActions)
             else:
+                print iter
                 break
 
         return values, bestactions
@@ -693,6 +698,7 @@ class MDP:
 
     def optionsVI(self, gamma, delta):
 
+        iterations = 0
         global absGamma
         values = [0]*len(self.states)
         values[3] = 1
@@ -701,7 +707,7 @@ class MDP:
 
         rso = []
         for o in self.options:
-            x = self.iterativeRewardCalculation(o.getIndex(), 1, 0.0001)
+            x = self.iterativeRewardCalculation(o.getIndex(), absGamma, 0.0001)
             triple = (o.getIndex() , x)
             rso.append(triple)
 
@@ -714,6 +720,7 @@ class MDP:
 
         while(True):
 
+            iterations += 1
             # print values
             prevvalues = deepcopy(values)
             dummy = [0] * len(self.states)
@@ -737,7 +744,10 @@ class MDP:
                     # print "Avaialable Option: " + str(o.getIndex())
                     sum = 0
                     reward = [r[1][s.getIndex()] for r in rso if r[0] == o.getIndex()][0]
+                    # if o.getIndex() == 0:
                     possible = [(self.states[p[1]], p[2][s.getIndex()]) for p in psxo if p[0] == o.getIndex() and p[2][s.getIndex()] != 0]
+                    # else:
+                    #     possible = [(self.states[x[1]], x[2]) for x in s.getTransition() if x[0] == o.getIndex() - 1 and x[2] != 0]
                     # for x in possible:
                     #     print "Possibilities: " + str(x[0].getIndex()) + " " + str(x[1])
                     # print "Reward: " + str(reward)
@@ -768,8 +778,10 @@ class MDP:
 
             if max_difference > delta:
                 values = deepcopy(dummy)
+                # print values
                 optionsbest = deepcopy(dummyoptionsbest)
             else:
+                print iterations
                 break
         return values, optionsbest
 
@@ -831,7 +843,8 @@ class Driver:
     a.autoRewardFunction()
     a.setOptions(readFromFile=True)
     global absGamma
-    absGamma = 0.8
+    absGamma = 0.9
+
 
     # print x.getReward()
     # print a.calculateRewardForOption(0, 0, absGamma, 0.0000001)
@@ -843,6 +856,9 @@ class Driver:
         a.modelActionAsOptions(x)
     # o = a.getOptions()
     # for x in o:
+    #     for y in a.getStates():
+    #         print a.iterativeTransitionCalculation(x.getIndex(),y.getIndex(),1,0.001)
+    #     print
     #     print x.getPolicy()
     #     print x.getBeta()
     #     print x.getInitiationSet()
@@ -851,9 +867,7 @@ class Driver:
     # print a.iterativeRewardCalculation(2, absGamma, 0.001)
     # print a.iterativeRewardCalculation(3, absGamma, 0.001)
     # print a.iterativeRewardCalculation(4, absGamma, 0.001)
-    #     for y in a.getStates():
-    #         print a.iterativeTransitionCalculation(x.getIndex(),y.getIndex(),1,0.001)
-    #     print
+
 
     # for x in xrange(0,12):
     #     print a.calculateRewardForOption(x, 0, absGamma, 0.001)
@@ -871,7 +885,7 @@ class Driver:
 
     print
     print
-    #
+    # #
     v,o = a.optionsVI(absGamma, 0.0001)
     print v
     print o
