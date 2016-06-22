@@ -681,7 +681,7 @@ class MDP:
                 values = deepcopy(dummy)
                 bestactions = deepcopy(dummyActions)
             else:
-                print iter
+                # print iter
                 break
 
         return values, bestactions
@@ -699,7 +699,6 @@ class MDP:
     def optionsVI(self, gamma, delta):
 
         iterations = 0
-        global absGamma
         values = [0]*len(self.states)
         values[3] = 1
         values[7] = -1
@@ -707,14 +706,17 @@ class MDP:
 
         rso = []
         for o in self.options:
-            x = self.iterativeRewardCalculation(o.getIndex(), absGamma, 0.0001)
+            x = self.iterativeRewardCalculation(o.getIndex(), gamma, 0.0001)
             triple = (o.getIndex() , x)
             rso.append(triple)
 
         psxo = []
         for o in self.options:
             for s in self.states:
+                # if o.getIndex() == 0:
                 x = self.iterativeTransitionCalculation(o.getIndex(), s.getIndex(), 1, 0.0001)
+                # else:
+                #     x = self.iterativeTransitionCalculation(o.getIndex(), s.getIndex(), 1, 0.0001)
                 triple = (o.getIndex(), s.getIndex(), x)
                 psxo.append(triple)
 
@@ -781,10 +783,79 @@ class MDP:
                 # print values
                 optionsbest = deepcopy(dummyoptionsbest)
             else:
-                print iterations
+                # print iterations
                 break
         return values, optionsbest
 
+    def generateLP(self, gamma):
+        decisionvar = []
+
+        for x in self.states:
+
+            triple = []
+            for y in self.states:
+
+                triplet = []
+                for o in self.options:
+
+                    if x.getIndex() == y.getIndex() and y.getIndex() in o.getInitiationSet():
+                        triplet.append(float(1))
+                    else:
+                        triplet.append(float(0))
+
+                triple.append(triplet)
+
+            decisionvar.append(triple)
+
+
+
+        rso = []
+        for o in self.options:
+            x = self.iterativeRewardCalculation(o.getIndex(), 1, 0.0001)
+            triple = (o.getIndex() , x)
+            rso.append(triple)
+
+        psxo = []
+        for o in self.options:
+            for s in self.states:
+                x = self.iterativeTransitionCalculation(o.getIndex(), s.getIndex(), 1, 0.0001)
+                triple = (o.getIndex(), s.getIndex(), x)
+                psxo.append(triple)
+
+        for x in self.states:
+
+            incoming = [ (t[0], t[2]) for t in psxo if t[1] == x.getIndex()]
+            for h in incoming:
+
+                opt = h[0]
+                nonzeros = [ (l, h[1][l]) for l in xrange(0, len(h[1])) if h[1][l] != 0 ]
+                for n in nonzeros:
+
+                    decisionvar[x.getIndex()][n[0]][opt] -= float(n[1])
+
+
+        for h in xrange(0,12):
+            for g in xrange(0,5):
+                print "r" + str(h) + "(" + str(g) + ") ,",
+
+        print
+        for h in self.states:
+            for x in self.options:
+                re = self.rewardOption(h.getIndex(), x.getIndex())
+                print str(re) + " ,",
+
+        print
+        for h in xrange(0,12):
+            for g in xrange(0,5):
+                print "x" + str(h) + "(" + str(g) + ") ,",
+
+        print
+        for x in decisionvar:
+            for y in x:
+                for z in y:
+                    print str(z) +",",
+                print "",
+            print
 
     def delta(self, state, statedash):
         if state == statedash:
@@ -843,7 +914,7 @@ class Driver:
     a.autoRewardFunction()
     a.setOptions(readFromFile=True)
     global absGamma
-    absGamma = 0.9
+    absGamma = 1
 
 
     # print x.getReward()
@@ -854,11 +925,11 @@ class Driver:
     # actions = a.getActions()
     for x in a.getActions():
         a.modelActionAsOptions(x)
-    # o = a.getOptions()
-    # for x in o:
-    #     for y in a.getStates():
-    #         print a.iterativeTransitionCalculation(x.getIndex(),y.getIndex(),1,0.001)
-    #     print
+    o = a.getOptions()
+    for x in o:
+        for y in a.getStates():
+            print a.iterativeTransitionCalculation(x.getIndex(),y.getIndex(),1,0.001)
+        print
     #     print x.getPolicy()
     #     print x.getBeta()
     #     print x.getInitiationSet()
@@ -875,17 +946,49 @@ class Driver:
     # s = a.getStates()
     # print s[4].getTransition()
     # print s[4].getReward()
-    val, act = a.actionsVI(absGamma, 0.0001)
-    print val
-    for x in act:
-        if x is None:
-            print None,
-        else:
-            print x.getIndex(),
+    # val, act = a.actionsVI(absGamma, 0.0001)
+    # print val
+    # for x in act:
+    #     if x is None:
+    #         print None,
+    #     else:
+    #         print x.getIndex(),
+    #
+    # print
+    # print
+    # # #
+    # v,o = a.optionsVI(absGamma, 0.0001)
+    # print v
+    # print o
 
-    print
-    print
-    # #
-    v,o = a.optionsVI(absGamma, 0.0001)
-    print v
-    print o
+    gammas = [1]
+    # print('{0:10} {1:15} {2:20}'.format('Gamma', 'Without Options', 'With Options'))
+    # for x in gammas:
+    #     z, y = a.actionsVI(x, 0.0001)
+    #
+    #     t, u = a.optionsVI(x, 0.0001)
+    #     # print t
+    #     # print u
+    #     if u[8] == 0:
+    #         str = 'Selecting Option.'
+    #     else:
+    #         str = 'Selecting Action.'
+    #     print('{0:10f} {1:15f} {2:15f} {3:15}'.format(x, z[8], t[8], str))
+
+    for x in gammas:
+        val, act = a.actionsVI(x, 0.0001)
+        print
+        print val
+        for y in act:
+            if y is None:
+                print None,
+            else:
+                print y.getIndex(),
+
+        print
+        print
+
+        v,o = a.optionsVI(1, 0.0001)
+        print v
+        print o
+    a.generateLP(1)
