@@ -1,0 +1,4 @@
+--
+
+- Usage of rounding in transition and reward calculation for options.
+- Removing direct valuing of terminal states from actions and options VI.
