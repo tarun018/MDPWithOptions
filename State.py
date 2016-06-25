@@ -86,16 +86,20 @@ class MDP:
     # Define States
     def initializeStates(self):
         for i in xrange(0, self.numberOfStates):
-            x = State(i, str("s" + str(i)), self.actions)
+            x = State(i, str("s" + str(i)), self.actions[0:self.numberOfActions-1])
             self.states.append(x)
         self.states[3].setTerminating(True)
         self.states[3].setUtility(1)
+        self.states[3].setPossibleActions([self.actions[self.numberOfActions-1]])
         self.states[7].setTerminating(True)
         self.states[7].setUtility(-1)
+        self.states[7].setPossibleActions([self.actions[self.numberOfActions - 1]])
 
     # Leave one line space after each transition table for each action in the data file.
     # TransitionFunction For Acti
-    def autoTransitionFunction(self):
+    def autoTransitionFunction(self, gamma=1):
+        for s in self.states:
+            s.setTransition([])
         stateIndex = 0
         actionIndex = 0
         with open('transitionData', 'rb') as csvfile:
@@ -106,7 +110,7 @@ class MDP:
                     actionIndex = actionIndex + 1
                     continue
                 for sp in xrange(0, self.numberOfStates):
-                    triple = (actionIndex, sp, float(row[sp]))
+                    triple = (actionIndex, sp, float(row[sp])*gamma)
                     self.states[stateIndex].getTransition().append(triple)
                 stateIndex += 1
 
@@ -412,10 +416,10 @@ class MDP:
         policy = []
 
         for s in self.states:
-            policy.append((s.getIndex(), action.getIndex(), float(1)))
             beta.append(float(1))
             if action in s.getPossibleActions():
                 initset.append(s.getIndex())
+                policy.append((s.getIndex(), action.getIndex(), float(1)))
 
         o = Option(self.numberOfOptions)
         self.options.append(o)
@@ -424,7 +428,7 @@ class MDP:
         o.setPolicy(policy)
         self.numberOfOptions += 1
 
-    def iterativeRewardCalculation(self, option, gamma, delta):
+    def iterativeRewardCalculation(self, option, delta):
 
         values = [0]*len(self.states)
         # values[3] = 1
@@ -502,7 +506,7 @@ class MDP:
                         valforaction += product
 
                     # print "Value For Action: " + str(valforaction)
-                    valforaction *= gamma
+                    valforaction *= 1
 
                     valforaction += immReward
                     valforaction *= probOfAction
@@ -534,7 +538,7 @@ class MDP:
 
         return values
 
-    def iterativeTransitionCalculation(self, option, statedash, gamma, delta):
+    def iterativeTransitionCalculation(self, option, statedash, delta):
 
         values = [0]*len(self.states)
         while (True):
@@ -550,7 +554,7 @@ class MDP:
             max_difference = 0
             for s in self.states:
 
-                # print "Considering state: " + str(s)
+                # print "Considering state: " + str(s.getIndex())
                 # print
 
                 s = s.getIndex()
@@ -573,10 +577,10 @@ class MDP:
                             break
 
                     # print "Probofaction: " + str(probOfAction)
-                    # print "immReward: " +str(immReward)
+
                     transitions = self.states[s].getTransition()
 
-                    # print "Transition Function for " + str(state) + " is: " + str(transitions)
+                    # print "Transition Function for " + str(s) + " is: " + str(transitions)
                     for x in transitions:
                         if x[0] == actions.getIndex() and x[2] != 0:
                             possibleStates.append((x[1], x[2]))
@@ -602,7 +606,8 @@ class MDP:
                         valforaction += product
 
                     # print "Value For Action: " + str(valforaction)
-                    valforaction *= gamma
+                    # if option == 0:
+                    valforaction *= 1
                     valforaction *= probOfAction
 
                     # print "Value For Action: " + str(valforaction)
@@ -631,22 +636,20 @@ class MDP:
 
         return values
 
-    def actionsVI(self, gamma, delta):
+    def actionsVI(self, delta):
 
+        iter = 0
         values = [x.getUtility() for x in self.states]
         bestactions = [None]*len(self.states)
 
         while(True):
+            iter += 1
             prevvalues = deepcopy(values)
             dummy = [0] * len(self.states)
             dummyActions = [None]*len(self.states)
 
             max_difference = 0
             for s in self.states:
-
-                if s.isTerminating():
-                    dummy[s.getIndex()] = prevvalues[s.getIndex()]
-                    continue
 
                 max_value = float('-INF')
                 for a in s.getPossibleActions():
@@ -660,7 +663,7 @@ class MDP:
                         sdash = self.states[x[0]]
                         sum += (prob * prevvalues[x[0]])
 
-                    sum *= gamma
+                    sum *= 1
                     sum += float(reward)
 
                     if sum >= max_value:
@@ -677,23 +680,22 @@ class MDP:
                 values = deepcopy(dummy)
                 bestactions = deepcopy(dummyActions)
             else:
+                # print iter
                 break
 
-        return values, bestactions
+        return values, bestactions, iter
 
-    def rewardOption(self, state, option):
-        global absGamma
-        x = self.iterativeRewardCalculation(option, absGamma, 0.0001)
+    def rewardOption(self, state, option, delta):
+        x = self.iterativeRewardCalculation(option, delta)
         return x[state]
 
     def transitionOption(self, state, option, statedash):
-        global absGamma
-        x = self.iterativeTransitionCalculation(option, statedash, absGamma, 0.0001)
+        x = self.iterativeTransitionCalculation(option, statedash, 0.0001)
         return x[state]
 
-    def optionsVI(self, gamma, delta):
+    def optionsVI(self, delta):
 
-        global absGamma
+        iterations = 0
         values = [0]*len(self.states)
         values[3] = 1
         values[7] = -1
@@ -701,19 +703,20 @@ class MDP:
 
         rso = []
         for o in self.options:
-            x = self.iterativeRewardCalculation(o.getIndex(), 1, 0.0001)
+            x = self.iterativeRewardCalculation(o.getIndex(), delta)
             triple = (o.getIndex() , x)
             rso.append(triple)
 
         psxo = []
         for o in self.options:
             for s in self.states:
-                x = self.iterativeTransitionCalculation(o.getIndex(), s.getIndex(), 1, 0.0001)
+                x = self.iterativeTransitionCalculation(o.getIndex(), s.getIndex(), delta)
                 triple = (o.getIndex(), s.getIndex(), x)
                 psxo.append(triple)
 
         while(True):
 
+            iterations += 1
             # print values
             prevvalues = deepcopy(values)
             dummy = [0] * len(self.states)
@@ -724,9 +727,6 @@ class MDP:
 
                 # print
                 # print "State: " + str(s.getIndex())
-                if s.isTerminating():
-                    dummy[s.getIndex()] = prevvalues[s.getIndex()]
-                    continue
 
                 max_value = float('-INF')
                 optionsavailable = [o for o in self.options if s.getIndex() in o.getInitiationSet()]
@@ -737,7 +737,10 @@ class MDP:
                     # print "Avaialable Option: " + str(o.getIndex())
                     sum = 0
                     reward = [r[1][s.getIndex()] for r in rso if r[0] == o.getIndex()][0]
+                    # if o.getIndex() == 0:
                     possible = [(self.states[p[1]], p[2][s.getIndex()]) for p in psxo if p[0] == o.getIndex() and p[2][s.getIndex()] != 0]
+                    # else:
+                    #     possible = [(self.states[x[1]], x[2]) for x in s.getTransition() if x[0] == o.getIndex() - 1 and x[2] != 0]
                     # for x in possible:
                     #     print "Possibilities: " + str(x[0].getIndex()) + " " + str(x[1])
                     # print "Reward: " + str(reward)
@@ -749,7 +752,7 @@ class MDP:
                         # print "Prob: " + str(prob) + " Prev Value: " + str(prevvalues[sd.getIndex()])
                         sum += (prob * prevvalues[sd.getIndex()])
 
-                    sum *= gamma
+                    sum *= 1
                     sum += reward
                     # print "Final Value for This Option: " + str(sum)
 
@@ -768,11 +771,93 @@ class MDP:
 
             if max_difference > delta:
                 values = deepcopy(dummy)
+                # print values
                 optionsbest = deepcopy(dummyoptionsbest)
             else:
+                # print iterations
                 break
-        return values, optionsbest
+        return values, optionsbest, iterations
 
+    def generateLP(self, delta):
+        decisionvar = []
+
+        for x in self.states:
+
+            triple = []
+            for y in self.states:
+
+                triplet = []
+                for o in self.options:
+
+                    if x.getIndex() == y.getIndex() and y.getIndex() in o.getInitiationSet():
+                        triplet.append(float(1))
+                    elif y.getIndex() in o.getInitiationSet():
+                        triplet.append(float(0))
+
+                triple.append(triplet)
+
+            decisionvar.append(triple)
+
+
+        rso = []
+        for o in self.options:
+            x = self.iterativeRewardCalculation(o.getIndex(), delta)
+            triple = (o.getIndex() , x)
+            rso.append(triple)
+
+        psxo = []
+        for o in self.options:
+            for s in self.states:
+                x = self.iterativeTransitionCalculation(o.getIndex(), s.getIndex(), delta)
+                triple = (o.getIndex(), s.getIndex(), x)
+                psxo.append(triple)
+
+        for x in self.states:
+
+            incoming = [ (t[0], t[2]) for t in psxo if t[1] == x.getIndex()]
+            for h in incoming:
+
+                opt = h[0]
+                nonzeros = [ (l, h[1][l]) for l in xrange(0, len(h[1])) if h[1][l] != 0 ]
+                for n in nonzeros:
+
+                    decisionvar[x.getIndex()][n[0]][opt] -= (float(n[1]))
+
+        for h in xrange(0,self.numberOfStates):
+            for g in xrange(0, self.numberOfOptions):
+                if h in self.options[g].getInitiationSet():
+                    print "r" + str(h) + "(" + str(g) + ") ,",
+
+        print
+        print
+
+        for h in self.states:
+            for x in self.options:
+                if h.getIndex() in x.getInitiationSet():
+                    re = self.rewardOption(h.getIndex(), x.getIndex(), delta)
+                    print str(re) + " ,",
+
+        print
+        print
+
+        for h in xrange(0,self.numberOfStates):
+            for g in xrange(0, self.numberOfOptions):
+                if h in self.options[g].getInitiationSet():
+                    print "x" + str(h) + "(" + str(g) + ") ,",
+
+        print
+        print
+
+        ## have to be changed.
+        for x in decisionvar:
+            for y in x:
+                for z in y:
+                    print str(z) +",",
+                print "",
+            print
+
+        print
+        print
 
     def delta(self, state, statedash):
         if state == statedash:
@@ -824,36 +909,33 @@ class Option:
         print "Beta: " + str(self.beta) + " Policy: " + str(self.policy)
 
 class Driver:
-    a = MDP(12, 4)
+    a = MDP(12, 5)
     a.initializeActions()
     a.initializeStates()
     a.autoTransitionFunction()
     a.autoRewardFunction()
     a.setOptions(readFromFile=True)
-    global absGamma
-    absGamma = 0.8
 
-    # print x.getReward()
-    # print a.calculateRewardForOption(0, 0, absGamma, 0.0000001)
-    # for x in xrange(0,4):
-    #     for y in xrange(0,4):
-    #         print a.calculateTransitionForOption(x,0,y, absGamma, 0.0001)
-    # actions = a.getActions()
     for x in a.getActions():
         a.modelActionAsOptions(x)
+
+    # for x in a.getStates():
+    #     print x.getReward()
     # o = a.getOptions()
     # for x in o:
+    #     for y in a.getStates():
+    #         print a.iterativeTransitionCalculation(x.getIndex(),y.getIndex(),0.001)
+    #     print
     #     print x.getPolicy()
     #     print x.getBeta()
     #     print x.getInitiationSet()
-    # print a.iterativeRewardCalculation(0, absGamma, 0.001)
-    # print a.iterativeRewardCalculation(1, absGamma, 0.001)
-    # print a.iterativeRewardCalculation(2, absGamma, 0.001)
-    # print a.iterativeRewardCalculation(3, absGamma, 0.001)
-    # print a.iterativeRewardCalculation(4, absGamma, 0.001)
-    #     for y in a.getStates():
-    #         print a.iterativeTransitionCalculation(x.getIndex(),y.getIndex(),1,0.001)
-    #     print
+    # print a.iterativeRewardCalculation(0, 0.001)
+    # print a.iterativeRewardCalculation(1, 0.001)
+    # print a.iterativeRewardCalculation(2, 0.001)
+    # print a.iterativeRewardCalculation(3, 0.001)
+    # print a.iterativeRewardCalculation(4, 0.001)
+    # print a.iterativeRewardCalculation(5, 0.001)
+
 
     # for x in xrange(0,12):
     #     print a.calculateRewardForOption(x, 0, absGamma, 0.001)
@@ -861,17 +943,56 @@ class Driver:
     # s = a.getStates()
     # print s[4].getTransition()
     # print s[4].getReward()
-    val, act = a.actionsVI(absGamma, 0.0001)
-    print val
-    for x in act:
-        if x is None:
-            print None,
-        else:
-            print x.getIndex(),
-
-    print
-    print
+    # val, act = a.actionsVI(absGamma, 0.0001)
+    # print val
+    # for x in act:
+    #     if x is None:
+    #         print None,
+    #     else:
+    #         print x.getIndex(),
     #
-    v,o = a.optionsVI(absGamma, 0.0001)
-    print v
-    print o
+    # print
+    # print
+    # # #
+    # v,o = a.optionsVI(absGamma, 0.0001)
+    # print v
+    # print o
+
+    gammas = [1.00, 0.99, 0.95, 0.9, 0.8, 0.7, 0.6]
+    delta = 0.00001
+    print('{0:15} {1:15} {2:25} {3:15} {4:15}'.format('Gamma', 'Without Options', 'Iterations', 'With Options', 'Iterations'))
+    for x in gammas:
+        a.autoTransitionFunction(x)
+        z, y, it = a.actionsVI(delta)
+
+        t, u, iter = a.optionsVI(delta)
+        # print t
+        # print u
+        if u[8] == 0:
+            strih = 'Selecting Option.'
+        else:
+            strih = 'Selecting Action.'
+        print('{0:10f} {1:15f} {2:15d} {3:15f} {4:15d} {5:15}'.format(x, z[8], it, t[8], iter, strih))
+
+    # for x in gammas:
+    #     a.autoTransitionFunction(x)
+    #     val, act = a.actionsVI(delta)
+    #     print
+    #     print val
+    #     for y in act:
+    #         if y is None:
+    #             print None,
+    #         else:
+    #             print y.getIndex(),
+    #
+    #     print
+    #     print
+    #
+    #     v,o = a.optionsVI(delta)
+    #     print v
+    #     print o
+
+    for x in gammas:
+        print "Gamma: " + str(x)
+        a.autoTransitionFunction(x)
+        a.generateLP(delta)
