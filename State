@@ -86,7 +86,7 @@ class MDP:
     # Define States
     def initializeStates(self):
         for i in xrange(0, self.numberOfStates):
-            x = State(i, str("s" + str(i)), self.actions[0:4])
+            x = State(i, str("s" + str(i)), self.actions[0:self.numberOfActions-1])
             self.states.append(x)
         self.states[3].setTerminating(True)
         self.states[3].setUtility(1)
@@ -540,7 +540,7 @@ class MDP:
 
     def iterativeTransitionCalculation(self, option, statedash, delta):
 
-        values = [2]*len(self.states)
+        values = [0]*len(self.states)
         while (True):
 
             # print "Values : " + str(values)
@@ -651,10 +651,6 @@ class MDP:
             max_difference = 0
             for s in self.states:
 
-                if s.isTerminating():
-                    dummy[s.getIndex()] = prevvalues[s.getIndex()]
-                    continue
-
                 max_value = float('-INF')
                 for a in s.getPossibleActions():
 
@@ -669,7 +665,6 @@ class MDP:
 
                     sum *= 1
                     sum += float(reward)
-                    sum = round(sum, 15)
 
                     if sum >= max_value:
                         max_value = sum
@@ -732,9 +727,6 @@ class MDP:
 
                 # print
                 # print "State: " + str(s.getIndex())
-                if s.isTerminating():
-                    dummy[s.getIndex()] = prevvalues[s.getIndex()]
-                    continue
 
                 max_value = float('-INF')
                 optionsavailable = [o for o in self.options if s.getIndex() in o.getInitiationSet()]
@@ -799,13 +791,12 @@ class MDP:
 
                     if x.getIndex() == y.getIndex() and y.getIndex() in o.getInitiationSet():
                         triplet.append(float(1))
-                    else:
+                    elif y.getIndex() in o.getInitiationSet():
                         triplet.append(float(0))
 
                 triple.append(triplet)
 
             decisionvar.append(triple)
-
 
 
         rso = []
@@ -858,12 +849,12 @@ class MDP:
         print
 
         ## have to be changed.
-        # for x in decisionvar:
-        #     for y in x:
-        #         for z in y:
-        #             print str(z) +",",
-        #         print "",
-        #     print
+        for x in decisionvar:
+            for y in x:
+                for z in y:
+                    print str(z) +",",
+                print "",
+            print
 
         print
         print
@@ -967,21 +958,21 @@ class Driver:
     # print v
     # print o
 
-    gammas = [0.99, 0.95, 0.9, 0.8, 0.7, 0.6]
-    delta = 0.0001
-    # print('{0:15} {1:15} {2:25} {3:15} {4:15}'.format('Gamma', 'Without Options', 'Iterations', 'With Options', 'Iterations'))
-    # for x in gammas:
-    #     a.autoTransitionFunction(x)
-    #     z, y, it = a.actionsVI(delta)
-    #
-    #     t, u, iter = a.optionsVI(delta)
-    #     # print t
-    #     # print u
-    #     if u[8] == 0:
-    #         str = 'Selecting Option.'
-    #     else:
-    #         str = 'Selecting Action.'
-    #     print('{0:10f} {1:15f} {2:15d} {3:15f} {4:15d} {5:15}'.format(x, z[8], it, t[8], iter, str))
+    gammas = [1.00, 0.99, 0.95, 0.9, 0.8, 0.7, 0.6]
+    delta = 0.00001
+    print('{0:15} {1:15} {2:25} {3:15} {4:15}'.format('Gamma', 'Without Options', 'Iterations', 'With Options', 'Iterations'))
+    for x in gammas:
+        a.autoTransitionFunction(x)
+        z, y, it = a.actionsVI(delta)
+
+        t, u, iter = a.optionsVI(delta)
+        # print t
+        # print u
+        if u[8] == 0:
+            strih = 'Selecting Option.'
+        else:
+            strih = 'Selecting Action.'
+        print('{0:10f} {1:15f} {2:15d} {3:15f} {4:15d} {5:15}'.format(x, z[8], it, t[8], iter, strih))
 
     # for x in gammas:
     #     a.autoTransitionFunction(x)
