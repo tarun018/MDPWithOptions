@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="59d3106a-70ef-477f-a148-a105708777e4" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data.xlsx" afterPath="$PROJECT_DIR$/data.xlsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/MDPWithOptions.iml" afterPath="$PROJECT_DIR$/.idea/MDPWithOptions.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/State.py" afterPath="$PROJECT_DIR$/State.py" />
     </list>
@@ -30,8 +28,8 @@
       <file leaf-file-name="State.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/State.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="94">
-              <caret line="956" column="16" selection-start-line="956" selection-start-column="16" selection-end-line="956" selection-end-column="16" />
+            <state relative-caret-position="61">
+              <caret line="960" column="19" selection-start-line="960" selection-start-column="19" selection-end-line="960" selection-end-column="19" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
                 <element signature="e#84#1286#0" expanded="false" />
@@ -70,7 +68,7 @@
       <file leaf-file-name="transitionData" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transitionData">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="349">
+            <state relative-caret-position="408">
               <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
               <folding />
             </state>
@@ -109,8 +107,8 @@
         <option value="$PROJECT_DIR$/rewardData" />
         <option value="$PROJECT_DIR$/transitionData" />
         <option value="$PROJECT_DIR$/State" />
-        <option value="$PROJECT_DIR$/State.py" />
         <option value="$PROJECT_DIR$/OptionsData" />
+        <option value="$PROJECT_DIR$/State.py" />
       </list>
     </option>
   </component>
@@ -366,7 +364,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34042552" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2974359" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29692832" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -708,18 +706,18 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/check" />
-    <entry file="file://$PROJECT_DIR$/transitionData">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rewardData">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/transitionData">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -734,8 +732,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/State.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
-          <caret line="956" column="16" selection-start-line="956" selection-start-column="16" selection-end-line="956" selection-end-column="16" />
+        <state relative-caret-position="61">
+          <caret line="960" column="19" selection-start-line="960" selection-start-column="19" selection-end-line="960" selection-end-column="19" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
             <element signature="e#84#1286#0" expanded="false" />

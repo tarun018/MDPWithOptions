@@ -958,7 +958,7 @@ class Driver:
     # print v
     # print o
 
-    gammas = [0.99]
+    gammas = [1.0, 0.99]
     # gammas = [1.00, 0.99, 0.95, 0.9, 0.8, 0.7, 0.6]
     delta = 0.00001
     print('{0:15} {1:15} {2:25} {3:15} {4:15}'.format('Gamma', 'Without Options', 'Iterations', 'With Options', 'Iterations'))
