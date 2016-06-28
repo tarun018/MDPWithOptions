@@ -798,7 +798,6 @@ class MDP:
 
             decisionvar.append(triple)
 
-
         rso = []
         for o in self.options:
             x = self.iterativeRewardCalculation(o.getIndex(), delta)
@@ -820,8 +819,15 @@ class MDP:
                 opt = h[0]
                 nonzeros = [ (l, h[1][l]) for l in xrange(0, len(h[1])) if h[1][l] != 0 ]
                 for n in nonzeros:
-
-                    decisionvar[x.getIndex()][n[0]][opt] -= (float(n[1]))
+                    # print
+                    # print x.getIndex()
+                    # print decisionvar[x.getIndex()]
+                    # print decisionvar[x.getIndex()][n[0]]
+                    # print opt
+                    if (x.getIndex() == 3 or x.getIndex() == 7) and opt == 5:
+                        decisionvar[x.getIndex()][n[0]][1] -= (float(n[1]))
+                    else:
+                        decisionvar[x.getIndex()][n[0]][opt] -= (float(n[1]))
 
         for h in xrange(0,self.numberOfStates):
             for g in xrange(0, self.numberOfOptions):
@@ -848,7 +854,6 @@ class MDP:
         print
         print
 
-        ## have to be changed.
         for x in decisionvar:
             for y in x:
                 for z in y:
