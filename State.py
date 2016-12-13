@@ -1,7 +1,11 @@
 import csv
 from copy import deepcopy
 from decimal import Decimal
-
+import numpy as np
+import cvxopt
+import cvxopt.solvers
+from cvxopt import matrix, log, spdiag
+import cvxpy
 class State:
 
     def __init__(self, ind, name, actions):
@@ -13,8 +17,8 @@ class State:
         self.terminating = False
         self.utility = 0
 
-    def __str__(self):
-        print "Index: " + str(self.index) + " Name: " + self.name + " Actions: " + str(self.possibleActions)
+    def __repr__(self):
+        return "Name: " + self.name
 
     def modifyActions(self, actions):
         self.possibleActions = actions
@@ -60,8 +64,8 @@ class Action:
         self.index = ind
         self.name = name
 
-    def __str__(self):
-        print "Index: " + str(self.index) + " Name: " + self.name
+    def __repr__(self):
+        return "Index: " + str(self.index) + " Name: " + self.name
 
     def getIndex(self):
         return self.index
@@ -93,10 +97,9 @@ class MDP:
         self.states[3].setPossibleActions([self.actions[self.numberOfActions-1]])
         self.states[7].setTerminating(True)
         self.states[7].setUtility(-1)
-        self.states[7].setPossibleActions([self.actions[self.numberOfActions - 1]])
+        self.states[7].setPossibleActions([self.actions[self.numberOfActions-1]])
 
     # Leave one line space after each transition table for each action in the data file.
-    # TransitionFunction For Acti
     def autoTransitionFunction(self, gamma=1):
         for s in self.states:
             s.setTransition([])
@@ -778,6 +781,164 @@ class MDP:
                 break
         return values, optionsbest, iterations
 
+    def generateLPAc(self, gamma):
+        decisionvar = []
+        for x in self.states:
+            triple = []
+            for y in self.states:
+                triplet = []
+                for a in y.possibleActions:
+                    if x.getIndex() == y.getIndex():
+                        triplet.append(float(1))
+                    else:
+                        triplet.append(float(0))
+                triple.append(triplet)
+            decisionvar.append(triple)
+
+        for x in self.states:
+            incoming = []
+            for s in self.states:
+                for t in s.transition:
+                    if t[1]==x.getIndex() and t[2]!=0:
+                        incoming.append((s, t[0], t[2]))
+
+            for h in incoming:
+                decisionvar[x.getIndex()][h[0].getIndex()][h[1]] -= gamma*float(h[2])
+
+        # for x in decisionvar:
+        #     for y in x:
+        #         for z in y:
+        #             print str(z) + ",",
+        #         print "",
+        #     print
+        #
+        # print
+        # print
+        A_mat = []
+        for x in decisionvar:
+            lit = []
+            for t in x:
+                lit.extend(t)
+            A_mat.append(lit)
+
+        newA = A_mat
+
+        # for x in A_mat:
+        #     print x
+
+        R_mat = []
+        for x in self.states:
+            for y in x.possibleActions:
+                for r in x.reward:
+                    if r[0]==y.getIndex():
+                        R_mat.append(r[1])
+        #print R_mat
+
+        newR = []
+        R_min = -1
+        R_max = 1
+        for x in self.states:
+            for y in x.possibleActions:
+                for r in x.reward:
+                    if r[0]==y.getIndex():
+                        newR.append((r[1]-R_min)/(R_max-R_min))
+
+        #print decisionvar
+        return A_mat, R_mat, newR, newA
+
+    def lpsolve(self, gamma):
+        a, R, newR, newA = self.generateLPAc(gamma)
+        R_mat = -1 * np.array(R)[np.newaxis].T
+        A_mat = np.array(a)
+        alpha = np.zeros((np.shape(a)[0], 1))
+        G = -1*np.identity(np.shape(R)[0])
+        h = np.zeros((np.shape(R)[0], 1))
+        alpha[8][0] = 1.0
+
+        A = cvxopt.matrix(A_mat)
+        b = cvxopt.matrix(alpha)
+        c = cvxopt.matrix(R_mat)
+        G = cvxopt.matrix(G)
+        h = cvxopt.matrix(h)
+        sol = cvxopt.solvers.lp(c, G, h, A, b)
+        x_mat = np.array(sol['x'])
+        print -1*np.dot(np.transpose(x_mat), R_mat)
+
+    # def lpsolveEM(self, gamma):
+    #     a, R, newR, newA = self.generateLPAc(gamma)
+    #     R_mat = -1 * np.array(newR)[np.newaxis].T
+    #     A_mat = np.array(newA)
+    #     alpha = np.zeros((np.shape(a)[0]+1, 1))
+    #     G = -1*np.identity(np.shape(R)[0])
+    #     h = np.zeros((np.shape(R)[0], 1))
+    #     alpha[8][0] = 1.0
+    #     alpha[12][0] = 1/(1-gamma)
+    #     x_mat = np.zeros((np.shape(R_mat)[0], 1))
+    #     while(True):
+    #         A = cvxopt.matrix(A_mat)
+    #         b = cvxopt.matrix(alpha)
+    #         G = cvxopt.matrix(G)
+    #         h = cvxopt.matrix(h)
+    #
+    #         def F(x=None, z=None):
+    #             if x is None: return 0, matrix(1.0, (42, 1))
+    #             if min(x) <= 0.0: return None
+    #             f = -sum(R_mat * x_mat * log(x))
+    #             Df = -(x ** -1).T
+    #             if z is None: return f, Df
+    #             H = spdiag(z[0] * x ** -2)
+    #             return f, Df, H
+    #
+    #         sol = cvxopt.solvers.cp(F=F, G=G, h=h, A=A, b=b)
+    #         x_mat = np.array(sol['x'])
+    #         print -1*np.dot(np.transpose(x_mat), R)
+
+    def solveLP(self, gamma):
+        A, R, newR, newA = self.generateLPAc(gamma)
+        #print len(R)
+        R_mat = np.array(R)[np.newaxis].T
+        A_mat = np.array(A)
+        alpha = np.zeros((np.shape(A)[0], 1))
+        alpha[8][0] = 1.0
+
+        x = cvxpy.Variable(42, 1)
+        obj = cvxpy.Maximize(np.transpose(R_mat)*x)
+        constraints = [A_mat*x == alpha, x >= 0]
+        prob = cvxpy.Problem(obj, constraints)
+        prob.solve()
+        #print "status:", prob.status
+        print "LPsolver: optimal value", prob.value
+        #print "optimal var", x.value
+
+    def solveNewLP(self, gamma, x_mat_val=None, touse=0):
+        print cvxpy.installed_solvers()
+        A, R, newR, newA = self.generateLPAc(gamma)
+        #print newA
+        R_mat = np.array(newR)[np.newaxis].T
+        A_mat = np.array(A)
+        alpha = np.zeros((np.shape(A)[0], 1))
+        alpha[8][0] = 1.0
+
+        if(touse==0):
+            x_mat = np.random.uniform(0,1 , size=(np.shape(A_mat)[1], 1))
+        else:
+            x_mat = x_mat_val
+
+        #print x_mat
+        rdiag = np.diag(R_mat[:,0])
+        rdiagx = rdiag.dot(x_mat)
+
+        xstar = cvxpy.Variable(42, 1)
+        obj = cvxpy.Maximize(np.transpose(rdiagx)*cvxpy.log(xstar))
+        constraints = [A_mat*xstar == alpha, xstar>0]
+        prob = cvxpy.Problem(obj, constraints)
+        prob.solve(solver=cvxpy.ECOS, verbose=False, max_iters=100)
+        print np.transpose(R)*xstar.value
+        #print cvxpy.sum_entries(xstar.value).value
+        #prob.solve()
+
+        return xstar.value, prob.value
+
     def generateLP(self, delta):
         decisionvar = []
 
@@ -909,18 +1070,30 @@ class Option:
         print "Beta: " + str(self.beta) + " Policy: " + str(self.policy)
 
 class Driver:
-    a = MDP(12, 5)
+    a = MDP(12,5)
     a.initializeActions()
     a.initializeStates()
     a.autoTransitionFunction()
     a.autoRewardFunction()
-    a.setOptions(readFromFile=True)
+    gamma = 0.99
 
-    for x in a.getActions():
-        a.modelActionAsOptions(x)
+    a.generateLPAc(gamma)
+    a.solveLP(gamma)
+    xv, v = a.solveNewLP(gamma)
+    for i in xrange(50):
+        xvv, vv = a.solveNewLP(gamma, x_mat_val=xv, touse=1)
+        xv = xvv
+
+    # print xv1, v1
+    # a.lpsolve(0.95)
+    #a.setOptions(readFromFile=True)
+    #a.generateLPAc()
+    # for x in a.getActions():
+    #     a.modelActionAsOptions(x)
 
     # for x in a.getStates():
-    #     print x.getReward()
+    #     print x.transition
+
     # o = a.getOptions()
     # for x in o:
     #     for y in a.getStates():
@@ -957,24 +1130,27 @@ class Driver:
     # v,o = a.optionsVI(absGamma, 0.0001)
     # print v
     # print o
-
-    gammas = [1.0, 0.99]
     # gammas = [1.00, 0.99, 0.95, 0.9, 0.8, 0.7, 0.6]
     delta = 0.00001
-    print('{0:15} {1:15} {2:25} {3:15} {4:15}'.format('Gamma', 'Without Options', 'Iterations', 'With Options', 'Iterations'))
+    gammas = [0.99]
+    #print('{0:15} {1:15} {2:25} {3:15} {4:15}'.format('Gamma', 'Without Options', 'Iterations', 'With Options', 'Iterations'))
     for x in gammas:
         a.autoTransitionFunction(x)
+        #a.lpsolve(x)
+        #a.solveLP(x)
+        #a.autoTransitionFunction(x)
+
         z, y, it = a.actionsVI(delta)
-
-        t, u, iter = a.optionsVI(delta)
-        # print t
-        # print u
-        if u[8] == 0:
-            strih = 'Selecting Option.'
-        else:
-            strih = 'Selecting Action.'
-        print('{0:10f} {1:15f} {2:15d} {3:15f} {4:15d} {5:15}'.format(x, z[8], it, t[8], iter, strih))
-
+        #
+        # t, u, iter = a.optionsVI(delta)
+        # # print t
+        # # print u
+        # if u[8] == 0:
+        #     strih = 'Selecting Option.'
+        # else:
+        #     strih = 'Selecting Action.'
+        # print('{0:10f} {1:15f} {2:15d} {3:15f} {4:15d} {5:15}'.format(x, z[8], it, t[8], iter, strih))
+        print "VI Solver: ", z[8], y, it
     # for x in gammas:
     #     a.autoTransitionFunction(x)
     #     val, act = a.actionsVI(delta)
@@ -992,8 +1168,8 @@ class Driver:
     #     v,o = a.optionsVI(delta)
     #     print v
     #     print o
-
-    for x in gammas:
-        print "Gamma: " + str(x)
-        a.autoTransitionFunction(x)
-        a.generateLP(delta)
+    #
+    # for x in gammas:
+    #     print "Gamma: " + str(x)
+    #     a.autoTransitionFunction(x)
+    #     a.generateLP(delta)
