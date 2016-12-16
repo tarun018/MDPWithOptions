@@ -1,11 +1,10 @@
 import csv
 from copy import deepcopy
-from decimal import Decimal
 import numpy as np
 import cvxopt
 import cvxopt.solvers
-from cvxopt import matrix, log, spdiag
 import cvxpy
+
 class State:
 
     def __init__(self, ind, name, actions):
@@ -49,8 +48,6 @@ class State:
 
     def setTerminating(self, term):
         self.terminating = term
-        if term == True:
-            self.possibleActions = []
 
     def setUtility(self, util):
         self.utility = util
@@ -90,14 +87,14 @@ class MDP:
     # Define States
     def initializeStates(self):
         for i in xrange(0, self.numberOfStates):
-            x = State(i, str("s" + str(i)), self.actions[0:self.numberOfActions-1])
+            x = State(i, str("s" + str(i)), self.actions)
             self.states.append(x)
-        self.states[3].setTerminating(True)
-        self.states[3].setUtility(1)
-        self.states[3].setPossibleActions([self.actions[self.numberOfActions-1]])
-        self.states[7].setTerminating(True)
-        self.states[7].setUtility(-1)
-        self.states[7].setPossibleActions([self.actions[self.numberOfActions-1]])
+        # self.states[3].setTerminating(True)
+        # self.states[3].setUtility(1)
+        # self.states[3].setPossibleActions([self.actions[self.numberOfActions-1]])
+        # self.states[7].setTerminating(True)
+        # self.states[7].setUtility(-1)
+        # self.states[7].setPossibleActions([self.actions[self.numberOfActions-1]])
 
     # Leave one line space after each transition table for each action in the data file.
     def autoTransitionFunction(self, gamma=1):
@@ -105,7 +102,7 @@ class MDP:
             s.setTransition([])
         stateIndex = 0
         actionIndex = 0
-        with open('transitionData', 'rb') as csvfile:
+        with open('tranData', 'rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 if len(row) == 0:
@@ -121,22 +118,8 @@ class MDP:
     def autoRewardFunction(self):
 
         tosend = []
-        # if readFromFile == False:
-        #     for x in self.states:
-        #         if x.isTerminating():
-        #             if x.getIndex() == 5:
-        #                 triple = (a.getIndex(), -1)
-        #             elif x.getIndex() == 8:
-        #                 triple = (a.getIndex(), 1)
-        #             tosend.append(triple)
-        #         else:
-        #             for a in self.actions:
-        #                 triple = (a.getIndex(), -0.04)
-        #                 tosend.append(triple)
-        #         x.setReward(tosend)
-        # else:
         stateIndex = 0
-        with open('rewardData', 'rb') as csvfile:
+        with open('rewdata', 'rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 if len(row)==0:
@@ -194,223 +177,6 @@ class MDP:
                             tosend.append(triple)
                             stateIndex += 1
                         actionIndex += 1
-
-
-    # def calculateRewardForOption(self, state, option, gamma, delta):
-    #
-    #     # print gamma
-    #     sums = 0
-    #     # print "State: " + str(state)
-    #     # print "Option: " + str(option)
-    #     if state not in self.options[option].getInitiationSet():
-    #         # print "Not in Initiation Set."
-    #         return  0
-    #
-    #     actionsavail = self.states[state].getPossibleActions()
-    #
-    #     if len(actionsavail) == 0:
-    #         return 0
-    #
-    #     for act in actionsavail:
-    #
-    #         # print
-    #         # print "State: " + str(state)
-    #         # print "Action: " + str(act.getIndex())
-    #         sumForAction = 0
-    #         probOfAction = 0
-    #         immReward = 0
-    #         possibleStates = []
-    #         actionSet = self.options[option].getPolicy()
-    #
-    #         for x in actionSet:
-    #             if x[0] == state and x[1] == act.getIndex():
-    #                 probOfAction = x[2]
-    #                 break
-    #
-    #         # print "Prob Of Action: " + str(probOfAction)
-    #
-    #         # if probOfAction == 0:
-    #         #     avail = self.states[state].getPossibleActions()
-    #         #     avail = filter(lambda a: a != act.getIndex(), avail)
-    #         #     self.states[state].setPossibleActions(avail)
-    #         #     continue
-    #
-    #         rewards = self.states[state].getReward()
-    #         for x in rewards:
-    #             if x[0] == act.getIndex():
-    #                 immReward = x[1]
-    #                 break
-    #
-    #         # print "Imm Reward: " + str(immReward)
-    #
-    #         if probOfAction != 0 and gamma > delta:
-    #
-    #             transitions = self.states[state].getTransition()
-    #
-    #             # print "Transition Function for " + str(state) + " is: " + str(transitions)
-    #             for x in transitions:
-    #                 if x[0] == act.getIndex() and x[2] != 0:
-    #                     possibleStates.append((x[1], x[2]))
-    #
-    #             # print "Possible States from " + str(state) + " are: " + str(possibleStates)
-    #
-    #             for x in possibleStates:
-    #
-    #                 product = 0
-    #                 if len(possibleStates) == 0:
-    #                     break
-    #
-    #                 # print "Possible State: " + str(x)
-    #
-    #
-    #                 sdash = self.states[x[0]]
-    #                 prob = float(x[1])
-    #
-    #                 # print "Sdash: " +str(sdash.getIndex())
-    #                 # print "prob: " + str(prob)
-    #
-    #                 beta_sdash = float(self.options[option].getBeta()[x[0]])
-    #
-    #                 # print "Beta_sdash: " + str(1-beta_sdash)
-    #
-    #                 if prob != 0 and (1-beta_sdash) != 0:
-    #                     product = prob * (1 - float(beta_sdash)) * self.calculateRewardForOption(sdash.getIndex(), option, gamma, delta)
-    #
-    #                 # print "Product for this state: " + str(product)
-    #                 sumForAction += product
-    #
-    #
-    #             # print "Sum for Action: " + str(sumForAction)
-    #             sumForAction *= gamma
-    #
-    #             sumForAction += immReward
-    #
-    #             sumForAction *= probOfAction
-    #
-    #             # print "Final Sum For Action: " + str(sumForAction)
-    #             # print
-    #
-    #         else:
-    #             # print "Prob of action is 0."
-    #             sumForAction = 0
-    #
-    #         # print immReward
-    #         # print probOfAction
-    #         # if sumForAction <= 0:
-    #         #     avail = self.states[state].getPossibleActions()
-    #         #     avail.remove(act.getIndex())
-    #         #     self.states[state].setPossibleActions(avail)
-    #
-    #         sums += sumForAction
-    #         # print "Sums: " + str(sums)
-    #         # print
-    #
-    #     return sums
-    #
-    # def calculateTransitionForOption(self, state, option, statedash, gamma, delta):
-    #
-    #     sums = 0
-    #     # print "State: " + str(state)
-    #     # print "Option: " + str(option)
-    #     # print "Statedash: " + str(statedash)
-    #     if state not in self.options[option].getInitiationSet():
-    #         # print "Not in Initiation Set."
-    #         return 0
-    #
-    #     actionsavail = self.states[state].getPossibleActions()
-    #
-    #     if len(actionsavail) == 0:
-    #         return 0
-    #
-    #     for act in actionsavail:
-    #
-    #         # print
-    #         # print "State: " + str(state)
-    #         # print "Action: " + str(act.getIndex())
-    #         sumForAction = 0
-    #         probOfAction = 0
-    #         possibleStates = []
-    #         actionSet = self.options[option].getPolicy()
-    #
-    #         for x in actionSet:
-    #             if x[0] == state and x[1] == act.getIndex():
-    #                 probOfAction = x[2]
-    #                 break
-    #
-    #         # print "Prob Of Action: " + str(probOfAction)
-    #
-    #         # if probOfAction == 0:
-    #         #     avail = self.states[state].getPossibleActions()
-    #         #     avail = filter(lambda a: a != act.getIndex(), avail)
-    #         #     self.states[state].setPossibleActions(avail)
-    #         #     continue
-    #
-    #         if probOfAction != 0 and gamma > delta:
-    #
-    #             transitions = self.states[state].getTransition()
-    #
-    #             # print "Transition Function for " + str(state) + " is: " + str(transitions)
-    #             for x in transitions:
-    #                 if x[0] == act.getIndex() and x[2] != 0:
-    #                     possibleStates.append((x[1], x[2]))
-    #
-    #             # print "Possible States from " + str(state) + " are: " + str(possibleStates)
-    #
-    #             for x in possibleStates:
-    #
-    #                 product = 0
-    #                 if len(possibleStates) == 0:
-    #                     break
-    #
-    #                 # print "Possible State: " + str(x)
-    #
-    #
-    #                 sdash = self.states[x[0]]
-    #                 prob = float(x[1])
-    #
-    #                 # print "Sdash: " +str(sdash.getIndex())
-    #                 # print "prob: " + str(prob)
-    #
-    #                 beta_sdash = float(self.options[option].getBeta()[x[0]])
-    #
-    #                 # print "1-Beta_sdash: " + str(1-beta_sdash)
-    #
-    #                 if prob != 0 and float(1 - beta_sdash) != 0:
-    #                     product += ((1 - float(beta_sdash)) * self.calculateTransitionForOption(sdash.getIndex(),
-    #                                                                                              option, statedash, gamma, delta))
-    #
-    #                 if prob != 0 and float(beta_sdash) != 0:
-    #                     product += (beta_sdash * self.delta(float(sdash.getIndex()), float(statedash)))
-    #
-    #                 product *= prob
-    #
-    #                 # print "Product for this state: " + str(product)
-    #                 sumForAction += product
-    #
-    #             # print "Sum for Action: " + str(sumForAction)
-    #
-    #             sumForAction *= gamma
-    #             sumForAction *= probOfAction
-    #
-    #             # print "Final Sum For Action: " + str(sumForAction)
-    #             # print
-    #
-    #         else:
-    #             # print "Prob of action is 0."
-    #             sumForAction = 0
-    #
-    #         # print immReward
-    #         # print probOfAction
-    #         # if sumForAction <= 0:
-    #         #     avail = self.states[state].getPossibleActions()
-    #         #     avail.remove(act.getIndex())
-    #         #     self.states[state].setPossibleActions(avail)
-    #
-    #         sums += sumForAction
-    #         # print "Sums: " + str(sums)
-    #         # print
-    #
-    #     return sums
 
     def modelActionAsOptions(self, action):
         global optionIndex
@@ -639,7 +405,7 @@ class MDP:
 
         return values
 
-    def actionsVI(self, delta):
+    def actionsVI(self, delta, gamma):
 
         iter = 0
         values = [x.getUtility() for x in self.states]
@@ -835,8 +601,8 @@ class MDP:
         #print R_mat
 
         newR = []
-        R_min = -1
-        R_max = 1
+        R_min = -3
+        R_max = 3
         for x in self.states:
             for y in x.possibleActions:
                 for r in x.reward:
@@ -844,7 +610,7 @@ class MDP:
                         newR.append((r[1]-R_min)/(R_max-R_min))
 
         #print decisionvar
-        return A_mat, R_mat, newR, newA
+        return A_mat, R_mat, newR
 
     def lpsolve(self, gamma):
         a, R, newR, newA = self.generateLPAc(gamma)
@@ -864,80 +630,69 @@ class MDP:
         x_mat = np.array(sol['x'])
         print -1*np.dot(np.transpose(x_mat), R_mat)
 
-    # def lpsolveEM(self, gamma):
-    #     a, R, newR, newA = self.generateLPAc(gamma)
-    #     R_mat = -1 * np.array(newR)[np.newaxis].T
-    #     A_mat = np.array(newA)
-    #     alpha = np.zeros((np.shape(a)[0]+1, 1))
-    #     G = -1*np.identity(np.shape(R)[0])
-    #     h = np.zeros((np.shape(R)[0], 1))
-    #     alpha[8][0] = 1.0
-    #     alpha[12][0] = 1/(1-gamma)
-    #     x_mat = np.zeros((np.shape(R_mat)[0], 1))
-    #     while(True):
-    #         A = cvxopt.matrix(A_mat)
-    #         b = cvxopt.matrix(alpha)
-    #         G = cvxopt.matrix(G)
-    #         h = cvxopt.matrix(h)
-    #
-    #         def F(x=None, z=None):
-    #             if x is None: return 0, matrix(1.0, (42, 1))
-    #             if min(x) <= 0.0: return None
-    #             f = -sum(R_mat * x_mat * log(x))
-    #             Df = -(x ** -1).T
-    #             if z is None: return f, Df
-    #             H = spdiag(z[0] * x ** -2)
-    #             return f, Df, H
-    #
-    #         sol = cvxopt.solvers.cp(F=F, G=G, h=h, A=A, b=b)
-    #         x_mat = np.array(sol['x'])
-    #         print -1*np.dot(np.transpose(x_mat), R)
-
     def solveLP(self, gamma):
-        A, R, newR, newA = self.generateLPAc(gamma)
+        A, R, newR = self.generateLPAc(gamma)
         #print len(R)
         R_mat = np.array(R)[np.newaxis].T
         A_mat = np.array(A)
         alpha = np.zeros((np.shape(A)[0], 1))
-        alpha[8][0] = 1.0
-
-        x = cvxpy.Variable(42, 1)
+        alpha[0][0] = 1.0
+        global num_vars
+        x = cvxpy.Variable(12, 1)
         obj = cvxpy.Maximize(np.transpose(R_mat)*x)
         constraints = [A_mat*x == alpha, x >= 0]
         prob = cvxpy.Problem(obj, constraints)
         prob.solve()
         #print "status:", prob.status
         print "LPsolver: optimal value", prob.value
+        return prob.value
         #print "optimal var", x.value
 
-    def solveNewLP(self, gamma, x_mat_val=None, touse=0):
-        print cvxpy.installed_solvers()
-        A, R, newR, newA = self.generateLPAc(gamma)
-        #print newA
-        R_mat = np.array(newR)[np.newaxis].T
+    def EM(self, gamma, delta):
+        A, R, newR = self.generateLPAc(gamma)
+        dualLP = self.solveLP(gamma)
+        newR = np.array(newR)[np.newaxis].T
         A_mat = np.array(A)
         alpha = np.zeros((np.shape(A)[0], 1))
-        alpha[8][0] = 1.0
+        alpha[0][0] = 1.0
+        global num_vars
+        initial_x = [0.5] * 12
+        initial_x = np.array(initial_x)
+        rdiagx,total = self.Estep(newR, initial_x, gamma)
+        xstar_val = self.Mstep(rdiagx, initial_x, total, A_mat, alpha)
+        expectedRew = np.asscalar(np.transpose(R) * xstar_val)
+        print "Expected Reward from EM: ", expectedRew
 
-        if(touse==0):
-            x_mat = np.random.uniform(0,1 , size=(np.shape(A_mat)[1], 1))
-        else:
-            x_mat = x_mat_val
+        #prevExpecRew = expectedRew
+        while(True):
+            xstar_val = np.array(xstar_val)
+            rdiagx, total = self.Estep(newR, xstar_val, gamma)
+            xstar_val = self.Mstep(rdiagx, xstar_val, total, A_mat, alpha)
+            expectedRew = np.asscalar(np.transpose(R)*xstar_val)
+            print "Expected Reward from EM: ", expectedRew
+            if (abs(dualLP - expectedRew) < delta) :
+                break
+            #prevExpecRew = expectedRew
 
-        #print x_mat
-        rdiag = np.diag(R_mat[:,0])
-        rdiagx = rdiag.dot(x_mat)
+    def Estep(self, Rcap, x, gamma):
+        print "Estep: "
+        rdiag = np.diag(Rcap[:,0])
+        rdiagx = rdiag.dot(x)
+        rdiagx = rdiagx*(1-gamma)
+        total = np.sum(rdiagx)
+        rdiagx = rdiagx/total
+        print np.transpose(rdiagx), total
+        return rdiagx, total
 
-        xstar = cvxpy.Variable(42, 1)
-        obj = cvxpy.Maximize(np.transpose(rdiagx)*cvxpy.log(xstar))
-        constraints = [A_mat*xstar == alpha, xstar>0]
-        prob = cvxpy.Problem(obj, constraints)
+    def Mstep(self, E, x, c, A_mat, alpha):
+        print "Mstep: "
+        xstar = cvxpy.Variable(12, 1)
+        obj = cvxpy.Maximize(np.transpose(E)*(cvxpy.log(xstar) - cvxpy.log(x) + cvxpy.log(c)))
+        cons = [A_mat*xstar == alpha, xstar>0]
+        prob = cvxpy.Problem(objective=obj, constraints=cons)
         prob.solve(solver=cvxpy.ECOS, verbose=False, max_iters=100)
-        print np.transpose(R)*xstar.value
-        #print cvxpy.sum_entries(xstar.value).value
-        #prob.solve()
-
-        return xstar.value, prob.value
+        print np.transpose(xstar.value)
+        return xstar.value
 
     def generateLP(self, delta):
         decisionvar = []
@@ -1070,20 +825,16 @@ class Option:
         print "Beta: " + str(self.beta) + " Policy: " + str(self.policy)
 
 class Driver:
-    a = MDP(12,5)
+    a = MDP(6,2)
     a.initializeActions()
     a.initializeStates()
     a.autoTransitionFunction()
     a.autoRewardFunction()
-    gamma = 0.99
+    gamma = 0.7
 
-    a.generateLPAc(gamma)
+    #a.generateLPAc(gamma)
     a.solveLP(gamma)
-    xv, v = a.solveNewLP(gamma)
-    for i in xrange(50):
-        xvv, vv = a.solveNewLP(gamma, x_mat_val=xv, touse=1)
-        xv = xvv
-
+    a.EM(gamma, 0.001)
     # print xv1, v1
     # a.lpsolve(0.95)
     #a.setOptions(readFromFile=True)
@@ -1132,7 +883,7 @@ class Driver:
     # print o
     # gammas = [1.00, 0.99, 0.95, 0.9, 0.8, 0.7, 0.6]
     delta = 0.00001
-    gammas = [0.99]
+    gammas = [gamma]
     #print('{0:15} {1:15} {2:25} {3:15} {4:15}'.format('Gamma', 'Without Options', 'Iterations', 'With Options', 'Iterations'))
     for x in gammas:
         a.autoTransitionFunction(x)
@@ -1140,7 +891,7 @@ class Driver:
         #a.solveLP(x)
         #a.autoTransitionFunction(x)
 
-        z, y, it = a.actionsVI(delta)
+        z, y, it = a.actionsVI(delta, x)
         #
         # t, u, iter = a.optionsVI(delta)
         # # print t
@@ -1150,7 +901,7 @@ class Driver:
         # else:
         #     strih = 'Selecting Action.'
         # print('{0:10f} {1:15f} {2:15d} {3:15f} {4:15d} {5:15}'.format(x, z[8], it, t[8], iter, strih))
-        print "VI Solver: ", z[8], y, it
+        print "VI Solver: ", z[0]
     # for x in gammas:
     #     a.autoTransitionFunction(x)
     #     val, act = a.actionsVI(delta)
