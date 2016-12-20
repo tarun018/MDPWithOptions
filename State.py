@@ -89,6 +89,7 @@ class MDP:
         for i in xrange(0, self.numberOfStates):
             x = State(i, str("s" + str(i)), self.actions)
             self.states.append(x)
+        self.states[1].setPossibleActions([self.actions[0]])
         # self.states[3].setTerminating(True)
         # self.states[3].setUtility(1)
         # self.states[3].setPossibleActions([self.actions[self.numberOfActions-1]])
@@ -102,7 +103,7 @@ class MDP:
             s.setTransition([])
         stateIndex = 0
         actionIndex = 0
-        with open('tranData', 'rb') as csvfile:
+        with open('tdata', 'rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 if len(row) == 0:
@@ -119,7 +120,7 @@ class MDP:
 
         tosend = []
         stateIndex = 0
-        with open('rewdata', 'rb') as csvfile:
+        with open('rdata', 'rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 if len(row)==0:
@@ -601,8 +602,8 @@ class MDP:
         #print R_mat
 
         newR = []
-        R_min = -3
-        R_max = 3
+        R_min = -1
+        R_max = 1
         for x in self.states:
             for y in x.possibleActions:
                 for r in x.reward:
@@ -635,17 +636,22 @@ class MDP:
         #print len(R)
         R_mat = np.array(R)[np.newaxis].T
         A_mat = np.array(A)
+
         alpha = np.zeros((np.shape(A)[0], 1))
-        alpha[0][0] = 1.0
+        alpha[0][0] = 0.5
+        alpha[1][0] = 0.5
         global num_vars
-        x = cvxpy.Variable(12, 1)
+        x = cvxpy.Variable(3, 1)
         obj = cvxpy.Maximize(np.transpose(R_mat)*x)
         constraints = [A_mat*x == alpha, x >= 0]
         prob = cvxpy.Problem(obj, constraints)
         prob.solve()
         #print "status:", prob.status
         print "LPsolver: optimal value", prob.value
+        print "Optimal x: ", x.value
+        print "Sum of x values: ", cvxpy.sum_entries(x).value
         return prob.value
+
         #print "optimal var", x.value
 
     def EM(self, gamma, delta):
@@ -654,9 +660,10 @@ class MDP:
         newR = np.array(newR)[np.newaxis].T
         A_mat = np.array(A)
         alpha = np.zeros((np.shape(A)[0], 1))
-        alpha[0][0] = 1.0
+        alpha[0][0] = 0.5
+        alpha[1][0] = 0.5
         global num_vars
-        initial_x = [0.5] * 12
+        initial_x = [0.5] * 3
         initial_x = np.array(initial_x)
         rdiagx,total = self.Estep(newR, initial_x, gamma)
         xstar_val = self.Mstep(rdiagx, initial_x, total, A_mat, alpha)
@@ -672,6 +679,9 @@ class MDP:
             print "Expected Reward from EM: ", expectedRew
             if (abs(dualLP - expectedRew) < delta) :
                 break
+
+        print "Optimal x: ", xstar_val
+        print "Sum of x values: ", cvxpy.sum_entries(xstar_val).value
             #prevExpecRew = expectedRew
 
     def Estep(self, Rcap, x, gamma):
@@ -686,7 +696,7 @@ class MDP:
 
     def Mstep(self, E, x, c, A_mat, alpha):
         print "Mstep: "
-        xstar = cvxpy.Variable(12, 1)
+        xstar = cvxpy.Variable(3, 1)
         obj = cvxpy.Maximize(np.transpose(E)*(cvxpy.log(xstar) - cvxpy.log(x) + cvxpy.log(c)))
         cons = [A_mat*xstar == alpha, xstar>0]
         prob = cvxpy.Problem(objective=obj, constraints=cons)
@@ -825,12 +835,12 @@ class Option:
         print "Beta: " + str(self.beta) + " Policy: " + str(self.policy)
 
 class Driver:
-    a = MDP(6,2)
+    a = MDP(2,2)
     a.initializeActions()
     a.initializeStates()
     a.autoTransitionFunction()
     a.autoRewardFunction()
-    gamma = 0.7
+    gamma = 0.95
 
     #a.generateLPAc(gamma)
     a.solveLP(gamma)
@@ -901,7 +911,7 @@ class Driver:
         # else:
         #     strih = 'Selecting Action.'
         # print('{0:10f} {1:15f} {2:15d} {3:15f} {4:15d} {5:15}'.format(x, z[8], it, t[8], iter, strih))
-        print "VI Solver: ", z[0]
+        print "VI Solver: ", z[0], it
     # for x in gammas:
     #     a.autoTransitionFunction(x)
     #     val, act = a.actionsVI(delta)
