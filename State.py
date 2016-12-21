@@ -4,6 +4,7 @@ import numpy as np
 import cvxopt
 import cvxopt.solvers
 import cvxpy
+import config
 
 class State:
 
@@ -89,21 +90,15 @@ class MDP:
         for i in xrange(0, self.numberOfStates):
             x = State(i, str("s" + str(i)), self.actions)
             self.states.append(x)
-        self.states[1].setPossibleActions([self.actions[0]])
-        # self.states[3].setTerminating(True)
-        # self.states[3].setUtility(1)
-        # self.states[3].setPossibleActions([self.actions[self.numberOfActions-1]])
-        # self.states[7].setTerminating(True)
-        # self.states[7].setUtility(-1)
-        # self.states[7].setPossibleActions([self.actions[self.numberOfActions-1]])
+        #self.states[1].setPossibleActions([self.actions[0]])
 
     # Leave one line space after each transition table for each action in the data file.
-    def autoTransitionFunction(self, gamma=1):
+    def autoTransitionFunction(self, filename, gamma=1):
         for s in self.states:
             s.setTransition([])
         stateIndex = 0
         actionIndex = 0
-        with open('tdata', 'rb') as csvfile:
+        with open(filename, 'rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 if len(row) == 0:
@@ -116,11 +111,11 @@ class MDP:
                 stateIndex += 1
 
     # RewardFunctions For Actions
-    def autoRewardFunction(self):
+    def autoRewardFunction(self, filename):
 
         tosend = []
         stateIndex = 0
-        with open('rdata', 'rb') as csvfile:
+        with open(filename, 'rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 if len(row)==0:
@@ -602,15 +597,14 @@ class MDP:
         #print R_mat
 
         newR = []
-        R_min = -1
-        R_max = 1
+        R_min = config.R_min
+        R_max = config.R_max
         for x in self.states:
             for y in x.possibleActions:
                 for r in x.reward:
                     if r[0]==y.getIndex():
                         newR.append((r[1]-R_min)/(R_max-R_min))
 
-        #print decisionvar
         return A_mat, R_mat, newR
 
     def lpsolve(self, gamma):
@@ -637,11 +631,9 @@ class MDP:
         R_mat = np.array(R)[np.newaxis].T
         A_mat = np.array(A)
 
-        alpha = np.zeros((np.shape(A)[0], 1))
-        alpha[0][0] = 0.5
-        alpha[1][0] = 0.5
+        alpha = config.alpha
         global num_vars
-        x = cvxpy.Variable(3, 1)
+        x = cvxpy.Variable(config.num_of_var, 1)
         obj = cvxpy.Maximize(np.transpose(R_mat)*x)
         constraints = [A_mat*x == alpha, x >= 0]
         prob = cvxpy.Problem(obj, constraints)
@@ -655,15 +647,14 @@ class MDP:
         #print "optimal var", x.value
 
     def EM(self, gamma, delta):
+        num_iter = 1
         A, R, newR = self.generateLPAc(gamma)
         dualLP = self.solveLP(gamma)
         newR = np.array(newR)[np.newaxis].T
         A_mat = np.array(A)
-        alpha = np.zeros((np.shape(A)[0], 1))
-        alpha[0][0] = 0.5
-        alpha[1][0] = 0.5
+        alpha = config.alpha
         global num_vars
-        initial_x = [0.5] * 3
+        initial_x = [0.5] * config.num_of_var
         initial_x = np.array(initial_x)
         rdiagx,total = self.Estep(newR, initial_x, gamma)
         xstar_val = self.Mstep(rdiagx, initial_x, total, A_mat, alpha)
@@ -672,6 +663,7 @@ class MDP:
 
         #prevExpecRew = expectedRew
         while(True):
+            num_iter += 1
             xstar_val = np.array(xstar_val)
             rdiagx, total = self.Estep(newR, xstar_val, gamma)
             xstar_val = self.Mstep(rdiagx, xstar_val, total, A_mat, alpha)
@@ -682,6 +674,7 @@ class MDP:
 
         print "Optimal x: ", xstar_val
         print "Sum of x values: ", cvxpy.sum_entries(xstar_val).value
+        print "Number of iterations: ", num_iter
             #prevExpecRew = expectedRew
 
     def Estep(self, Rcap, x, gamma):
@@ -696,7 +689,7 @@ class MDP:
 
     def Mstep(self, E, x, c, A_mat, alpha):
         print "Mstep: "
-        xstar = cvxpy.Variable(3, 1)
+        xstar = cvxpy.Variable(config.num_of_var, 1)
         obj = cvxpy.Maximize(np.transpose(E)*(cvxpy.log(xstar) - cvxpy.log(x) + cvxpy.log(c)))
         cons = [A_mat*xstar == alpha, xstar>0]
         prob = cvxpy.Problem(objective=obj, constraints=cons)
@@ -835,16 +828,16 @@ class Option:
         print "Beta: " + str(self.beta) + " Policy: " + str(self.policy)
 
 class Driver:
-    a = MDP(2,2)
+    a = MDP(config.states,config.actions)
     a.initializeActions()
     a.initializeStates()
-    a.autoTransitionFunction()
-    a.autoRewardFunction()
-    gamma = 0.95
+    a.autoTransitionFunction(filename=config.tranFile)
+    a.autoRewardFunction(filename=config.rewFile)
+    gamma = config.gamma
 
     #a.generateLPAc(gamma)
     a.solveLP(gamma)
-    a.EM(gamma, 0.001)
+    a.EM(gamma, config.delta)
     # print xv1, v1
     # a.lpsolve(0.95)
     #a.setOptions(readFromFile=True)
@@ -892,16 +885,16 @@ class Driver:
     # print v
     # print o
     # gammas = [1.00, 0.99, 0.95, 0.9, 0.8, 0.7, 0.6]
-    delta = 0.00001
+
     gammas = [gamma]
     #print('{0:15} {1:15} {2:25} {3:15} {4:15}'.format('Gamma', 'Without Options', 'Iterations', 'With Options', 'Iterations'))
     for x in gammas:
-        a.autoTransitionFunction(x)
+        a.autoTransitionFunction(filename=config.tranFile, gamma=x)
         #a.lpsolve(x)
         #a.solveLP(x)
         #a.autoTransitionFunction(x)
 
-        z, y, it = a.actionsVI(delta, x)
+        z, y, it = a.actionsVI(config.delta, x)
         #
         # t, u, iter = a.optionsVI(delta)
         # # print t
@@ -911,7 +904,7 @@ class Driver:
         # else:
         #     strih = 'Selecting Action.'
         # print('{0:10f} {1:15f} {2:15d} {3:15f} {4:15d} {5:15}'.format(x, z[8], it, t[8], iter, strih))
-        print "VI Solver: ", z[0], it
+        print "VI Solver: ", z, it
     # for x in gammas:
     #     a.autoTransitionFunction(x)
     #     val, act = a.actionsVI(delta)
