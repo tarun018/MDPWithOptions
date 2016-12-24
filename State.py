@@ -640,7 +640,7 @@ class MDP:
         prob.solve()
         #print "status:", prob.status
         print "LPsolver: optimal value", prob.value
-        print "Optimal x: ", x.value
+        #print "Optimal x: ", x.value
         print "Sum of x values: ", cvxpy.sum_entries(x).value
         return prob.value
 
@@ -684,7 +684,7 @@ class MDP:
         rdiagx = rdiagx*(1-gamma)
         total = np.sum(rdiagx)
         rdiagx = rdiagx/total
-        print np.transpose(rdiagx), total
+        #print np.transpose(rdiagx), total
         return rdiagx, total
 
     def Mstep(self, E, x, c, A_mat, alpha):
@@ -694,7 +694,7 @@ class MDP:
         cons = [A_mat*xstar == alpha, xstar>0]
         prob = cvxpy.Problem(objective=obj, constraints=cons)
         prob.solve(solver=cvxpy.ECOS, verbose=False, max_iters=100)
-        print np.transpose(xstar.value)
+        #print np.transpose(xstar.value)
         return xstar.value
 
     def generateLP(self, delta):
