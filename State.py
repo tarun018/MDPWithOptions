@@ -71,7 +71,8 @@ class Action:
 
 class MDP:
 
-    def __init__(self, numberOfStates, numberOfActions):
+    def __init__(self, agent, numberOfStates, numberOfActions):
+        self.agent = agent
         self.numberOfStates = numberOfStates
         self.numberOfActions = numberOfActions
         self.numberOfOptions = 0
@@ -597,8 +598,8 @@ class MDP:
         #print R_mat
 
         newR = []
-        R_min = config.R_min
-        R_max = config.R_max
+        R_min = config.R_min[self.agent]
+        R_max = config.R_max[self.agent]
         for x in self.states:
             for y in x.possibleActions:
                 for r in x.reward:
@@ -794,6 +795,47 @@ class MDP:
         return self.options
 
 
+class PrimtiveEvent:
+    def __init__(self, agent, state, action, statedash):
+        self.agent = agent
+        self.state = state
+        self.action = action
+        self.statedash = statedash
+
+class Event:
+    def __init__(self, agent, events):
+        self.agent = agent
+        self.events = events
+
+class Constraint:
+    def __init__(self, num_agent, Events, rew):
+        self.num_agent = num_agent
+        self.Events = Events
+        self.reward = rew
+
+class JointReward:
+    def __init__(self, num_cons, cons):
+        self.num_cons = num_cons
+        self.constraints = cons
+
+class EMMDP:
+    def __init__(self, n):
+        self.num_agents = n
+        self.mdps = []
+        self.generateMDPs()
+
+    def generateMDPs(self):
+        for i in xrange(0, self.num_agents):
+            a = MDP(i, config.states, config.actions)
+            a.initializeActions()
+            a.initializeStates()
+            a.autoTransitionFunction(filename=config.tranFile[i])
+            a.autoRewardFunction(filename=config.rewFile[i])
+            gamma = config.gamma
+            self.mdps.append(a)
+
+
+
 class Option:
 
     def __init__(self, ind):
@@ -828,102 +870,6 @@ class Option:
         print "Beta: " + str(self.beta) + " Policy: " + str(self.policy)
 
 class Driver:
-    a = MDP(config.states,config.actions)
-    a.initializeActions()
-    a.initializeStates()
-    a.autoTransitionFunction(filename=config.tranFile)
-    a.autoRewardFunction(filename=config.rewFile)
-    gamma = config.gamma
-
-    #a.generateLPAc(gamma)
-    a.solveLP(gamma)
-    a.EM(gamma, config.delta)
-    # print xv1, v1
-    # a.lpsolve(0.95)
-    #a.setOptions(readFromFile=True)
-    #a.generateLPAc()
-    # for x in a.getActions():
-    #     a.modelActionAsOptions(x)
-
-    # for x in a.getStates():
-    #     print x.transition
-
-    # o = a.getOptions()
-    # for x in o:
-    #     for y in a.getStates():
-    #         print a.iterativeTransitionCalculation(x.getIndex(),y.getIndex(),0.001)
-    #     print
-    #     print x.getPolicy()
-    #     print x.getBeta()
-    #     print x.getInitiationSet()
-    # print a.iterativeRewardCalculation(0, 0.001)
-    # print a.iterativeRewardCalculation(1, 0.001)
-    # print a.iterativeRewardCalculation(2, 0.001)
-    # print a.iterativeRewardCalculation(3, 0.001)
-    # print a.iterativeRewardCalculation(4, 0.001)
-    # print a.iterativeRewardCalculation(5, 0.001)
-
-
-    # for x in xrange(0,12):
-    #     print a.calculateRewardForOption(x, 0, absGamma, 0.001)
-    # print a.iterativeTransitionCalculation(0, 1, absGamma, 0.0001)
-    # s = a.getStates()
-    # print s[4].getTransition()
-    # print s[4].getReward()
-    # val, act = a.actionsVI(absGamma, 0.0001)
-    # print val
-    # for x in act:
-    #     if x is None:
-    #         print None,
-    #     else:
-    #         print x.getIndex(),
-    #
-    # print
-    # print
-    # # #
-    # v,o = a.optionsVI(absGamma, 0.0001)
-    # print v
-    # print o
-    # gammas = [1.00, 0.99, 0.95, 0.9, 0.8, 0.7, 0.6]
-
-    gammas = [gamma]
-    #print('{0:15} {1:15} {2:25} {3:15} {4:15}'.format('Gamma', 'Without Options', 'Iterations', 'With Options', 'Iterations'))
-    for x in gammas:
-        a.autoTransitionFunction(filename=config.tranFile, gamma=x)
-        #a.lpsolve(x)
-        #a.solveLP(x)
-        #a.autoTransitionFunction(x)
-
-        z, y, it = a.actionsVI(config.delta, x)
-        #
-        # t, u, iter = a.optionsVI(delta)
-        # # print t
-        # # print u
-        # if u[8] == 0:
-        #     strih = 'Selecting Option.'
-        # else:
-        #     strih = 'Selecting Action.'
-        # print('{0:10f} {1:15f} {2:15d} {3:15f} {4:15d} {5:15}'.format(x, z[8], it, t[8], iter, strih))
-        print "VI Solver: ", z, it
-    # for x in gammas:
-    #     a.autoTransitionFunction(x)
-    #     val, act = a.actionsVI(delta)
-    #     print
-    #     print val
-    #     for y in act:
-    #         if y is None:
-    #             print None,
-    #         else:
-    #             print y.getIndex(),
-    #
-    #     print
-    #     print
-    #
-    #     v,o = a.optionsVI(delta)
-    #     print v
-    #     print o
-    #
-    # for x in gammas:
-    #     print "Gamma: " + str(x)
-    #     a.autoTransitionFunction(x)
-    #     a.generateLP(delta)
+    a = EMMDP(3)
+    for i in xrange(0,3):
+        a.mdps[i].solveLP(config.gamma)
