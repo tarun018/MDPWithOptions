@@ -908,8 +908,9 @@ class EMMDP:
                     for g in hh:
                         ampl.write(str(g)+" ")
                     ampl.write("\n")
-                ampl.write("\n")
-        ampl.write(";\n")
+            if i == self.num_agents - 1:
+                ampl.write(";")
+        ampl.write("\n")
 
         ampl.write("param R := \n")
         for i in xrange(0, self.num_agents):
@@ -924,8 +925,9 @@ class EMMDP:
                 for g in hh:
                     ampl.write(str(g)+" ")
                 ampl.write("\n")
-            ampl.write("\n")
-        ampl.write(";\n")
+            if i == self.num_agents - 1:
+                ampl.write(";")
+        ampl.write("\n")
 
         ampl.write("param alpha : ")
         for x in xrange(0, config.states):
