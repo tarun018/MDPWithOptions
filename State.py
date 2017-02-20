@@ -840,7 +840,7 @@ class EMMDP:
         self.num_cons = n_c
         self.mdps = []
         self.rho = []
-        self.num_prim_events_one_event = 3
+        self.num_prim_events_one_event = 4
         self.num_events_one_cons = n
         self.generateMDPs()
         self.ConstraintGen()
@@ -1021,8 +1021,10 @@ class Option:
         print "Beta: " + str(self.beta) + " Policy: " + str(self.policy)
 
 class Driver:
-    a = EMMDP(3, 2)
-    for i in xrange(0,3):
-        a.mdps[i].solveLP(config.gamma)
-        a.genAMPL()
+    a = EMMDP(config.agents, config.const)
+    ss = 0
+    for i in xrange(0, config.agents):
+        ss += a.mdps[i].solveLP(config.gamma)
+    a.genAMPL()
+    print ss
         #a.mdps[i].EM(config.gamma, config.delta)

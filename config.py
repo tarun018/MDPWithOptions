@@ -1,7 +1,8 @@
 import numpy as np
 import mdptoolbox.example
 
-agents = 3
+agents = 4
+const = 4
 R_min = []
 R_max = []
 tranFile = []
