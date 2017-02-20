@@ -1,0 +1,6 @@
+reset;
+model nl.mod;
+data nl1.dat;
+solve;
+display sum{i in 1..1, j in cS, k in cA} x[i,j,k];
+display EReward;

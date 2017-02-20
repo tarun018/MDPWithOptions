@@ -8,8 +8,8 @@ tranFile = []
 rewFile = []
 delta = 0.001
 gamma = 0.5
-states = 30
-actions = 20
+states = 4
+actions = 2
 num_of_var = states * actions
 a = float(1.0 / float(states))
 
@@ -22,8 +22,8 @@ for i in xrange(0,agents):
     # P, R = mdptoolbox.example.forest(S=states,p=0.45)
     # print R
 
-    #mask = np.ones((states, states))
-    P, R = mdptoolbox.example.rand(states, actions)
+    mask = np.ones((actions, states, states))
+    P, R = mdptoolbox.example.rand(states, actions, mask=mask)
     newR = []
     for x in R:
         sums = np.sum(x, axis=1)
