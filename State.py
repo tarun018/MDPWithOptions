@@ -680,6 +680,7 @@ class MDP:
                     max_difference = difference
 
             if max_difference > delta:
+                print str(iter) + " " + str(values)
                 values = deepcopy(dummy)
                 bestactions = deepcopy(dummyActions)
             else:
@@ -1075,14 +1076,14 @@ class Driver:
     a.initializeStates()
     a.autoTransitionFunction()
     a.autoRewardFunction()
-    gamma = 0.99
+    gamma = 1
 
-    a.generateLPAc(gamma)
+    #a.generateLPAc(gamma)
     a.solveLP(gamma)
-    xv, v = a.solveNewLP(gamma)
-    for i in xrange(50):
-        xvv, vv = a.solveNewLP(gamma, x_mat_val=xv, touse=1)
-        xv = xvv
+    # xv, v = a.solveNewLP(gamma)
+    # for i in xrange(50):
+    #     xvv, vv = a.solveNewLP(gamma, x_mat_val=xv, touse=1)
+    #     xv = xvv
 
     # print xv1, v1
     # a.lpsolve(0.95)
@@ -1132,7 +1133,7 @@ class Driver:
     # print o
     # gammas = [1.00, 0.99, 0.95, 0.9, 0.8, 0.7, 0.6]
     delta = 0.00001
-    gammas = [0.99]
+    gammas = [0.99999]
     #print('{0:15} {1:15} {2:25} {3:15} {4:15}'.format('Gamma', 'Without Options', 'Iterations', 'With Options', 'Iterations'))
     for x in gammas:
         a.autoTransitionFunction(x)
