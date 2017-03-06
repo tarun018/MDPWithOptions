@@ -1,4 +1,4 @@
-flag = 0
+flag = 1
 T = 8
 nloc = 5
 agents = 2

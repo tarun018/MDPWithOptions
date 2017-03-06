@@ -64,7 +64,7 @@ class MDP:
             self.readStates("DomainStateData"+str(self.agent)+".txt")
             self.terminal = self.states[0]
             self.readTransition("DomainTransitionData"+str(self.agent)+".txt")
-            self.checkTransitionProbabilitySumTo1File()
+            #self.checkTransitionProbabilitySumTo1File()
             self.readRewards("DomainRewardData"+str(self.agent)+".txt")
 
         self.numberStates = len(self.states)
@@ -504,9 +504,9 @@ class EMMDP:
 class Driver:
     a = EMMDP(config.agents)
 
-    # for i in a.states:
-    #     for j in a.actions:
-    #         print str(i) + " " + str(j) + "            " + str(a.rewardFunction(i,j))
+    for i in a.mdps[0].states:
+        for j in a.mdps[0].actions:
+            print str(i) + " " + str(j) + "            " + str(a.mdps[0].rewardFunction(i,j))
 
     # Verification of incoming probabilities of a state
     # print a.states[65]
