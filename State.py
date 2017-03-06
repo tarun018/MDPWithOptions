@@ -38,7 +38,7 @@ class Action:
         return "Index: " + str(self.index) + " Name: " + str(self.name) + " Goto: " + str(self.gotox)
 
 class MDP:
-    def __init__(self, T, nlocs, agent, collecTimes, transitTimes, alpha):
+    def __init__(self, T, nlocs, agent, collecTimes, transitTimes, alpha, flag=1):
         self.T = T
         self.nlocs = nlocs
         self.agent = agent
@@ -48,14 +48,25 @@ class MDP:
         self.collectTimes = collecTimes
         self.transitTimes = transitTimes
         self.alpha = alpha
-        self.terminal = State(0, -1, -1, [-1] * self.nlocs, -1, -1)
-        self.states.append(self.terminal)
-        self.initiateActions()
-        self.initiateStates()
-        self.waste()
-        self.checkTransitionProbabilitySumTo1()
-        self.writeTransitionsToFile()
-        self.writeRewardsToFile()
+        if(flag==0):
+            self.terminal = State(0, -1, -1, [-1] * self.nlocs, -1, -1)
+            self.states.append(self.terminal)
+            self.initiateActions()
+            self.initiateStates()
+            self.waste()
+            self.checkTransitionProbabilitySumTo1()
+            self.writeStatesToFile()
+            self.writeActionsToFile()
+            self.writeTransitionsToFile()
+            self.writeRewardsToFile()
+        else:
+            self.readActions("DomainActionData"+str(self.agent)+".txt")
+            self.readStates("DomainStateData"+str(self.agent)+".txt")
+            self.terminal = self.states[0]
+            self.readTransition("DomainTransitionData"+str(self.agent)+".txt")
+            self.checkTransitionProbabilitySumTo1File()
+            self.readRewards("DomainRewardData"+str(self.agent)+".txt")
+
         self.numberStates = len(self.states)
         self.numerActions = len(self.actions)
 
@@ -81,7 +92,6 @@ class MDP:
                         st = State(index,j,i,k,t,self.actions)
                         self.states.append(st)
                         index = index + 1
-        print self.states
 
     def transition(self, s, a, sd):
         if a.name == "Collect":
@@ -260,8 +270,28 @@ class MDP:
                     fp.write(str(tran))
                     fp.write("\n")
                 if (sum != 1):
-                    print "k: " + str(k) + " i: " + str(i) + " Sum: " + str(sum)
+                    print "WARNING: k: " + str(k) + " i: " + str(i) + " Sum: " + str(sum)
         fp.close()
+
+    def checkTransitionProbabilitySumTo1File(self):
+        fp = open('tds', 'w')
+        for k in self.actions:
+            for i in self.states:
+                sum = 0
+                for j in self.states:
+                    fp.write(str(i))
+                    fp.write("\n")
+                    fp.write(str(j))
+                    fp.write("\n")
+                    tran = [xx[2] for xx in i.transition if xx[0]==k and xx[1]==j]
+                    tran = tran[0]
+                    sum += tran
+                    fp.write(str(tran))
+                    fp.write("\n")
+                if (sum != 1):
+                    print "WARNING: k: " + str(k) + " i: " + str(i) + " Sum: " + str(sum)
+        fp.close()
+
 
     def rewardFunction(self, s, a):
         if a.name == "Collect":
@@ -282,7 +312,9 @@ class MDP:
         for i in self.actions:
             for j in self.states:
                 for k in self.states:
-                    tran.write(str(self.transition(j,i,k)))
+                    tt = self.transition(j,i,k)
+                    j.transition.append((i, k, tt))
+                    tran.write(str(tt))
                     if k != self.states[len(self.states)-1]:
                         tran.write(",")
                 tran.write("\n")
@@ -293,16 +325,185 @@ class MDP:
         rew = open("DomainRewardData"+str(self.agent)+".txt",'w')
         for i in self.states:
             for j in self.actions:
-                rew.write(str(self.rewardFunction(i,j)))
+                re = self.rewardFunction(i,j)
+                rew.write(str(re))
+                i.reward.append((j, re))
                 if j != self.actions[len(self.actions)-1]:
                     rew.write(",")
             rew.write("\n")
         rew.close()
 
+    def writeStatesToFile(self):
+        stat = open("DomainStateData" + str(self.agent) + ".txt", 'w')
+        for j in self.states:
+            stat.write(str(j.index)+","+str(j.location)+","+str(j.time)+",")
+            for x in j.dvals:
+                stat.write(str(x)+",")
+            stat.write(str(j.dold)+"\n")
+        stat.close()
+
+    def writeActionsToFile(self):
+        act = open("DomainActionData" + str(self.agent) + ".txt", 'w')
+        for j in self.actions:
+            act.write(str(j.index)+","+str(j.gotox)+","+str(j.name)+"\n")
+
+    def readActions(self, filename):
+        with open(filename, 'rb') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',')
+            for row in reader:
+                ind = int(row[0])
+                if str(row[1])=="None":
+                    gotox = None
+                else:
+                    gotox = int(row[1])
+                name = row[2]
+                a = Action(ind, name, gotox)
+                self.actions.append(a)
+
+    def readStates(self, filename):
+        with open(filename, 'rb') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',')
+            for row in reader:
+                ind = int(row[0])
+                loc = int(row[1])
+                tim = int(row[2])
+                lst = []
+                for x in xrange(0, self.nlocs):
+                    lst.append(int(row[3+x]))
+                dold = int(row[len(row)-1])
+                s = State(ind, loc, tim, lst, dold, self.actions)
+                self.states.append(s)
+
+    def readTransition(self, filename):
+        for s in self.states:
+            s.transition = []
+        stateIndex = 0
+        actionIndex = 0
+        with open(filename, 'rb') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',')
+            for row in reader:
+                if len(row) == 0:
+                    stateIndex = 0
+                    actionIndex = actionIndex + 1
+                    continue
+                for sp in xrange(0, len(self.states)):
+                    triple = (self.actions[actionIndex], self.states[sp], float(row[sp]))
+                    self.states[stateIndex].transition.append(triple)
+                stateIndex += 1
+
+    def readRewards(self, filename):
+        tosend = []
+        stateIndex = 0
+        with open(filename, 'rb') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',')
+            for row in reader:
+                if len(row)==0:
+                    continue
+                for ap in xrange(0, len(self.actions)):
+                    triple = (self.actions[ap], float(row[ap]))
+                    tosend.append(triple)
+                self.states[stateIndex].reward = tosend
+                tosend = []
+                stateIndex += 1
+
+class PrimtiveEvent:
+    def __init__(self, agent, state, action, statedash, index):
+        self.agent = agent
+        self.state = state
+        self.action = action
+        self.statedash = statedash
+        self.index = index
+
+
+class Event:
+    def __init__(self, agent, pevents, index, name, site):
+        self.agent = agent
+        self.pevents = pevents
+        self.index = index
+        self.name = name
+        self.site = site
+
+    def __repr__(self):
+        return "E: ( " + str(self.agent) + " " + str(self.pevents) + " " + str(self.name) + " " + str(self.site) + " )"
+
+class Constraint:
+    def __init__(self, num_agent, Events, rew, index):
+        self.num_agent = num_agent
+        self.Events = Events
+        self.reward = rew
+        self.index = index
+
+    def __repr__(self):
+        return "Cons: ( " + str(self.num_agent) + " " + str(self.Events) + " " + str(self.reward) + " )"
+
+class JointReward:
+    def __init__(self, num_cons, cons):
+        self.num_cons = num_cons
+        self.constraints = cons
+
+    def __repr__(self):
+        return "JointRew: ( " + str(self.num_cons) + " " + str(self.constraints) + " )"
+
+class EMMDP:
+    def __init__(self, n):
+        self.num_agents = n
+        self.mdps = []
+        self.primitives = []
+        self.events = []
+        self.constraints = []
+        self.generateMDPs()
+        self.genPrimitiveEvents()
+        self.genEvents()
+        self.genConstraints()
+
+    def generateMDPs(self):
+        for i in xrange(0, self.num_agents):
+            a = MDP(config.T, config.nloc, i, config.collectTimes, config.transitTimes, config.alpha, config.flag)
+            self.mdps.append(a)
+
+    def genPrimitiveEvents(self):
+        index = 0
+        for q in xrange(0,self.num_agents):
+            a = self.mdps[q]
+            for z in xrange(0, a.nlocs):
+                for i in a.states:
+                    if i.location == z and i.dvals[i.location] == 0 and i.dold == 0:
+                        for k in a.states:
+                            if k.location == z and k.dvals[k.location] == 1 and k.dold == 0:
+                                if a.transition(i, a.actions[0], k) != 0:
+                                    pe = PrimtiveEvent(q, i, a.actions[0], k, index)
+                                    self.primitives.append(pe)
+                                    index = index + 1
+
+
+    def genEvents(self):
+        index = 0
+        for agent in xrange(0, self.num_agents):
+            for j in xrange(0, self.mdps[agent].nlocs):
+                arr = []
+                for i in self.primitives:
+                    if i.agent == agent and i.state.location == j:
+                        arr.append(i)
+                e = Event(agent, arr, index, "Agent " + str(agent) + " Collect at site "+str(j), j)
+                index = index + 1
+                self.events.append(e)
+
+    def genConstraints(self):
+        index = 0
+        shared = [0,1]
+        for x in shared:
+            local = []
+            for y in self.events:
+                if y.site == x:
+                    local.append(y)
+            c = Constraint(self.num_agents, local, -1, index)
+            index = index + 1
+            self.constraints.append(c)
+
+
 class Driver:
-    a = MDP(config.T, config.nloc, 1, config.collectTimes, config.transitTimes, config.alpha)
-    print a.numberStates
-    print a.numerActions
+    a = EMMDP(config.agents)
+
     # for i in a.states:
     #     for j in a.actions:
     #         print str(i) + " " + str(j) + "            " + str(a.rewardFunction(i,j))

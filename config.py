@@ -1,5 +1,6 @@
+flag = 0
 T = 8
-nloc = 2
+nloc = 5
 agents = 2
 collectTimes = [2]*nloc
 transitTimes = [[2]*nloc]*nloc
