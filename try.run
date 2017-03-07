@@ -1,0 +1,7 @@
+reset;
+model try.mod;
+data try.dat;
+display member(1,cons[1]);
+display creward[1];
+for{i in 1..1, j in 1..card(cons[i])} display member(j, cons[i]);
+solve;

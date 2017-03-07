@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="59d3106a-70ef-477f-a148-a105708777e4" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tds" afterPath="$PROJECT_DIR$/tds" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainStateData0.txt" afterPath="$PROJECT_DIR$/DomainStateData0.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainStateData1.txt" afterPath="$PROJECT_DIR$/DomainStateData1.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/State.py" afterPath="$PROJECT_DIR$/State.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.py" afterPath="$PROJECT_DIR$/config.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nl1.dat" afterPath="$PROJECT_DIR$/nl1.dat" />
-    </list>
+    <list default="true" id="59d3106a-70ef-477f-a148-a105708777e4" name="Default" comment="" />
     <ignored path="MDPWithOptions.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,7 +23,7 @@
       <file leaf-file-name="State.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/State.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4621">
+            <state relative-caret-position="-4351">
               <caret line="45" column="78" lean-forward="false" selection-start-line="45" selection-start-column="78" selection-end-line="45" selection-end-column="78" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -965,7 +957,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/State.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4621">
+        <state relative-caret-position="-4351">
           <caret line="45" column="78" lean-forward="false" selection-start-line="45" selection-start-column="78" selection-end-line="45" selection-end-column="78" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
