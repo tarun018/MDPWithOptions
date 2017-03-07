@@ -1,4 +1,5 @@
-flag = 0
+#flag=1 fileread
+flag = 1
 agents = 2
 collectTimes = []
 transitTimes = []
