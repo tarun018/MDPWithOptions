@@ -238,7 +238,7 @@ class MDP:
 
 
             sameds = all([i.dvals[j] == 0 for j in xrange(0, self.nlocs)])
-            if i.time == config.T and sameds==True and i.dold==0:
+            if i.time == config.T[self.agent] and sameds==True and i.dold==0:
                 continue
 
             flag = 0
@@ -307,7 +307,7 @@ class MDP:
     def rewardFunction(self, s, a):
         if a.name == "Collect":
             if s.dold == 0 and s.dvals[s.location] == 1:
-                return config.rewardCollection
+                return config.rewardCollection[self.agent]
             else:
                 return 0
         # elif a.name == "Dummy":
@@ -421,11 +421,11 @@ class MDP:
         sum = 0
         for i in self.states:
             sameds = all([i.dvals[j] == 0 for j in xrange(0, self.nlocs)])
-            if i.time == config.T and sameds==True and i.dold==0:
+            if i.time == config.T[self.agent] and sameds==True and i.dold==0:
                 sum += 1
         for i in self.states:
             sameds = all([i.dvals[j] == 0 for j in xrange(0, self.nlocs)])
-            if i.time == config.T and sameds==True and i.dold==0:
+            if i.time == config.T[self.agent] and sameds==True and i.dold==0:
                 self.start.append(float(1/float(sum)))
             else:
                 self.start.append(float(0))
@@ -568,7 +568,7 @@ class EMMDP:
 
     def generateMDPs(self):
         for i in xrange(0, self.num_agents):
-            a = MDP(config.T, config.nloc, i, config.collectTimes, config.transitTimes, config.alpha, config.flag)
+            a = MDP(config.T[i], config.nloc[i], i, config.collectTimes[i], config.transitTimes[i], config.alpha, config.flag)
             self.mdps.append(a)
 
     def genPrimitiveEvents(self):
@@ -600,7 +600,7 @@ class EMMDP:
 
     def genConstraints(self):
         index = 0
-        shared = [0,1]
+        shared = config.shared
         for x in shared:
             local = []
             for y in self.events:
@@ -611,29 +611,34 @@ class EMMDP:
             self.constraints.append(c)
 
     def genAMPL(self):
-        cS = len(self.mdps[0].states)
-        cA = len(self.mdps[0].actions)
-        ampl = open('nl1.dat', 'w')
-        ampl.write("param n := " + str(self.num_agents) + ";\n")
-        ampl.write("param cardS := " + str(cS) + ";\n")
-        ampl.write("param cardA := " + str(cA) + ";\n")
 
-        ampl.write("param num_cons := " + str(len(self.constraints)) + ";\n")
-        ampl.write("param num_prim_events := " + str(len(self.primitives)) + ";\n")
-        ampl.write("param num_events := " + str(len(self.events)) + ";\n")
-        ampl.write("param num_events_one_cons := " + str(self.num_agents) + ";\n")
-        ampl.write("param num_prim_events_one_event := " + str(len(self.events[0].pevents)) + ";\n")
+        ampl = open('nl2.dat', 'w')
+        ampl.write("param n := " + str(self.num_agents) + ";\n")
+        ampl.write("\n")
+        for i in xrange(0, self.num_agents):
+            ampl.write("set S[" + str(i+1) + "] := ")
+            for x in self.mdps[i].states:
+                ampl.write(str(x.index+1)+" ")
+            ampl.write(";\n")
+            ampl.write("set A[" + str(i+1) + "] := ")
+            for x in self.mdps[i].actions:
+                ampl.write(str(x.index+1)+" ")
+            ampl.write(";\n")
+        ampl.write("\n")
+        ampl.write("param numcons := "+str(len(self.constraints))+";\n")
+        ampl.write("param numprims := "+str(len(self.primitives))+";\n")
+        ampl.write("param numevents := "+str(len(self.events))+";\n")
         ampl.write("param gamma := " + str(config.gamma) + ";\n")
         ampl.write("\n")
 
         ampl.write("param P := \n")
         for i in xrange(0, self.num_agents):
-            for j in xrange(0, cA):
+            for j in xrange(0, len(self.mdps[i].actions)):
                 ampl.write("[" + str(i + 1) + "," + str(j + 1) + ",*,*] : ")
-                for k in xrange(0, cS):
+                for k in xrange(0, len(self.mdps[i].states)):
                     ampl.write(str(k + 1) + " ")
                 ampl.write(":= \n")
-                for k in xrange(0, cS):
+                for k in xrange(0, len(self.mdps[i].states)):
                     ampl.write(str(k + 1) + " ")
                     h = self.mdps[i].states[k].transition
                     hh = [x[2] for x in h if x[0] == self.mdps[i].actions[j]]
@@ -647,10 +652,10 @@ class EMMDP:
         ampl.write("param R := \n")
         for i in xrange(0, self.num_agents):
             ampl.write("[" + str(i + 1) + ",*,*] : ")
-            for j in xrange(0, cA):
+            for j in xrange(0, len(self.mdps[i].actions)):
                 ampl.write(str(j + 1) + " ")
             ampl.write(":= \n")
-            for j in xrange(0, cS):
+            for j in xrange(0, len(self.mdps[i].states)):
                 ampl.write(str(j + 1) + " ")
                 h = self.mdps[i].states[j].reward
                 hh = [x[1] for x in h]
@@ -661,29 +666,24 @@ class EMMDP:
                 ampl.write(";")
         ampl.write("\n")
 
-        ampl.write("param alpha : ")
-        for x in xrange(0, cS):
-            ampl.write(str(x + 1) + " ")
-        ampl.write(":= \n")
-        for i in xrange(0, self.num_agents):
-            ampl.write(str(i + 1) + " ")
-            for gg in self.mdps[i].start:
-                ampl.write(str(gg) + " ")
+        ampl.write("param alpha := \n")
+        for i in xrange(0,self.num_agents):
+            ampl.write("[" + str(i + 1) + ",*] := ")
+            for gg in xrange(0,len(self.mdps[i].start)):
+                ampl.write(str(gg+1) + " " + str(self.mdps[i].start[gg]) + " ")
             ampl.write("\n")
         ampl.write(";\n")
 
-        ampl.write("param creward : 1 := \n")
-        numc = len(self.constraints)
-        cons = self.constraints
-        for i in xrange(0, numc):
-            ampl.write(str(i+1)+" "+str(cons[i].reward)+"\n")
+        ampl.write("param creward := ")
+        for x in xrange(0, len(self.constraints)):
+            ampl.write(str(x+1)+" "+str(self.constraints[x].reward)+" ")
         ampl.write(";\n")
 
-        ampl.write("param prim_event : ")
+        ampl.write("param primitives : ")
         for i in xrange(0, 4):
             ampl.write(str(i + 1) + " ")
         ampl.write(":= \n")
-        for x in cons:
+        for x in self.constraints:
             ev = x.Events
             for y in ev:
                 pev = y.pevents
@@ -692,32 +692,19 @@ class EMMDP:
                         z.action.index + 1) + " " + str(z.statedash.index + 1) + "\n")
         ampl.write(";\n")
 
-        ampl.write("param event : ")
-        for i in xrange(0, len(self.events[0].pevents)):
-            ampl.write(str(i + 1) + " ")
-        ampl.write(":= \n")
-        for x in cons:
-            ev = x.Events
-            for y in ev:
-                pev = y.pevents
-                ampl.write(str(y.index + 1) + " ")
-                for z in pev:
-                    ampl.write(str(z.index + 1) + " ")
-                ampl.write("\n")
-        ampl.write(";\n")
+        for i in xrange(0, len(self.events)):
+            ampl.write("set events["+str(i+1)+"] := ")
+            for x in self.events[i].pevents:
+                ampl.write(str(x.index+1)+" ")
+            ampl.write(";\n")
+        ampl.write("\n")
 
-        ampl.write("param cons: ")
-        for i in xrange(0, self.num_agents):
-            ampl.write(str(i + 1) + " ")
-        ampl.write(":= \n")
-        for x in cons:
-            ev = x.Events
-            ampl.write(str(x.index + 1) + " ")
-            for y in ev:
-                ampl.write(str(y.index + 1) + " ")
-            ampl.write("\n")
-        ampl.write(";\n")
-
+        for i in xrange(0, len(self.constraints)):
+            ampl.write("set cons["+str(i+1)+"] := ")
+            for x in self.constraints[i].Events:
+                ampl.write(str(x.index+1)+" ")
+            ampl.write(";\n")
+        ampl.write("\n")
         ampl.close()
 
 class Driver:
