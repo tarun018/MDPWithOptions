@@ -19,13 +19,13 @@ var z{i in 1..numcons, j in cons[i]};
 
 
 maximize ER: 
-sum{i in 1..n, j in 1..card(S[i]), k in 1..card(A[i])} x[i,j,k]*R[i,j,k] + 
+sum{i in 1..n, j in 1..card(S[i]), k in 1..card(A[i])} x[i,j,k]*R[i,j,k] +
 sum{l in 1..numcons} creward[l] * prod{m in cons[l]} z[l,m];
 
 subject to Flow {i in 1..n, j in 1..card(S[i])}:
 sum{k in 1..card(A[i])} x[i,j,k] - 
 gamma * sum{l in 1..card(S[i]), m in 1..card(A[i])} x[i,l,m]*P[i,m,l,j] = alpha[i,j];
-
+subject to Positive {i in 1..n, j in 1..card(S[i]), k in 1..card(A[i])}: x[i,j,k] >= 0;
 subject to defineZ{i in 1..numcons, j in cons[i]}:
 z[i,j] = sum{k in events[j]} x[primitives[k,1],primitives[k,2],primitives[k,3]]*
 P[primitives[k,1], primitives[k,3], primitives[k,2], primitives[k,4]];

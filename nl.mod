@@ -32,6 +32,6 @@ maximize EReward:
 subject to Flow {i in N, j in cS} : 
 sum{k in cA} x[i,j,k] - gamma * sum {l in cS, m in cA} x[i,l,m]*P[i,m,l,j] = alpha[i,j];
 subject to Positive {i in N, j in cS, k in cA}: x[i,j,k] >= 0;
-subject to DefineZ {i in 1..num_cons, j in 1..num_events_one_cons} : 
-z[i,j] = sum{k in 1..num_prim_events_one_event} x[prim_event[event[cons[i,j], k], 1], prim_event[event[cons[i,j], k], 2], prim_event[event[cons[i,j], k], 3]] * P[prim_event[event[cons[i,j], k], 1], prim_event[event[cons[i,j], k], 3], prim_event[event[cons[i,j], k], 2], prim_event[event[cons[i,j], k], 4]];
+#subject to DefineZ {i in 1..num_cons, j in 1..num_events_one_cons} : 
+#z[i,j] = sum{k in 1..num_prim_events_one_event} x[prim_event[event[cons[i,j], k], 1], prim_event[event[cons[i,j], k], 2], prim_event[event[cons[i,j], k], 3]] * P[prim_event[event[cons[i,j], k], 1], prim_event[event[cons[i,j], k], 3], prim_event[event[cons[i,j], k], 2], prim_event[event[cons[i,j], k], 4]];
 

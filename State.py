@@ -711,7 +711,8 @@ class Driver:
     a = EMMDP(config.agents)
     # for x in a.events:
     #     print x
-    # a.genAMPL()
+    a.genAMPL()
+    # print a.mdps[0].solveLP(config.gamma) + a.mdps[1].solveLP(config.gamma)
     # for i in a.mdps[0].states:
     #     for j in a.mdps[0].actions:
     #         print str(i) + " " + str(j) + "            " + str(a.mdps[0].rewardFunction(i,j))
