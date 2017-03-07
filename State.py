@@ -37,8 +37,13 @@ class Action:
     def __repr__(self):
         return "Index: " + str(self.index) + " Name: " + str(self.name) + " Goto: " + str(self.gotox)
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.index == other.index and self.gotox==other.gotox and self.name==other.name
+        return False
+
 class MDP:
-    def __init__(self, T, nlocs, agent, collecTimes, transitTimes, alpha, flag=1):
+    def __init__(self, T, nlocs, agent, collecTimes, transitTimes, alpha, flag):
         self.T = T
         self.nlocs = nlocs
         self.agent = agent
@@ -48,8 +53,9 @@ class MDP:
         self.collectTimes = collecTimes
         self.transitTimes = transitTimes
         self.alpha = alpha
+        self.start = []
         if(flag==0):
-            self.terminal = State(0, -1, -1, [-1] * self.nlocs, -1, -1)
+            self.terminal = State(0, -1, -1, [-1] * self.nlocs, -1, self.actions)
             self.states.append(self.terminal)
             self.initiateActions()
             self.initiateStates()
@@ -66,7 +72,7 @@ class MDP:
             self.readTransition("DomainTransitionData"+str(self.agent)+".txt")
             #self.checkTransitionProbabilitySumTo1File()
             self.readRewards("DomainRewardData"+str(self.agent)+".txt")
-
+        self.defineStart()
         self.numberStates = len(self.states)
         self.numerActions = len(self.actions)
 
@@ -253,6 +259,11 @@ class MDP:
         # print len(self.states)
         # print
 
+        index = 0
+        for x in self.states:
+            x.index = index
+            index = index + 1
+
         return len(wastestates)
 
     def checkTransitionProbabilitySumTo1(self):
@@ -406,6 +417,103 @@ class MDP:
                 tosend = []
                 stateIndex += 1
 
+    def defineStart(self):
+        sum = 0
+        for i in self.states:
+            sameds = all([i.dvals[j] == 0 for j in xrange(0, self.nlocs)])
+            if i.time == config.T and sameds==True and i.dold==0:
+                sum += 1
+        for i in self.states:
+            sameds = all([i.dvals[j] == 0 for j in xrange(0, self.nlocs)])
+            if i.time == config.T and sameds==True and i.dold==0:
+                self.start.append(float(1/float(sum)))
+            else:
+                self.start.append(float(0))
+
+
+    def generateLPAc(self, gamma):
+        decisionvar = []
+        for x in self.states:
+            triple = []
+            for y in self.states:
+                triplet = []
+                for a in y.possibleActions:
+                    if x.index == y.index:
+                        triplet.append(float(1))
+                    else:
+                        triplet.append(float(0))
+                triple.append(triplet)
+            decisionvar.append(triple)
+
+        for x in self.states:
+            incoming = []
+            for s in self.states:
+                for t in s.transition:
+                    if t[1]==x and t[2]!=0:
+                        incoming.append((s, t[0], t[2]))
+
+            for h in incoming:
+                decisionvar[x.index][h[0].index][h[1].index] -= gamma*float(h[2])
+
+        # for x in decisionvar:
+        #     for y in x:
+        #         for z in y:
+        #             print str(z) + ",",
+        #         print "",
+        #     print
+        #
+        # print
+        # print
+        A_mat = []
+        for x in decisionvar:
+            lit = []
+            for t in x:
+                lit.extend(t)
+            A_mat.append(lit)
+
+        newA = A_mat
+
+        # for x in A_mat:
+        #     print x
+
+        R_mat = []
+        for x in self.states:
+            for y in x.possibleActions:
+                for r in x.reward:
+                    if r[0]==y:
+                        R_mat.append(r[1])
+        # print R_mat
+
+        newR = []
+        # R_min = config.R_min[self.agent]
+        # R_max = config.R_max[self.agent]
+        # for x in self.states:
+        #     for y in x.possibleActions:
+        #         for r in x.reward:
+        #             if r[0]==y.getIndex():
+        #                 newR.append((r[1]-R_min)/(R_max-R_min))
+
+        return A_mat, R_mat, newR
+
+    def solveLP(self, gamma):
+        A, R, newR = self.generateLPAc(gamma)
+        #print len(R)
+        R_mat = np.array(R)[np.newaxis].T
+        A_mat = np.array(A)
+
+        alpha = self.start
+        global num_vars
+        x = cvxpy.Variable(self.numberStates*self.numerActions, 1)
+        obj = cvxpy.Maximize(np.transpose(R_mat)*x)
+        constraints = [A_mat*x == alpha, x >= 0]
+        prob = cvxpy.Problem(obj, constraints)
+        prob.solve()
+        #print "status:", prob.status
+        print "LPsolver: optimal value", prob.value
+        #print "Optimal x: ", x.value
+        print "Sum of x values: ", cvxpy.sum_entries(x).value
+        return prob.value
+
 class PrimtiveEvent:
     def __init__(self, agent, state, action, statedash, index):
         self.agent = agent
@@ -414,6 +522,8 @@ class PrimtiveEvent:
         self.statedash = statedash
         self.index = index
 
+    def __repr__(self):
+        return "PE: Agent: " + str(self.agent) + " Index: " + str(self.index)
 
 class Event:
     def __init__(self, agent, pevents, index, name, site):
@@ -500,13 +610,124 @@ class EMMDP:
             index = index + 1
             self.constraints.append(c)
 
+    def genAMPL(self):
+        cS = len(self.mdps[0].states)
+        cA = len(self.mdps[0].actions)
+        ampl = open('nl1.dat', 'w')
+        ampl.write("param n := " + str(self.num_agents) + ";\n")
+        ampl.write("param cardS := " + str(cS) + ";\n")
+        ampl.write("param cardA := " + str(cA) + ";\n")
+
+        ampl.write("param num_cons := " + str(len(self.constraints)) + ";\n")
+        ampl.write("param num_prim_events := " + str(len(self.primitives)) + ";\n")
+        ampl.write("param num_events := " + str(len(self.events)) + ";\n")
+        ampl.write("param num_events_one_cons := " + str(self.num_agents) + ";\n")
+        ampl.write("param num_prim_events_one_event := " + str(len(self.events[0].pevents)) + ";\n")
+        ampl.write("param gamma := " + str(config.gamma) + ";\n")
+        ampl.write("\n")
+
+        ampl.write("param P := \n")
+        for i in xrange(0, self.num_agents):
+            for j in xrange(0, cA):
+                ampl.write("[" + str(i + 1) + "," + str(j + 1) + ",*,*] : ")
+                for k in xrange(0, cS):
+                    ampl.write(str(k + 1) + " ")
+                ampl.write(":= \n")
+                for k in xrange(0, cS):
+                    ampl.write(str(k + 1) + " ")
+                    h = self.mdps[i].states[k].transition
+                    hh = [x[2] for x in h if x[0] == self.mdps[i].actions[j]]
+                    for g in hh:
+                        ampl.write(str(g) + " ")
+                    ampl.write("\n")
+            if i == self.num_agents - 1:
+                ampl.write(";")
+        ampl.write("\n")
+
+        ampl.write("param R := \n")
+        for i in xrange(0, self.num_agents):
+            ampl.write("[" + str(i + 1) + ",*,*] : ")
+            for j in xrange(0, cA):
+                ampl.write(str(j + 1) + " ")
+            ampl.write(":= \n")
+            for j in xrange(0, cS):
+                ampl.write(str(j + 1) + " ")
+                h = self.mdps[i].states[j].reward
+                hh = [x[1] for x in h]
+                for g in hh:
+                    ampl.write(str(g) + " ")
+                ampl.write("\n")
+            if i == self.num_agents - 1:
+                ampl.write(";")
+        ampl.write("\n")
+
+        ampl.write("param alpha : ")
+        for x in xrange(0, cS):
+            ampl.write(str(x + 1) + " ")
+        ampl.write(":= \n")
+        for i in xrange(0, self.num_agents):
+            ampl.write(str(i + 1) + " ")
+            for gg in self.mdps[i].start:
+                ampl.write(str(gg) + " ")
+            ampl.write("\n")
+        ampl.write(";\n")
+
+        ampl.write("param creward : 1 := \n")
+        numc = len(self.constraints)
+        cons = self.constraints
+        for i in xrange(0, numc):
+            ampl.write(str(i+1)+" "+str(cons[i].reward)+"\n")
+        ampl.write(";\n")
+
+        ampl.write("param prim_event : ")
+        for i in xrange(0, 4):
+            ampl.write(str(i + 1) + " ")
+        ampl.write(":= \n")
+        for x in cons:
+            ev = x.Events
+            for y in ev:
+                pev = y.pevents
+                for z in pev:
+                    ampl.write(str(z.index + 1) + " " + str(z.agent + 1) + " " + str(z.state.index + 1) + " " + str(
+                        z.action.index + 1) + " " + str(z.statedash.index + 1) + "\n")
+        ampl.write(";\n")
+
+        ampl.write("param event : ")
+        for i in xrange(0, len(self.events[0].pevents)):
+            ampl.write(str(i + 1) + " ")
+        ampl.write(":= \n")
+        for x in cons:
+            ev = x.Events
+            for y in ev:
+                pev = y.pevents
+                ampl.write(str(y.index + 1) + " ")
+                for z in pev:
+                    ampl.write(str(z.index + 1) + " ")
+                ampl.write("\n")
+        ampl.write(";\n")
+
+        ampl.write("param cons: ")
+        for i in xrange(0, self.num_agents):
+            ampl.write(str(i + 1) + " ")
+        ampl.write(":= \n")
+        for x in cons:
+            ev = x.Events
+            ampl.write(str(x.index + 1) + " ")
+            for y in ev:
+                ampl.write(str(y.index + 1) + " ")
+            ampl.write("\n")
+        ampl.write(";\n")
+
+        ampl.close()
 
 class Driver:
     a = EMMDP(config.agents)
-
-    for i in a.mdps[0].states:
-        for j in a.mdps[0].actions:
-            print str(i) + " " + str(j) + "            " + str(a.mdps[0].rewardFunction(i,j))
+    # for x in a.events:
+    #     print x
+    # a.genAMPL()
+    # for i in a.mdps[0].states:
+    #     for j in a.mdps[0].actions:
+    #         print str(i) + " " + str(j) + "            " + str(a.mdps[0].rewardFunction(i,j))
 
     # Verification of incoming probabilities of a state
     # print a.states[65]
