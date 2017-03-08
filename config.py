@@ -1,8 +1,8 @@
 import numpy as np
 import mdptoolbox.example
 
-states = 30
-actions = 20
+states = 4
+actions = 2
 num_of_var = states*actions
 #num_of_var = 3
 gamma = 0.5
