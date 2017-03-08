@@ -485,13 +485,13 @@ class MDP:
         # print R_mat
 
         newR = []
-        # R_min = config.R_min[self.agent]
-        # R_max = config.R_max[self.agent]
-        # for x in self.states:
-        #     for y in x.possibleActions:
-        #         for r in x.reward:
-        #             if r[0]==y.getIndex():
-        #                 newR.append((r[1]-R_min)/(R_max-R_min))
+        R_min = config.R_min[self.agent]
+        R_max = config.R_max[self.agent]
+        for x in self.states:
+            for y in x.possibleActions:
+                for r in x.reward:
+                    if r[0]==y:
+                        newR.append((r[1]-R_min)/(R_max-R_min))
 
         return A_mat, R_mat, newR
 
@@ -707,8 +707,66 @@ class EMMDP:
         ampl.write("\n")
         ampl.close()
 
+    def EM(self, gamma, delta, agent):
+        num_iter = 1
+        A, R, newR = self.mdps[agent].generateLPAc(gamma)
+        dualLP = self.mdps[agent].solveLP(gamma)
+        newR = np.array(newR)[np.newaxis].T
+        A_mat = np.array(A)
+        alpha = self.mdps[agent].start
+        alpha = np.array(alpha)
+        global num_of_var
+        num_of_var = self.mdps[agent].numberStates*self.mdps[agent].numerActions
+        initial_x = [0.5] * num_of_var
+        initial_x = np.array(initial_x)
+        rdiagx, total = self.Estep(newR, initial_x, gamma)
+        xstar_val = self.Mstep(rdiagx, initial_x, total, A_mat, alpha)
+        expectedRew = np.asscalar(np.transpose(R) * xstar_val)
+        print "Expected Reward from EM: ", expectedRew
+
+        # prevExpecRew = expectedRew
+        while (True):
+            num_iter += 1
+            xstar_val = np.array(xstar_val)
+            rdiagx, total = self.Estep(newR, xstar_val, gamma)
+            xstar_val = self.Mstep(rdiagx, xstar_val, total, A_mat, alpha)
+            expectedRew = np.asscalar(np.transpose(R) * xstar_val)
+            print "Expected Reward from EM: ", expectedRew
+            if (abs(dualLP - expectedRew) < delta):
+                break
+
+        print "Optimal x: ", xstar_val
+        print "Sum of x values: ", cvxpy.sum_entries(xstar_val).value
+        print "Number of iterations: ", num_iter
+        # prevExpecRew = expectedRew
+
+    def Estep(self, Rcap, x, gamma):
+        print "Estep: "
+        rdiag = np.diag(Rcap[:, 0])
+        rdiagx = rdiag.dot(x)
+        rdiagx = rdiagx * (1 - gamma)
+        total = np.sum(rdiagx)
+        rdiagx = rdiagx / total
+        # print np.transpose(rdiagx), total
+        return rdiagx, total
+
+    def Mstep(self, E, x, c, A_mat, alpha):
+        print "Mstep: "
+        global num_of_var
+        xstar = cvxpy.Variable(num_of_var, 1)
+        obj = cvxpy.Maximize(np.transpose(E) * (cvxpy.log(xstar)))
+        cons = [A_mat * xstar == alpha, xstar > 0]
+        prob = cvxpy.Problem(objective=obj, constraints=cons)
+        prob.solve(solver=cvxpy.ECOS, verbose=False, max_iters=100)
+        # print np.transpose(xstar.value)
+        return xstar.value
+
 class Driver:
     a = EMMDP(config.agents)
+    print a.mdps[0].solveLP(config.gamma)+a.mdps[1].solveLP(config.gamma)
+    a.EM(config.gamma, config.delta, 0)
+    a.EM(config.gamma, config.delta, 1)
+
     # for x in a.events:
     #     print x
     a.genAMPL()
