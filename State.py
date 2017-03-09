@@ -307,7 +307,7 @@ class MDP:
     def rewardFunction(self, s, a):
         if a.name == "Collect":
             if s.dold == 0 and s.dvals[s.location] == 1:
-                return config.rewardCollection[self.agent]
+                return config.rewardCollection[self.agent][s.location]
             else:
                 return 0
         # elif a.name == "Dummy":
@@ -485,8 +485,8 @@ class MDP:
         # print R_mat
 
         newR = []
-        R_min = config.R_min[self.agent]
-        R_max = config.R_max[self.agent]
+        R_min = config.R_min
+        R_max = config.R_max
         for x in self.states:
             for y in x.possibleActions:
                 for r in x.reward:
@@ -601,12 +601,12 @@ class EMMDP:
     def genConstraints(self):
         index = 0
         shared = config.shared
-        for x in shared:
+        for x in xrange(0, len(shared)):
             local = []
             for y in self.events:
-                if y.site == x:
+                if y.site == x and y.agent in shared[x]:
                     local.append(y)
-            c = Constraint(self.num_agents, local, 3, index)
+            c = Constraint(len(shared[x]), local, config.creward[x], index)
             index = index + 1
             self.constraints.append(c)
 
@@ -707,31 +707,6 @@ class EMMDP:
         ampl.write("\n")
         ampl.close()
 
-    def calcObjective(self, R, x, y):
-        obj = np.transpose(R)*x + np.transpose(R)*y
-        for i in xrange(0, len(self.constraints)):
-            mt = np.zeros((num_of_var, 1))
-            prod = self.constraints[i].reward
-            for j in self.constraints[i].Events:
-                if j.agent == 0:
-                    for k in j.pevents:
-                        s = k.state
-                        a = k.action
-                        sd = k.statedash
-                        ind = s.index+a.index+s.index
-                        mt[ind] = self.mdps[j.agent].transition(s,a,sd)
-                    prod *= np.transpose(mt)*x
-                else:
-                    for k in j.pevents:
-                        s = k.state
-                        a = k.action
-                        sd = k.statedash
-                        ind = s.index+a.index+s.index
-                        mt[ind] = self.mdps[j.agent].transition(s,a,sd)
-                    prod *= np.transpose(mt)*y
-            obj += prod
-        return obj
-
     def EM(self, gamma, delta, agent):
         num_iter = 1
         A, R, newR = self.mdps[agent].generateLPAc(gamma)
@@ -746,7 +721,7 @@ class EMMDP:
         initial_x = np.array(initial_x)
         initial_z = [0.5] * len(self.constraints)
         initial_z = np.array(initial_z)
-        rdiagx, econ = self.Estep(newR, initial_x, initial_z, gamma, agent)
+        rdiagx, econ = self.Estep(newR, initial_x, initial_z, gamma)
         xstar_val, zstar_val, probval = self.Mstep(rdiagx, econ, A_mat, alpha, agent)
         previter = probval
         print "Expected Reward from EM: ", previter
@@ -754,7 +729,7 @@ class EMMDP:
         while (True):
             num_iter += 1
             xstar_val = np.array(xstar_val)
-            rdiagx, econ = self.Estep(newR, xstar_val, zstar_val, gamma, agent)
+            rdiagx, econ = self.Estep(newR, xstar_val, zstar_val, gamma)
             xstar_val, zstar_val, probval = self.Mstep(rdiagx, econ, A_mat, alpha, agent)
             newiter = probval
             print "Expected Reward from EM: ", newiter
@@ -768,7 +743,7 @@ class EMMDP:
         return R,xstar_val
         # prevExpecRew = expectedRew
 
-    def Estep(self, Rcap, x, z, gamma, agent):
+    def Estep(self, Rcap, x, z, gamma):
         print "Estep: "
         rdiag = np.diag(Rcap[:, 0])
         rdiagx = rdiag.dot(x)
@@ -778,7 +753,7 @@ class EMMDP:
         # print np.transpose(rdiagx), total
 
         econ = []
-        cks = self.normalizeck(agent)
+        cks = self.normalizeck()
         for i in xrange(0, len(self.constraints)):
             prod = cks[i] * z[i]
             econ.append(prod)
@@ -808,23 +783,22 @@ class EMMDP:
         #print np.transpose(xstar.value)
         return xstar.value, zstar.value, prob.value
 
-    def normalizeck(self, agent):
+    def normalizeck(self):
         nck = []
-        cks = [xx.reward for xx in self.constraints]
-        mi = min(cks)
         for x in self.constraints:
-            nck.append(float(x.reward - mi) / float(config.R_max[agent] - config.R_min[agent]))
+            nck.append(float(x.reward - config.R_min) / float(config.R_max - config.R_min))
         return nck
 
 class Driver:
     a = EMMDP(config.agents)
-    #print a.mdps[0].solveLP(config.gamma)+a.mdps[1].solveLP(config.gamma)
-    R,x = a.EM(config.gamma, config.delta, 0)
-    R,y = a.EM(config.gamma, config.delta, 1)
-    print a.calcObjective(R,x,y)
-    # for x in a.events:
-    #     print x
-    a.genAMPL()
+#    print a.mdps[0].solveLP(config.gamma)+a.mdps[1].solveLP(config.gamma)+a.mdps[2].solveLP(config.gamma)
+    # for x in a.constraints:
+    #     print x.num_agent
+    #     for y in x.Events:
+    #         print y.pevents
+    #     print x.reward
+    #     print x.index
+    # a.genAMPL()
     # print a.mdps[0].solveLP(config.gamma) + a.mdps[1].solveLP(config.gamma)
     # for i in a.mdps[0].states:
     #     for j in a.mdps[0].actions:
