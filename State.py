@@ -606,7 +606,7 @@ class EMMDP:
             for y in self.events:
                 if y.site == x:
                     local.append(y)
-            c = Constraint(self.num_agents, local, -1, index)
+            c = Constraint(self.num_agents, local, 3, index)
             index = index + 1
             self.constraints.append(c)
 
@@ -707,6 +707,31 @@ class EMMDP:
         ampl.write("\n")
         ampl.close()
 
+    def calcObjective(self, R, x, y):
+        obj = np.transpose(R)*x + np.transpose(R)*y
+        for i in xrange(0, len(self.constraints)):
+            mt = np.zeros((num_of_var, 1))
+            prod = self.constraints[i].reward
+            for j in self.constraints[i].Events:
+                if j.agent == 0:
+                    for k in j.pevents:
+                        s = k.state
+                        a = k.action
+                        sd = k.statedash
+                        ind = s.index+a.index+s.index
+                        mt[ind] = self.mdps[j.agent].transition(s,a,sd)
+                    prod *= np.transpose(mt)*x
+                else:
+                    for k in j.pevents:
+                        s = k.state
+                        a = k.action
+                        sd = k.statedash
+                        ind = s.index+a.index+s.index
+                        mt[ind] = self.mdps[j.agent].transition(s,a,sd)
+                    prod *= np.transpose(mt)*y
+            obj += prod
+        return obj
+
     def EM(self, gamma, delta, agent):
         num_iter = 1
         A, R, newR = self.mdps[agent].generateLPAc(gamma)
@@ -719,28 +744,31 @@ class EMMDP:
         num_of_var = self.mdps[agent].numberStates*self.mdps[agent].numerActions
         initial_x = [0.5] * num_of_var
         initial_x = np.array(initial_x)
-        rdiagx, total = self.Estep(newR, initial_x, gamma)
-        xstar_val = self.Mstep(rdiagx, initial_x, total, A_mat, alpha)
-        expectedRew = np.asscalar(np.transpose(R) * xstar_val)
-        print "Expected Reward from EM: ", expectedRew
-
+        initial_z = [0.5] * len(self.constraints)
+        initial_z = np.array(initial_z)
+        rdiagx, econ = self.Estep(newR, initial_x, initial_z, gamma, agent)
+        xstar_val, zstar_val, probval = self.Mstep(rdiagx, econ, A_mat, alpha, agent)
+        previter = probval
+        print "Expected Reward from EM: ", previter
         # prevExpecRew = expectedRew
         while (True):
             num_iter += 1
             xstar_val = np.array(xstar_val)
-            rdiagx, total = self.Estep(newR, xstar_val, gamma)
-            xstar_val = self.Mstep(rdiagx, xstar_val, total, A_mat, alpha)
-            expectedRew = np.asscalar(np.transpose(R) * xstar_val)
-            print "Expected Reward from EM: ", expectedRew
-            if (abs(dualLP - expectedRew) < delta):
+            rdiagx, econ = self.Estep(newR, xstar_val, zstar_val, gamma, agent)
+            xstar_val, zstar_val, probval = self.Mstep(rdiagx, econ, A_mat, alpha, agent)
+            newiter = probval
+            print "Expected Reward from EM: ", newiter
+            if (abs(newiter - previter) < 0.00001):
                 break
+            previter = newiter
 
         print "Optimal x: ", xstar_val
         print "Sum of x values: ", cvxpy.sum_entries(xstar_val).value
         print "Number of iterations: ", num_iter
+        return R,xstar_val
         # prevExpecRew = expectedRew
 
-    def Estep(self, Rcap, x, gamma):
+    def Estep(self, Rcap, x, z, gamma, agent):
         print "Estep: "
         rdiag = np.diag(Rcap[:, 0])
         rdiagx = rdiag.dot(x)
@@ -748,25 +776,52 @@ class EMMDP:
         total = np.sum(rdiagx)
         rdiagx = rdiagx / total
         # print np.transpose(rdiagx), total
-        return rdiagx, total
 
-    def Mstep(self, E, x, c, A_mat, alpha):
+        econ = []
+        cks = self.normalizeck(agent)
+        for i in xrange(0, len(self.constraints)):
+            prod = cks[i] * z[i]
+            econ.append(prod)
+        econ = np.array(econ)[np.newaxis].T
+        return rdiagx, econ
+
+    def Mstep(self, E, EZ, A_mat, alpha, agent):
         print "Mstep: "
         global num_of_var
         xstar = cvxpy.Variable(num_of_var, 1)
-        obj = cvxpy.Maximize(np.transpose(E) * (cvxpy.log(xstar)))
+        zstar = cvxpy.Variable(len(self.constraints), 1)
+        obj = cvxpy.Maximize(np.transpose(E) * cvxpy.log(xstar) + np.transpose(EZ)*cvxpy.log(zstar))
         cons = [A_mat * xstar == alpha, xstar > 0]
+        for i in xrange(0, len(self.constraints)):
+            mt = np.zeros((num_of_var,1))
+            for j in self.constraints[i].Events:
+                if j.agent == agent:
+                    for k in j.pevents:
+                        s = k.state
+                        a = k.action
+                        sd = k.statedash
+                        ind = s.index+a.index+s.index
+                        mt[ind] = self.mdps[agent].transition(s,a,sd)
+            cons.append(zstar[i] == np.transpose(mt)*xstar)
         prob = cvxpy.Problem(objective=obj, constraints=cons)
         prob.solve(solver=cvxpy.ECOS, verbose=False, max_iters=100)
-        # print np.transpose(xstar.value)
-        return xstar.value
+        #print np.transpose(xstar.value)
+        return xstar.value, zstar.value, prob.value
+
+    def normalizeck(self, agent):
+        nck = []
+        cks = [xx.reward for xx in self.constraints]
+        mi = min(cks)
+        for x in self.constraints:
+            nck.append(float(x.reward - mi) / float(config.R_max[agent] - config.R_min[agent]))
+        return nck
 
 class Driver:
     a = EMMDP(config.agents)
-    print a.mdps[0].solveLP(config.gamma)+a.mdps[1].solveLP(config.gamma)
-    a.EM(config.gamma, config.delta, 0)
-    a.EM(config.gamma, config.delta, 1)
-
+    #print a.mdps[0].solveLP(config.gamma)+a.mdps[1].solveLP(config.gamma)
+    R,x = a.EM(config.gamma, config.delta, 0)
+    R,y = a.EM(config.gamma, config.delta, 1)
+    print a.calcObjective(R,x,y)
     # for x in a.events:
     #     print x
     a.genAMPL()
