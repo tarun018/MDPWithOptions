@@ -6,7 +6,8 @@ transitTimes = []
 T = [4]*agents
 nloc = [3,3,4]
 shared = [[0,1], [0,1,2], [1,2]]
-creward = [-1, -2, -3]
+nc = len(shared)
+creward = [0,0,0]
 collectTimes.append([2]*nloc[0])
 collectTimes.append([2]*nloc[1])
 collectTimes.append([2]*nloc[2])
