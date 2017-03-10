@@ -2,5 +2,5 @@ reset;
 model try.mod;
 data nl2.dat;
 for{i in 1..1, j in 1..card(cons[i])} display member(j, cons[i]);
-option minos_options 'Completion=Full';
+option solver loqo;
 solve;

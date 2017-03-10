@@ -317,6 +317,7 @@ class MDP:
             return 0
 
     def writeTransitionsToFile(self):
+        print "     Writing Transitions for Agent " +str(self.agent)
         tran = open("DomainTransitionData"+str(self.agent)+".txt", 'w')
         for i in self.actions:
             for j in self.states:
@@ -331,6 +332,7 @@ class MDP:
         tran.close()
 
     def writeRewardsToFile(self):
+        print "     Writing Rewards for Agent " +str(self.agent)
         rew = open("DomainRewardData"+str(self.agent)+".txt",'w')
         for i in self.states:
             for j in self.actions:
@@ -343,6 +345,7 @@ class MDP:
         rew.close()
 
     def writeStatesToFile(self):
+        print "     Writing States for Agent " +str(self.agent)
         stat = open("DomainStateData" + str(self.agent) + ".txt", 'w')
         for j in self.states:
             stat.write(str(j.index)+","+str(j.location)+","+str(j.time)+",")
@@ -352,11 +355,13 @@ class MDP:
         stat.close()
 
     def writeActionsToFile(self):
+        print "     Writing Actions for Agent " +str(self.agent)
         act = open("DomainActionData" + str(self.agent) + ".txt", 'w')
         for j in self.actions:
             act.write(str(j.index)+","+str(j.gotox)+","+str(j.name)+"\n")
 
     def readActions(self, filename):
+        print "     Reading Actions for Agent " +str(self.agent)
         with open(filename, 'rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
@@ -370,6 +375,7 @@ class MDP:
                 self.actions.append(a)
 
     def readStates(self, filename):
+        print "     Reading States for Agent " +str(self.agent)
         with open(filename, 'rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
@@ -384,6 +390,7 @@ class MDP:
                 self.states.append(s)
 
     def readTransition(self, filename):
+        print "     Reading Transitions for Agent " +str(self.agent)
         for s in self.states:
             s.transition = []
         stateIndex = 0
@@ -401,6 +408,7 @@ class MDP:
                 stateIndex += 1
 
     def readRewards(self, filename):
+        print "     Reading Rewards for Agent " +str(self.agent)
         tosend = []
         stateIndex = 0
         with open(filename, 'rb') as csvfile:
@@ -573,14 +581,15 @@ class EMMDP:
         self.genEvents()
         self.genConstraints()
         self.agentwise = self.agentEventSep()
-        self.__result = []
 
     def generateMDPs(self):
         for i in xrange(0, self.num_agents):
+            print "Generating MDP for Agent"+str(i)
             a = MDP(config.T[i], config.nloc[i], i, config.collectTimes[i], config.transitTimes[i], config.alpha, config.flag)
             self.mdps.append(a)
 
     def genPrimitiveEvents(self):
+        print "Generating Primitive Events"
         index = 0
         for q in xrange(0,self.num_agents):
             a = self.mdps[q]
@@ -595,6 +604,7 @@ class EMMDP:
                                     index = index + 1
 
     def genEvents(self):
+        print "Generating Events"
         index = 0
         for agent in xrange(0, self.num_agents):
             for j in xrange(0, self.mdps[agent].nlocs):
@@ -607,6 +617,7 @@ class EMMDP:
                 self.events.append(e)
 
     def genConstraints(self):
+        print "Generating Constraints"
         index = 0
         shared = config.shared
         for x in xrange(0, len(shared)):
@@ -619,7 +630,7 @@ class EMMDP:
             self.constraints.append(c)
 
     def genAMPL(self):
-
+        print "Generating AMPL"
         ampl = open('nl2.dat', 'w')
         ampl.write("param n := " + str(self.num_agents) + ";\n")
         ampl.write("\n")
@@ -716,6 +727,7 @@ class EMMDP:
         ampl.close()
 
     def agentEventSep(self):
+        print "Gnerating Event Separation"
         agent = []
         for k in xrange(0, self.num_agents):
             eves = []
@@ -727,11 +739,15 @@ class EMMDP:
         return agent
 
     def objective(self, xvals, zvals, gamma):
+        print "Calculating Objective"
         sum = 0
         for i in xrange(0, self.num_agents):
             A, R, newR = self.mdps[i].generateLPAc(gamma)
             R = np.array(R)[np.newaxis].T
             sum += np.transpose(R)*xvals[i]
+            if abs(np.sum(xvals[i]) - float(1)/(float(1-gamma))) > config.delta:
+                print np.sum(xvals[i])
+                print "Warning"
         econ = []
         for i in xrange(0, len(self.constraints)):
             prod = self.constraints[i].reward
@@ -768,7 +784,11 @@ class EMMDP:
             rdiagx, econ = self.Estep(newR, initial_x, initial_z, gamma, i)
             #evals.append(pool.apipe(self.Estep, newR, initial_x, initial_z, gamma, i))
             xstar_val, zstar_val, probval = self.Mstep(rdiagx, econ, A_mat, alpha, i)
-            zvals.append(zstar_val)
+            #zstar_val = np.array(zstar_val)[np.newaxis].T
+            if np.size(zstar_val)==1:
+                zvals.append([zstar_val])
+            else:
+                zvals.append(zstar_val)
             xvals.append(xstar_val)
             pvals.append(probval)
         print self.objective(xvals, zvals, gamma)
@@ -794,20 +814,23 @@ class EMMDP:
                 rdiagx, econ = self.Estep(newR, xstar_val, zvals, gamma, i)
                 # evals.append(pool.apipe(self.Estep, newR, initial_x, initial_z, gamma, i))
                 xstar_val, zstar_val, probval = self.Mstep(rdiagx, econ, A_mat, alpha, i)
-                zvalues.append(zstar_val)
+                if np.size(zstar_val) == 1:
+                    zvalues.append([zstar_val])
+                else:
+                    zvalues.append(zstar_val)
                 xvalues.append(xstar_val)
                 pvalues.append(probval)
             xvals = xvalues
             zvals = zvalues
             print self.objective(xvals, zvals, gamma)
-            # if num_iter == 1000:
-            if all([abs(pvalues[t] - pvals[t]) < 0.01 for t in xrange(0, self.num_agents)]):
+            if num_iter == 1000:
+            #if all([abs(pvalues[t] - pvals[t]) < delta for t in xrange(0, self.num_agents)]):
                 pvals = pvalues
                 break
             pvals = pvalues
 
     def Estep(self, Rcap, x, z, gamma, agent):
-        print "Estep: "
+        print "Estep: ",
         rdiag = np.diag(Rcap[:, 0])
         rdiagx = rdiag.dot(x)
         rdiagx = rdiagx * (1 - gamma)
@@ -833,10 +856,11 @@ class EMMDP:
         for i in self.agentwise[agent]:
             tosend.append(econ[i[1]])
         tosend = np.array(tosend)[np.newaxis].T
+        print "Done"
         return rdiagx, tosend
 
     def Mstep(self, E, EZ, A_mat, alpha, agent):
-        print "Mstep: "
+        print "Mstep: ",
         num_of_var = self.mdps[agent].numberStates*self.mdps[agent].numerActions
         xstar = cvxpy.Variable(num_of_var, 1)
         zstar = cvxpy.Variable(len(self.agentwise[agent]), 1)
@@ -856,6 +880,7 @@ class EMMDP:
         prob = cvxpy.Problem(objective=obj, constraints=cons)
         prob.solve(solver=cvxpy.ECOS, verbose=False, max_iters=100)
         #print np.transpose(xstar.value)
+        print "Done"
         return xstar.value, zstar.value, prob.value
 
     def normalizeck(self):
@@ -867,6 +892,5 @@ class EMMDP:
 class Driver:
     print cvxpy.installed_solvers()
     a = EMMDP(config.agents)
-    #print a.mdps[0].solveLP(config.gamma)+a.mdps[1].solveLP(config.gamma)+a.mdps[2].solveLP(config.gamma)
     a.genAMPL()
     a.EM(config.gamma, config.delta)
