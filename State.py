@@ -302,7 +302,6 @@ class MDP:
                     print "WARNING: k: " + str(k) + " i: " + str(i) + " Sum: " + str(sum)
         fp.close()
 
-
     def rewardFunction(self, s, a):
         if a.name == "Collect":
             if s.dold == 0 and s.dvals[s.location] == 1:
@@ -429,7 +428,6 @@ class MDP:
             else:
                 self.start.append(float(0))
 
-
     def generateLPAc(self, gamma):
         decisionvar = []
         for x in self.states:
@@ -542,7 +540,7 @@ class Event:
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
-            return self.agent == other.agent and self.index==other.index and self.name==other.name and self.site==other.site and self.pevents==other.pevents
+            return self.agent == other.agent and self.index==other.index and self.name==other.name and self.site==other.site
         return False
 
 class Constraint:
@@ -736,11 +734,11 @@ class EMMDP:
             sum += np.transpose(R)*xvals[i]
         econ = []
         for i in xrange(0, len(self.constraints)):
-            prod = config.creward[i]
+            prod = self.constraints[i].reward
             for j in self.constraints[i].Events:
                 ag = j.agent
                 for k in xrange(0, len(self.agentwise[ag])):
-                    if j == self.agentwise[ag][k][0]:
+                    if j==self.agentwise[ag][k][0] and i==self.agentwise[ag][k][1]:
                         prod *= zvals[ag][k]
             econ.append(prod)
         sum += np.sum(econ)
@@ -802,7 +800,8 @@ class EMMDP:
             xvals = xvalues
             zvals = zvalues
             print self.objective(xvals, zvals, gamma)
-            if all([pvalues[t] - pvals[t] < 0.001 for t in xrange(0, self.num_agents)]):
+            # if num_iter == 1000:
+            if all([abs(pvalues[t] - pvals[t]) < 0.01 for t in xrange(0, self.num_agents)]):
                 pvals = pvalues
                 break
             pvals = pvalues
@@ -825,7 +824,7 @@ class EMMDP:
             for j in self.constraints[i].Events:
                 ag = j.agent
                 for k in xrange(0, len(self.agentwise[ag])):
-                    if j==self.agentwise[ag][k][0]:
+                    if j==self.agentwise[ag][k][0] and i==self.agentwise[ag][k][1]:
                         prod *= z[ag][k]
             econ.append(prod)
 
@@ -866,6 +865,8 @@ class EMMDP:
         return nck
 
 class Driver:
+    print cvxpy.installed_solvers()
     a = EMMDP(config.agents)
-    a.EM(config.gamma, config.delta)
+    #print a.mdps[0].solveLP(config.gamma)+a.mdps[1].solveLP(config.gamma)+a.mdps[2].solveLP(config.gamma)
     a.genAMPL()
+    a.EM(config.gamma, config.delta)
