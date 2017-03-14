@@ -34,4 +34,5 @@ sum{k in cA} x[i,j,k] - gamma * sum {l in cS, m in cA} x[i,l,m]*P[i,m,l,j] = alp
 subject to Positive {i in N, j in cS, k in cA}: x[i,j,k] >= 0;
 #subject to DefineZ {i in 1..num_cons, j in 1..num_events_one_cons} : 
 #z[i,j] = sum{k in 1..num_prim_events_one_event} x[prim_event[event[cons[i,j], k], 1], prim_event[event[cons[i,j], k], 2], prim_event[event[cons[i,j], k], 3]] * P[prim_event[event[cons[i,j], k], 1], prim_event[event[cons[i,j], k], 3], prim_event[event[cons[i,j], k], 2], prim_event[event[cons[i,j], k], 4]];
-
+ - 2*x[1,21,1]*x[1,25,1]*x[2,46,1]*x[2,49,1]*x[2,51,1]*x[2,63,1]*x[2,66,1]*x[2,67,1]*x[2,72,1]*x[2,76,1];
+4*x[2,39,1]*x[2,40,1]*x[2,44,1]*x[2,58,1]*[2,59,1]*x[2,62,1]*x[2,70,1]*x[2,75,1]
