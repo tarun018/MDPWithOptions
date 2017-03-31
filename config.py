@@ -7,7 +7,8 @@ T = [8]*agents
 nloc = [3,3]
 shared = [[0],[0],[0]]
 nc = len(shared)
-creward = [0,0,0]
+creward = [-5,-2,-1]
+thetahat = 0.5
 collectTimes.append([4]*nloc[0])
 collectTimes.append([2]*nloc[1])
 transitTimes.append([[4]*nloc[0]]*nloc[0])
