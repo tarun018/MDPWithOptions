@@ -585,7 +585,7 @@ class EMMDP:
         self.genPrimitiveEvents()
         self.genEvents()
         self.genConstraints()
-        self.agentwise = self.agentEventSep()
+        self.agentwise = self.agentwiseSeparation()
 
     def generateMDPs(self):
         for i in xrange(0, self.num_agents):
@@ -727,47 +727,44 @@ class EMMDP:
         ampl.write("\n")
         ampl.close()
 
-    def agentEventSep(self):
+    def agentwiseSeparation(self):
         print "Generating Event Separation"
-        agent = []
-        for k in xrange(0, self.num_agents):
-            eves = []
-            for i in xrange(0, len(self.constraints)):
-                for j in self.constraints[i].Events:
-                    if j.agent == k:
-                        eves.append((j,i))
-            agent.append(eves)
-        return agent
+        agentwise = []
+        for i in xrange(0, self.num_agents):
+            lst= []
+            for j in xrange(0, len(self.constraints)):
+                for k in self.constraints[j].Events:
+                    if k.agent == i:
+                        lst.append((k, j))
+            agentwise.append(lst)
+        return agentwise
 
-    def objective(self, xvals, zvals, Rs, gamma):
-        print xvals, zvals
+
+    def objective(self, xvals, Rs):
         print "Calculating Objective"
         sum = 0
         for i in xrange(0, self.num_agents):
-            sum += np.transpose(Rs[i])*xvals[i]
-            if abs(np.sum(xvals[i]) - float(1)/(float(1-gamma))) > config.delta:
+            sum += np.transpose(Rs[i]) * xvals[i]
+            if abs(np.sum(xvals[i]) - float(1) / (float(1 - config.gamma))) > config.delta:
                 print np.sum(xvals[i])
                 print "Warning"
-        econ = []
-        for i in xrange(0, len(self.constraints)):
-            prod = self.constraints[i].reward
-            for j in self.constraints[i].Events:
-                ag = j.agent
-                for k in xrange(0, len(self.agentwise[ag])):
-                    if j==self.agentwise[ag][k][0] and i==self.agentwise[ag][k][1]:
-                        prod *= zvals[ag][k]
-            econ.append(prod)
-        sum += np.sum(econ)
         print sum
         return sum
 
-    def EM(self, gamma, delta):
+    def EM(self):
+        initial_x = []
+        for i in xrange(0, self.num_agents):
+            numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
+            lst = [1]*numvar
+            initial_x.append(lst)
+
         initial_z = []
         for i in xrange(0, self.num_agents):
             lst = []
-            for j in self.agentwise[i]:
+            for eves in self.agentwise[i]:
+                event = eves[0]
                 sum = 0
-                for k in j[0].pevents:
+                for k in event.pevents:
                     s = k.state
                     a = k.action
                     sd = k.statedash
@@ -775,156 +772,80 @@ class EMMDP:
                 lst.append(sum)
             initial_z.append(lst)
 
-        initial_x = []
-        for i in xrange(0, self.num_agents):
-            lst = []
-            numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
-            lst = [1]*numvar
-            initial_x.append(lst)
-
         As = []
         Rs = []
         newRs = []
-        zvals = []
         xvals = []
         pvals = []
         num_iter = 1
-        print "Iteration: "+str(num_iter)
+
+        print "Iteration: " + str(num_iter)
         for i in xrange(0, self.num_agents):
-            A, R, newR = self.mdps[i].generateLPAc(gamma)
+            A, R, newR = self.mdps[i].generateLPAc(config.gamma)
             As.append(A)
             Rs.append(R)
             newRs.append(newR)
 
-        sums, econs, total = self.genAll(initial_x, initial_z, newRs, gamma)
-
-        print "Matrices Done "
+        sums = self.generateEstep(initial_x, newRs)
         for i in xrange(0, self.num_agents):
             A_mat = np.array(As[i])
             alpha = self.mdps[i].start
             alpha = np.array(alpha)
-            rdiagx, econ = self.Estep(sums, econs, total, i)
-            #evals.append(pool.apipe(self.Estep, newR, initial_x, initial_z, gamma, i))
-            xstar_val, zstar_val, probval = self.Mstep(rdiagx, econ, A_mat, alpha, i)
-            zvals.append(zstar_val)
+            rdiagx = self.Estep(sums, i)
+            xstar_val, probval = self.Mstep(rdiagx, A_mat, alpha, i)
             xvals.append(xstar_val)
             pvals.append(probval)
-        #     for j in xrange(0, len(self.agentwise[i])):
-        #         mt = np.zeros((num_of_var, 1))
-        #         ev = self.agentwise[i][j][0]
-        #         for k in ev.pevents:
-        #             s = k.state
-        #             a = k.action
-        #             sd = k.statedash
-        #             ind = (s.index * self.mdps[i].numerActions) + a.index
-        #             mt[ind] = self.mdps[i].transition(s, a, sd)
-        #         print zstar_val[j], np.transpose(mt) * xstar_val
-        # print self.objective(xvals, zvals, Rs, gamma)
-        #     pool.close()
-        # pool.join()
-        # for x in evals:
-        #     print x.get()
-        #     zvalues.append(zstar_val)
-        while (True):
+
+        while(True):
             num_iter += 1
             print "Iteration: " + str(num_iter)
-            zvalues = []
             xvalues = []
             pvalues = []
-            sums, econs, total = self.genAll(xvals, zvals, newRs, gamma)
+            sums = self.generateEstep(xvals, newRs)
             for i in xrange(0, self.num_agents):
                 A_mat = np.array(As[i])
                 alpha = self.mdps[i].start
                 alpha = np.array(alpha)
-                rdiagx, econ = self.Estep(sums, econs, total, i)
-                # evals.append(pool.apipe(self.Estep, newR, initial_x, initial_z, gamma, i))
-                xstar_val, zstar_val, probval = self.Mstep(rdiagx, econ, A_mat, alpha, i)
-                zvalues.append(zstar_val)
+                rdiagx = self.Estep(sums, i)
+                xstar_val, probval = self.Mstep(rdiagx, A_mat, alpha, i)
                 xvalues.append(xstar_val)
                 pvalues.append(probval)
-            prevobj = self.objective(xvals, zvals, Rs, gamma)
+            prevobj = self.objective(xvals, Rs)
             xvals = xvalues
-            zvals = zvalues
-            newobj = self.objective(xvals, zvals, Rs, gamma)
-            if abs(newobj - prevobj) < delta:
-            #if all([abs(pvals[t] - pvalues[t]) < delta for t in xrange(0, self.num_agents)]):
-                print self.objective(xvals,zvals,Rs,gamma)
+            newobj = self.objective(xvals, Rs)
+            if abs(newobj - prevobj) < config.delta:
+                print newobj
                 pvals = pvalues
                 break
             pvals = pvalues
 
-    def genAll(self, x, z, newRs, gamma):
-        #Computing S1,S2,...,S|rho|
-        #S1 = c1*prod{E1}
-        total = 0
+    def generateEstep(self, x, newRs):
         sums = []
         for i in xrange(0, self.num_agents):
             Rcap = np.array(newRs[i])[np.newaxis].T
             rdiag = np.diag(Rcap[:, 0])
             rdiagx = rdiag.dot(x[i])
-            rdiagx = rdiagx * (1 - gamma)
-            total += np.sum(rdiagx)
+            rdiagx = rdiagx * (1 - config.gamma)
             sums.append(rdiagx)
+        return sums
 
-        econ = []
-        cks = self.normalizeck()
-        for i in xrange(0, len(self.constraints)):
-            prod = cks[i]
-            for j in self.constraints[i].Events:
-                ag = j.agent
-                for k in xrange(0, len(self.agentwise[ag])):
-                    if j==self.agentwise[ag][k][0] and i==self.agentwise[ag][k][1]:
-                        prod *= z[ag][k]
-            econ.append(prod)
-
-        total += np.sum(econ)
-        total *= float(1)/float(self.num_agents + len(self.constraints))
-        return sums, econ, total
-
-    def Estep(self, sums, econs, total, agent):
+    def Estep(self, sums, agent):
         print "Estep: ",
         rdiagx = sums[agent]
-        rdiagx = rdiagx / total
-
-        #print np.transpose(rdiagx), total
-        #Sending parameter
-        tosend = []
-        for i in self.agentwise[agent]:
-            tosend.append(float(econs[i[1]]) / float(total))
-        tosend = np.array(tosend)[np.newaxis].T
-
         print "Done"
-        return rdiagx, tosend
+        return rdiagx
 
-    def Mstep(self, E, EZ, A_mat, alpha, agent):
+    def Mstep(self, RX, A_mat, alpha, agent):
         print "Mstep: ",
-        num_of_var = self.mdps[agent].numberStates*self.mdps[agent].numerActions
+        num_of_var = self.mdps[agent].numberStates * self.mdps[agent].numerActions
         xstar = cvxpy.Variable(num_of_var, 1)
-        zstar = cvxpy.Variable(len(self.agentwise[agent]), 1)
-        obj = cvxpy.Maximize(np.transpose(E) * cvxpy.log(xstar) + np.transpose(EZ)*cvxpy.log(zstar))
+        obj = cvxpy.Maximize(np.transpose(RX)*cvxpy.log(xstar))
         cons = [A_mat * xstar == alpha, xstar >= 0]
-        for i in xrange(0, len(self.agentwise[agent])):
-            mt = np.zeros((num_of_var, 1))
-            ev = self.agentwise[agent][i][0]
-            for k in ev.pevents:
-                s = k.state
-                a = k.action
-                sd = k.statedash
-                ind = (s.index*self.mdps[agent].numerActions)+a.index
-                mt[ind] = self.mdps[agent].transition(s, a, sd)
-            cons.append(zstar[i] == np.transpose(mt)*xstar)
-
         prob = cvxpy.Problem(objective=obj, constraints=cons)
         prob.solve(solver=cvxpy.ECOS, verbose=False, max_iters=10000000)
-        #print np.transpose(xstar.value)
+        # print np.transpose(xstar.value)
         print "Done"
-        return xstar.value, zstar.value, prob.value
-
-    def normalizeck(self):
-        nck = []
-        for x in self.constraints:
-            nck.append(float(x.reward - config.R_min) / float(config.R_max - config.R_min))
-        return nck
+        return xstar.value, prob.value
 
 class Driver:
     print cvxpy.installed_solvers()
@@ -946,4 +867,4 @@ class Driver:
     #     sum += a.mdps[i].solveLP(config.gamma)
     # print sum
     a.genAMPL()
-    a.EM(config.gamma, config.delta)
+    a.EM()
