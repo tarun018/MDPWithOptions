@@ -750,7 +750,7 @@ class EMMDP:
 
         for cons in xrange(0, len(self.constraints)):
             prod = self.constraints[cons].reward
-            for events in cons.Events:
+            for events in self.constraints[cons].Events:
                 agent = events.agent
                 searchagentwise = [index for index in xrange(0, len(self.agentwise[agent]))
                                    if self.agentwise[agent][index][0] == events and self.agentwise[agent][index][1] == cons]
@@ -759,6 +759,7 @@ class EMMDP:
                 prod *= zvals[agent][ind]
             sum += prod
 
+        #sum += len(self.constraints)*config.theta
         print sum
         return sum
 
@@ -766,7 +767,7 @@ class EMMDP:
         initial_x = []
         for i in xrange(0, self.num_agents):
             numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
-            lst = [0.05]*numvar
+            lst = [0.1]*numvar
             initial_x.append(lst)
 
         initial_z = []
@@ -782,7 +783,7 @@ class EMMDP:
                     sum += initial_x[i][(s.index*self.mdps[i].numerActions)+a.index]*self.mdps[i].transition(s,a,sd)
                 lst.append(sum)
             initial_z.append(lst)
-        assert all(vals >= 0 for vals in initial_z)
+        assert all(vals >= 0 for some in initial_z for vals in some)
 
         As = []
         Rs = []
@@ -806,8 +807,11 @@ class EMMDP:
             alpha = np.array(alpha)
             rdiagx, productarr, z1arr, zarr = self.Estep(sums, products, initial_z, i)
             xstar_val, zstar_val, probval = self.Mstep(rdiagx, productarr, z1arr, zarr, A_mat, alpha, i)
+            if np.size(zstar_val) == 1: #problem 4
+                zvals.append([zstar_val])
+            else:
+                zvals.append(zstar_val)
             xvals.append(xstar_val)
-            zvals.append(zstar_val)
             pvals.append(probval)
 
         while(True):
@@ -824,11 +828,15 @@ class EMMDP:
                 rdiagx, productarr, z1arr, zarr = self.Estep(sums, products, zvals, i)
                 xstar_val, zstar_val, probval = self.Mstep(rdiagx, productarr, z1arr, zarr, A_mat, alpha, i)
                 xvalues.append(xstar_val)
-                zvalues.append(zstar_val)
+                if np.size(zstar_val) == 1:
+                    zvalues.append([zstar_val])
+                else:
+                    zvalues.append(zstar_val)
                 pvalues.append(probval)
             prevobj = self.objective(xvals, zvals, Rs)
             xvals = xvalues
             zvals = zvalues
+            print zvals
             newobj = self.objective(xvals, zvals, Rs)
             if abs(newobj - prevobj) < config.delta:
                 print newobj
@@ -837,7 +845,7 @@ class EMMDP:
             pvals = pvalues
 
     def generateEstep(self, x, z, newRs):
-        print z
+
         sums = []
         for i in xrange(0, self.num_agents):
             Rcap = np.array(newRs[i])[np.newaxis].T
@@ -879,16 +887,25 @@ class EMMDP:
         z1arr = []
         zarr = []
         thetahat = float(config.theta - config.R_min) / float(config.R_max - config.R_min) #affect 3
-        assert thetahat >= 0
+        assert thetahat > 0
         for evecon in xrange(0, len(self.agentwise[agent])):
             event = self.agentwise[agent][evecon][0]
             cons = self.agentwise[agent][evecon][1]
             productarr.append(products[cons])
             z1arr.append(thetahat*(1 - z[agent][evecon]))
             zarr.append(thetahat*(z[agent][evecon]))
-        assert all(vals >=0 for vals in productarr)
+
+        assert len(productarr) == len(self.agentwise[agent])
+        assert len(z1arr) == len(self.agentwise[agent])
+        assert len(zarr) == len(self.agentwise[agent])
+
+        assert all(vals >= 0 for vals in productarr)
         assert all(vals >= 0 for vals in z1arr)
         assert all(vals >= 0 for vals in zarr)
+
+        productarr = np.array(productarr)[np.newaxis].T
+        z1arr = np.array(z1arr)[np.newaxis].T
+        zarr = np.array(zarr)[np.newaxis].T
 
         print "Done"
         return rdiagx, productarr, z1arr, zarr
@@ -899,8 +916,8 @@ class EMMDP:
         zstar = cvxpy.Variable(len(self.agentwise[agent]), 1)
         xstar = cvxpy.Variable(num_of_var, 1)
         obj = cvxpy.Maximize(np.transpose(rdiagx)*cvxpy.log(xstar) + np.transpose(productarr)*cvxpy.log(zstar) +
-                             np.transpose(z1arr)*cvxpy.log(zstar) + np.transpose(zarr)*cvxpy.log(zstar))
-        cons = [A_mat * xstar == alpha, xstar >= 0]
+                             np.transpose(z1arr)*cvxpy.log(1 - zstar) + np.transpose(zarr)*cvxpy.log(zstar))
+        cons = [A_mat * xstar == alpha, xstar > 0]
         for evecon in xrange(0, len(self.agentwise[agent])):
             mt = np.zeros((num_of_var, 1))
             event = self.agentwise[agent][evecon][0]
@@ -915,7 +932,6 @@ class EMMDP:
 
         prob = cvxpy.Problem(objective=obj, constraints=cons)
         prob.solve(solver=cvxpy.ECOS, verbose=False, max_iters=10000000)
-        # print np.transpose(xstar.value)
         print "Done"
         return xstar.value, zstar.value, prob.value
 
