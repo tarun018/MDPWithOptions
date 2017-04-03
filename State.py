@@ -501,7 +501,7 @@ class MDP:
             for y in x.possibleActions:
                 for r in x.reward:
                     if r[0]==y:
-                        newR.append(float(r[1]-R_min)/float(R_max-R_min))
+                        newR.append(float(r[1])/float(R_max-R_min))
 
         return A_mat, R_mat, newR
 
@@ -585,7 +585,6 @@ class EMMDP:
         self.genPrimitiveEvents()
         self.genEvents()
         self.genConstraints()
-        self.agentwise = self.agentwiseSeparation()
 
     def generateMDPs(self):
         for i in xrange(0, self.num_agents):
@@ -727,20 +726,7 @@ class EMMDP:
         ampl.write("\n")
         ampl.close()
 
-    def agentwiseSeparation(self):
-        print "Generating Event Separation"
-        agentwise = []
-        for i in xrange(0, self.num_agents):
-            lst= []
-            for j in xrange(0, len(self.constraints)):
-                for k in self.constraints[j].Events:
-                    if k.agent == i:
-                        lst.append((k, j))
-            agentwise.append(lst)
-        return agentwise
-
-
-    def objective(self, xvals, zvals, Rs):
+    def objective(self, xvals, Rs):
         sum = 0
         for i in xrange(0, self.num_agents):
             sum += np.transpose(Rs[i]) * xvals[i]
@@ -748,18 +734,20 @@ class EMMDP:
                 print np.sum(xvals[i])
                 print "Warning"
 
-        for cons in xrange(0, len(self.constraints)):
-            prod = self.constraints[cons].reward
-            for events in self.constraints[cons].Events:
-                agent = events.agent
-                searchagentwise = [index for index in xrange(0, len(self.agentwise[agent]))
-                                   if self.agentwise[agent][index][0] == events and self.agentwise[agent][index][1] == cons]
-                assert len(searchagentwise) == 1
-                ind = searchagentwise[0]
-                prod *= zvals[agent][ind]
+        for i in xrange(0, len(self.constraints)):
+            cons = self.constraints[i]
+            prod = cons.reward
+            for eves in cons.Events:
+                pesum = 0
+                agent = eves.agent
+                for peves in eves.pevents:
+                    s = peves.state
+                    a = peves.action
+                    sd = peves.statedash
+                    pesum += self.mdps[agent].transition(s,a,sd)*xvals[agent][(s.index*self.mdps[agent].numerActions)+a.index]
+                prod *= pesum
             sum += prod
 
-        #sum += len(self.constraints)*config.theta
         print sum
         return sum
 
@@ -767,30 +755,14 @@ class EMMDP:
         initial_x = []
         for i in xrange(0, self.num_agents):
             numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
-            lst = [0.1]*numvar
+            lst = [0.01]*numvar
             initial_x.append(lst)
-
-        initial_z = []
-        for i in xrange(0, self.num_agents):
-            lst = []
-            for eves in self.agentwise[i]:
-                event = eves[0]
-                sum = 0 #Affect 1 --------------------
-                for k in event.pevents:
-                    s = k.state
-                    a = k.action
-                    sd = k.statedash
-                    sum += initial_x[i][(s.index*self.mdps[i].numerActions)+a.index]*self.mdps[i].transition(s,a,sd)
-                lst.append(sum)
-            initial_z.append(lst)
-        assert all(vals >= 0 for some in initial_z for vals in some)
 
         As = []
         Rs = []
         newRs = []
         xvals = []
         pvals = []
-        zvals = []
         num_iter = 1
 
         print "Iteration: " + str(num_iter)
@@ -800,51 +772,40 @@ class EMMDP:
             Rs.append(R)
             newRs.append(newR)
 
-        sums, products = self.generateEstep(initial_x, initial_z, newRs)
+        sums, products = self.generateEstep(initial_x, newRs)
         for i in xrange(0, self.num_agents):
             A_mat = np.array(As[i])
             alpha = self.mdps[i].start
             alpha = np.array(alpha)
-            rdiagx, productarr, z1arr, zarr = self.Estep(sums, products, initial_z, i)
-            xstar_val, zstar_val, probval = self.Mstep(rdiagx, productarr, z1arr, zarr, A_mat, alpha, i)
-            if np.size(zstar_val) == 1: #problem 4
-                zvals.append([zstar_val])
-            else:
-                zvals.append(zstar_val)
+            rdiagx = self.Estep(sums, i)
+            xstar_val, prob_val = self.Mstep(rdiagx, products, initial_x, A_mat, alpha, i)
             xvals.append(xstar_val)
-            pvals.append(probval)
+            pvals.append(prob_val)
+        self.objective(xvals, Rs)
 
         while(True):
             num_iter += 1
             print "Iteration: " + str(num_iter)
             xvalues = []
             pvalues = []
-            zvalues = []
-            sums, products = self.generateEstep(xvals, zvals, newRs)
+            sums, products = self.generateEstep(xvals, newRs)
             for i in xrange(0, self.num_agents):
                 A_mat = np.array(As[i])
                 alpha = self.mdps[i].start
                 alpha = np.array(alpha)
-                rdiagx, productarr, z1arr, zarr = self.Estep(sums, products, zvals, i)
-                xstar_val, zstar_val, probval = self.Mstep(rdiagx, productarr, z1arr, zarr, A_mat, alpha, i)
+                rdiagx = self.Estep(sums, i)
+                xstar_val, probval = self.Mstep(rdiagx, products, xvals, A_mat, alpha, i)
                 xvalues.append(xstar_val)
-                if np.size(zstar_val) == 1:
-                    zvalues.append([zstar_val])
-                else:
-                    zvalues.append(zstar_val)
                 pvalues.append(probval)
-            prevobj = self.objective(xvals, zvals, Rs)
+            prevobj = self.objective(xvals, Rs)
             xvals = xvalues
-            zvals = zvalues
-            print zvals
-            newobj = self.objective(xvals, zvals, Rs)
+            pvals = pvalues
+            newobj = self.objective(xvals, Rs)
             if abs(newobj - prevobj) < config.delta:
                 print newobj
-                pvals = pvalues
                 break
-            pvals = pvalues
 
-    def generateEstep(self, x, z, newRs):
+    def generateEstep(self, x, newRs):
 
         sums = []
         for i in xrange(0, self.num_agents):
@@ -855,85 +816,111 @@ class EMMDP:
             sums.append(rdiagx)
 
         products = []
-        normalizedrewards = self.normalizeck()
         for i in xrange(0, len(self.constraints)):
-            prod =  normalizedrewards[i]
-            for j in self.constraints[i].Events:
-                agent = j.agent
-                searchagentwise = [index for index in xrange(0, len(self.agentwise[agent]))
-                                   if self.agentwise[agent][index][0]==j and self.agentwise[agent][index][1]==i]
-                assert len(searchagentwise) == 1
-                ind = searchagentwise[0]
-                prod *= z[agent][ind]
+            prod =  float(self.constraints[i].reward) / float(config.R_max - config.R_min)
+            assert prod >= 0
+            for eves in self.constraints[i].Events:
+                sum = 0
+                agent = eves.agent
+                for k in eves.pevents:
+                    s = k.state
+                    a = k.action
+                    sd = k.statedash
+                    sum += self.mdps[agent].transition(s,a,sd) * x[agent][(s.index*self.mdps[agent].numerActions)+a.index]
+                prod *= sum
             products.append(prod)
         assert all(vals >= 0 for vals in products)
         return sums, np.array(products)
 
-    def normalizeck(self):
-        rewards = [cons.reward for cons in self.constraints]
-        tosend = []
-        for x in rewards:
-            tosend.append(float(x - config.R_min) / float(config.R_max - config.R_min)) #affect 2
-        assert all(vals >= 0 for vals in tosend)
-        return tosend
 
-
-    def Estep(self, sums, products, z, agent):
+    def Estep(self, sums, agent):
         print "Estep: ",
 
         rdiagx = sums[agent]
 
-        productarr = []
-        z1arr = []
-        zarr = []
-        thetahat = float(config.theta - config.R_min) / float(config.R_max - config.R_min) #affect 3
-        assert thetahat > 0
-        for evecon in xrange(0, len(self.agentwise[agent])):
-            event = self.agentwise[agent][evecon][0]
-            cons = self.agentwise[agent][evecon][1]
-            productarr.append(products[cons])
-            z1arr.append(thetahat*(1 - z[agent][evecon]))
-            zarr.append(thetahat*(z[agent][evecon]))
-
-        assert len(productarr) == len(self.agentwise[agent])
-        assert len(z1arr) == len(self.agentwise[agent])
-        assert len(zarr) == len(self.agentwise[agent])
-
-        assert all(vals >= 0 for vals in productarr)
-        assert all(vals >= 0 for vals in z1arr)
-        assert all(vals >= 0 for vals in zarr)
-
-        productarr = np.array(productarr)[np.newaxis].T
-        z1arr = np.array(z1arr)[np.newaxis].T
-        zarr = np.array(zarr)[np.newaxis].T
-
         print "Done"
-        return rdiagx, productarr, z1arr, zarr
+        return rdiagx
 
-    def Mstep(self, rdiagx, productarr, z1arr, zarr, A_mat, alpha, agent):
+    def Mstep(self, rdiagx, products, x, A_mat, alpha, agent):
         print "Mstep: ",
         num_of_var = self.mdps[agent].numberStates * self.mdps[agent].numerActions
-        zstar = cvxpy.Variable(len(self.agentwise[agent]), 1)
         xstar = cvxpy.Variable(num_of_var, 1)
-        obj = cvxpy.Maximize(np.transpose(rdiagx)*cvxpy.log(xstar) + np.transpose(productarr)*cvxpy.log(zstar) +
-                             np.transpose(z1arr)*cvxpy.log(1 - zstar) + np.transpose(zarr)*cvxpy.log(zstar))
-        cons = [A_mat * xstar == alpha, xstar > 0]
-        for evecon in xrange(0, len(self.agentwise[agent])):
-            mt = np.zeros((num_of_var, 1))
-            event = self.agentwise[agent][evecon][0]
-            con = self.agentwise[agent][evecon][1]
-            for peven in event.pevents:
-                s = peven.state
-                a = peven.action
-                sd = peven.statedash
-                ind = (s.index*self.mdps[agent].numerActions)+a.index
-                mt[ind] = self.mdps[agent].transition(s,a,sd)
-            cons.append(zstar[evecon] == np.transpose(mt)*xstar)
+        obj = np.transpose(rdiagx)*cvxpy.log(xstar)
+        thetahat = float(config.theta) / float(config.R_max - config.R_min)
+        assert thetahat >= 0
+        for i in xrange(0, len(self.constraints)):
+            estepvalue = products[i]
+            const = self.constraints[i]
+            sumallevents = 0
+            sumallevents1 = 0
+            sumallevents2 = 0
+            for eves in const.Events:
+                sumxstar = 0
+                sumx = 0
+                if eves.agent != agent:
+                    continue
+                for pevens in eves.pevents:
+                    s = pevens.state
+                    a = pevens.action
+                    sd = pevens.statedash
 
+                    if type(sumxstar) is int:
+                        sumxstar = self.mdps[agent].transition(s,a,sd) * xstar[(s.index*self.mdps[agent].numerActions)+a.index]
+                    else:
+                        sumxstar += self.mdps[agent].transition(s, a, sd) * xstar[
+                            (s.index * self.mdps[agent].numerActions) + a.index]
+
+                    if type(sumx) is int:
+                        sumx = self.mdps[agent].transition(s,a,sd) * x[agent][(s.index*self.mdps[agent].numerActions)+a.index]
+                    else:
+                        sumx += self.mdps[agent].transition(s,a,sd) * x[agent][(s.index*self.mdps[agent].numerActions)+a.index]
+
+                if type(sumallevents) is int:
+                    sumallevents = cvxpy.log(sumxstar)
+                else:
+                    sumallevents += cvxpy.log(sumxstar)
+
+                if type(sumallevents1) is int:
+                    sumallevents1 = (1 - sumx) * cvxpy.log(1 - sumxstar)
+                else:
+                    sumallevents1 = (1 - sumx) * cvxpy.log(1 - sumxstar)
+
+                if type(sumallevents2) is int:
+                    sumallevents2 = sumx * cvxpy.log(sumxstar)
+                else:
+                    sumallevents2 += sumx * cvxpy.log(sumxstar)
+
+
+            if sumallevents != 0:
+                #print estepvalue * sumallevents
+                obj += estepvalue*sumallevents
+
+            if sumallevents1 != 0:
+                #print thetahat * sumallevents1
+                obj += thetahat * sumallevents1
+
+            if sumallevents2 != 0:
+                #print thetahat * sumallevents2
+                obj += thetahat * sumallevents2
+
+        obj = cvxpy.Maximize(obj)
+        cons = [A_mat * xstar == alpha, xstar > 0]
+        # for evecon in xrange(0, len(self.agentwise[agent])):
+        #     mt = np.zeros((num_of_var, 1))
+        #     event = self.agentwise[agent][evecon][0]
+        #     con = self.agentwise[agent][evecon][1]
+        #     for peven in event.pevents:
+        #         s = peven.state
+        #         a = peven.action
+        #         sd = peven.statedash
+        #         ind = (s.index*self.mdps[agent].numerActions)+a.index
+        #         mt[ind] = self.mdps[agent].transition(s,a,sd)
+        #     cons.append(zstar[evecon] == np.transpose(mt)*xstar)
+        #
         prob = cvxpy.Problem(objective=obj, constraints=cons)
         prob.solve(solver=cvxpy.ECOS, verbose=False, max_iters=10000000)
         print "Done"
-        return xstar.value, zstar.value, prob.value
+        return xstar.value, prob.value
 
 class Driver:
     print cvxpy.installed_solvers()
