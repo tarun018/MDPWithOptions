@@ -286,7 +286,7 @@ set events[7] := 10 ;
 set events[8] := 11 ;
 set events[9] := 12 ;
 
-set cons[1] := 1 4 7 ;
-set cons[2] := 2 5 8 ;
-set cons[3] := 3 6 9 ;
+set cons[1] := 1 4 ;
+set cons[2] := 5 8 ;
+set cons[3] := 3 9 ;
 

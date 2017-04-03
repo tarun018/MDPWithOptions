@@ -755,7 +755,7 @@ class EMMDP:
         initial_x = []
         for i in xrange(0, self.num_agents):
             numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
-            lst = [0.01]*numvar
+            lst = [config.initialxval]*numvar
             initial_x.append(lst)
 
         As = []
