@@ -5,5 +5,6 @@ for{i in 1..1, j in 1..card(cons[i])} display member(j, cons[i]);
 #option solver minos;
 solve;
 display sum{i in 1..n, j in 1..card(S[i]), k in 1..card(A[i])} x[i,j,k]; 
-display {i in 1..numcons, j in cons[i]} z[i,j];
-display {i in 1..n, j in 1..card(S[i]), k in 1..card(A[i])} x[i,j,k]; 
+display {i in 1..numcons} sum {j in cons[i]} z[i,j];
+#display {i in 1..numcons, j in cons[i]} z[i,j];
+#display {i in 1..n, j in 1..card(S[i]), k in 1..card(A[i])} x[i,j,k]; 

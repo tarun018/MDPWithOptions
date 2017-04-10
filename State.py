@@ -307,18 +307,18 @@ class MDP:
         if s.time == 0 and s.dold == 0 and s.dvals[s.location] == 1:
             return config.rewardCollection[self.agent][s.location]
 
-        if a.name == "Collect":
-            if s.dold == 0 and s.dvals[s.location] == 1:
-                return config.rewardCollection[self.agent][s.location]
-            else:
-                return 0
+        #if a.name == "Collect":
+        if s.dold == 0 and s.dvals[s.location] == 1:
+            return config.rewardCollection[self.agent][s.location]
+        else:
+            return 0
         # elif a.name == "Dummy":
         #     if s.dold == 0 and s.dvals[s.location] == 1:
         #         return config.rewardCollection
         #     else:
         #         return 0
-        else:
-            return 0
+        # else:
+        #     return 0
 
     def writeTransitionsToFile(self):
         print "     Writing Transitions for Agent " +str(self.agent)
@@ -730,9 +730,9 @@ class EMMDP:
         sum = 0
         for i in xrange(0, self.num_agents):
             sum += np.transpose(Rs[i]) * xvals[i]
-            if abs(np.sum(xvals[i]) - float(1) / (float(1 - config.gamma))) > config.delta:
-                print np.sum(xvals[i])
-                print "Warning"
+            #if abs(np.sum(xvals[i]) - float(1)) > config.delta:
+                #print np.sum(xvals[i])
+                #print "Warning"
 
         for i in xrange(0, len(self.constraints)):
             cons = self.constraints[i]
@@ -826,7 +826,7 @@ class EMMDP:
                     s = k.state
                     a = k.action
                     sd = k.statedash
-                    sum += self.mdps[agent].transition(s,a,sd) * x[agent][(s.index*self.mdps[agent].numerActions)+a.index]
+                    sum += self.mdps[agent].transition(s,a,sd) * x[agent][(s.index*self.mdps[agent].numerActions)+a.index] * (1-config.gamma)
                 prod *= sum
             products.append(prod)
         assert all(vals >= 0 for vals in products)
@@ -865,15 +865,15 @@ class EMMDP:
                     sd = pevens.statedash
 
                     if type(sumxstar) is int:
-                        sumxstar = self.mdps[agent].transition(s,a,sd) * xstar[(s.index*self.mdps[agent].numerActions)+a.index]
+                        sumxstar = self.mdps[agent].transition(s,a,sd) * xstar[(s.index*self.mdps[agent].numerActions)+a.index] * (1-config.gamma)
                     else:
                         sumxstar += self.mdps[agent].transition(s, a, sd) * xstar[
-                            (s.index * self.mdps[agent].numerActions) + a.index]
+                            (s.index * self.mdps[agent].numerActions) + a.index] * (1-config.gamma)
 
                     if type(sumx) is int:
-                        sumx = self.mdps[agent].transition(s,a,sd) * x[agent][(s.index*self.mdps[agent].numerActions)+a.index]
+                        sumx = self.mdps[agent].transition(s,a,sd) * x[agent][(s.index*self.mdps[agent].numerActions)+a.index] * (1-config.gamma)
                     else:
-                        sumx += self.mdps[agent].transition(s,a,sd) * x[agent][(s.index*self.mdps[agent].numerActions)+a.index]
+                        sumx += self.mdps[agent].transition(s,a,sd) * x[agent][(s.index*self.mdps[agent].numerActions)+a.index] * (1-config.gamma)
 
                 if type(sumallevents) is int:
                     sumallevents = cvxpy.log(sumxstar)
