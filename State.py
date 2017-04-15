@@ -5,6 +5,8 @@ import config
 import itertools
 import copy_reg
 import types
+import pyipopt
+import algopy
 from pathos.multiprocessing import ProcessingPool as Pool
 
 class State:
@@ -727,9 +729,10 @@ class EMMDP:
         ampl.close()
 
     def objective(self, xvals, Rs):
+        print xvals
         sum = 0
         for i in xrange(0, self.num_agents):
-            sum += np.transpose(Rs[i]) * xvals[i]
+            sum += np.dot(Rs[i], np.array(xvals[i]))
             #if abs(np.sum(xvals[i]) - float(1)) > config.delta:
                 #print np.sum(xvals[i])
                 #print "Warning"
@@ -772,13 +775,15 @@ class EMMDP:
             Rs.append(R)
             newRs.append(newR)
 
+        ans = 0
         sums, products = self.generateEstep(initial_x, newRs)
         for i in xrange(0, self.num_agents):
             A_mat = np.array(As[i])
             alpha = self.mdps[i].start
             alpha = np.array(alpha)
             rdiagx = self.Estep(sums, i)
-            xstar_val, prob_val = self.Mstep(rdiagx, products, initial_x, A_mat, alpha, i)
+            #xstar_val, prob_val = self.Mstep(rdiagx, products, initial_x, A_mat, alpha, i)
+            xstar_val, prob_val = self.Mstep1(rdiagx, initial_x, A_mat, alpha, i)
             xvals.append(xstar_val)
             pvals.append(prob_val)
         self.objective(xvals, Rs)
@@ -794,7 +799,8 @@ class EMMDP:
                 alpha = self.mdps[i].start
                 alpha = np.array(alpha)
                 rdiagx = self.Estep(sums, i)
-                xstar_val, probval = self.Mstep(rdiagx, products, xvals, A_mat, alpha, i)
+                #xstar_val, probval = self.Mstep(rdiagx, products, xvals, A_mat, alpha, i)
+                xstar_val, probval = self.Mstep1(rdiagx, xvals, A_mat, alpha, i)
                 xvalues.append(xstar_val)
                 pvalues.append(probval)
             prevobj = self.objective(xvals, Rs)
@@ -840,6 +846,57 @@ class EMMDP:
 
         print "Done"
         return rdiagx
+
+    def eval_f(self, x, user_data=None):
+        return -1*np.dot(self.rdiagx,np.log(np.array(x)))
+
+    def eval_grad_f(self, x, user_data=None):
+        x = algopy.UTPM.init_jacobian(x)
+        return algopy.UTPM.extract_jacobian(self.eval_f(x))
+
+    def eval_g(self, x, user_data=None):
+        out = algopy.zeros(self.ncon, dtype=x)
+        for i in xrange(0, self.ncon):
+            out[i] = np.dot(self.A_mat[i,:], x)
+        return out
+
+    def eval_jac_g(self, x, flag, user_data=None):
+        if flag:
+            rows = []
+            cols = []
+            arr = range(0, self.nvar)
+            for i in xrange(0, self.ncon):
+                rows.extend([i]*self.nvar)
+                cols.extend(arr)
+            assert len(rows) == self.nnzj
+            assert len(cols) == self.nnzj
+            return (np.array(rows), np.array(cols))
+        else:
+            x = algopy.UTPM.init_jacobian(x)
+            y = algopy.UTPM.extract_jacobian(self.eval_g(x))
+            return np.concatenate(np.array(y))
+
+    def Mstep1(self, rdiagx, initx, A_mat, alpha, agent):
+        print "Mstep: "
+        self.nvar = self.mdps[agent].numberStates * self.mdps[agent].numerActions
+        x_L = np.ones((self.nvar), dtype=np.float_) * 0.000001
+        x_U = np.ones((self.nvar), dtype=np.float_) * (float(1) / float(1-config.gamma))
+
+        self.ncon = self.mdps[agent].numberStates
+        g_L = np.array(alpha)
+        g_U = np.array(alpha)
+
+        self.rdiagx = rdiagx
+        self.A_mat = A_mat
+
+        self.nnzj = self.ncon * self.nvar
+        self.nnzh = 0
+
+        nlp = pyipopt.create(self.nvar, x_L, x_U, self.ncon, g_L, g_U, self.nnzj, self.nnzh, self.eval_f, self.eval_grad_f, self.eval_g, self.eval_jac_g)
+        x0 = np.array(initx[agent])
+        x, zl, zu, constraint_multipliers, obj, status = nlp.solve(x0)
+        nlp.close()
+        return x, -1*obj
 
     def Mstep(self, rdiagx, products, x, A_mat, alpha, agent):
         print "Mstep: ",
