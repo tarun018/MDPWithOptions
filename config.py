@@ -5,10 +5,10 @@ agents = 5
 collectTimes = []
 transitTimes = []
 T = [8]*agents
-nloc = [3]*agents
-shared = [[0],[1,4],[2,3]]
+nloc = [4]*agents
+shared = [[0],[1,4],[2,3],[1,4]]
 nc = len(shared)
-creward = [1,1,1]
+creward = [1,1,1,2]
 theta = 0.00001
 collectTimes.append([4]*nloc[0])
 collectTimes.append([8]*nloc[1])
@@ -22,11 +22,11 @@ transitTimes.append([[8]*nloc[3]]*nloc[3])
 transitTimes.append([[8]*nloc[4]]*nloc[4])
 gamma = 0.8
 rewardCollection = []
-rewardCollection.append([1,3,1])
-rewardCollection.append([4,4,5])
-rewardCollection.append([3,4,2])
-rewardCollection.append([3,4,2])
-rewardCollection.append([3,4,2])
+rewardCollection.append([1,3,1,2])
+rewardCollection.append([4,4,5,5])
+rewardCollection.append([3,4,2,9])
+rewardCollection.append([3,4,2,1])
+rewardCollection.append([3,4,2,4])
 initialxval = 0.00001
 alpha = 0.8
 delta = 0.000001
