@@ -729,13 +729,11 @@ class EMMDP:
         ampl.close()
 
     def objective(self, xvals, Rs):
-        print xvals
         sum = 0
         for i in xrange(0, self.num_agents):
             sum += np.dot(Rs[i], np.array(xvals[i]))
-            #if abs(np.sum(xvals[i]) - float(1)) > config.delta:
-                #print np.sum(xvals[i])
-                #print "Warning"
+            if abs(np.sum(np.array(xvals[i])) - (float(1) / float(1-config.gamma))) > config.delta:
+                print "Warning", np.sum(xvals[i])
 
         for i in xrange(0, len(self.constraints)):
             cons = self.constraints[i]
@@ -761,9 +759,10 @@ class EMMDP:
             lst = [config.initialxval]*numvar
             initial_x.append(lst)
 
-        As = []
-        Rs = []
-        newRs = []
+        self.As = []
+        self.Rs = []
+        self.newRs = []
+        self.alphas = []
         xvals = []
         pvals = []
         num_iter = 1
@@ -771,48 +770,41 @@ class EMMDP:
         print "Iteration: " + str(num_iter)
         for i in xrange(0, self.num_agents):
             A, R, newR = self.mdps[i].generateLPAc(config.gamma)
-            As.append(A)
-            Rs.append(R)
-            newRs.append(newR)
+            self.As.append(A)
+            self.Rs.append(R)
+            self.newRs.append(newR)
+            self.alphas.append(self.mdps[i].start)
 
         ans = 0
-        sums, products = self.generateEstep(initial_x, newRs)
+        self.sums, self.products = self.generateEstep(initial_x, self.newRs)
         for i in xrange(0, self.num_agents):
-            A_mat = np.array(As[i])
-            alpha = self.mdps[i].start
-            alpha = np.array(alpha)
-            rdiagx = self.Estep(sums, i)
             #xstar_val, prob_val = self.Mstep(rdiagx, products, initial_x, A_mat, alpha, i)
-            xstar_val, prob_val = self.Mstep1(rdiagx, initial_x, A_mat, alpha, i)
+            xstar_val, prob_val = self.Mstep1(initial_x, i)
             xvals.append(xstar_val)
             pvals.append(prob_val)
-        self.objective(xvals, Rs)
+        self.objective(xvals, self.Rs)
 
         while(True):
             num_iter += 1
             print "Iteration: " + str(num_iter)
             xvalues = []
             pvalues = []
-            sums, products = self.generateEstep(xvals, newRs)
+            self.sums, self.products = self.generateEstep(xvals, self.newRs)
             for i in xrange(0, self.num_agents):
-                A_mat = np.array(As[i])
-                alpha = self.mdps[i].start
-                alpha = np.array(alpha)
-                rdiagx = self.Estep(sums, i)
                 #xstar_val, probval = self.Mstep(rdiagx, products, xvals, A_mat, alpha, i)
-                xstar_val, probval = self.Mstep1(rdiagx, xvals, A_mat, alpha, i)
+                xstar_val, probval = self.Mstep1(xvals, i)
                 xvalues.append(xstar_val)
                 pvalues.append(probval)
-            prevobj = self.objective(xvals, Rs)
+            prevobj = self.objective(xvals, self.Rs)
             xvals = xvalues
             pvals = pvalues
-            newobj = self.objective(xvals, Rs)
+            newobj = self.objective(xvals, self.Rs)
             if abs(newobj - prevobj) < config.delta:
                 print newobj
                 break
 
     def generateEstep(self, x, newRs):
-
+        print "Estep: "
         sums = []
         for i in xrange(0, self.num_agents):
             Rcap = np.array(newRs[i])[np.newaxis].T
@@ -824,7 +816,7 @@ class EMMDP:
         products = []
         for i in xrange(0, len(self.constraints)):
             prod =  float(self.constraints[i].reward) / float(config.R_max - config.R_min)
-            assert prod >= 0
+            assert prod > 0
             for eves in self.constraints[i].Events:
                 sum = 0
                 agent = eves.agent
@@ -835,38 +827,32 @@ class EMMDP:
                     sum += self.mdps[agent].transition(s,a,sd) * x[agent][(s.index*self.mdps[agent].numerActions)+a.index] * (1-config.gamma)
                 prod *= sum
             products.append(prod)
-        assert all(vals >= 0 for vals in products)
+        assert all(vals > 0 for vals in products)
+        print "Done"
         return sums, np.array(products)
 
-
-    def Estep(self, sums, agent):
-        print "Estep: ",
-
-        rdiagx = sums[agent]
-
-        print "Done"
-        return rdiagx
-
     def eval_f(self, x, user_data=None):
-        return -1*np.dot(self.rdiagx,np.log(np.array(x)))
+        self.thetahat = float(config.theta) / float(config.R_max - config.R_min)
+        assert self.thetahat > 0
+        return -1*np.dot(self.Mrdiagx,np.log(np.array(x)))
 
     def eval_grad_f(self, x, user_data=None):
         x = algopy.UTPM.init_jacobian(x)
         return algopy.UTPM.extract_jacobian(self.eval_f(x))
 
     def eval_g(self, x, user_data=None):
-        out = algopy.zeros(self.ncon, dtype=x)
-        for i in xrange(0, self.ncon):
-            out[i] = np.dot(self.A_mat[i,:], x)
+        out = algopy.zeros(self.Mncon, dtype=x)
+        for i in xrange(0, self.Mncon):
+            out[i] = np.dot(self.MA_mat[i,:], x)
         return out
 
     def eval_jac_g(self, x, flag, user_data=None):
         if flag:
             rows = []
             cols = []
-            arr = range(0, self.nvar)
-            for i in xrange(0, self.ncon):
-                rows.extend([i]*self.nvar)
+            arr = range(0, self.Mnvar)
+            for i in xrange(0, self.Mncon):
+                rows.extend([i]*self.Mnvar)
                 cols.extend(arr)
             assert len(rows) == self.nnzj
             assert len(cols) == self.nnzj
@@ -876,23 +862,23 @@ class EMMDP:
             y = algopy.UTPM.extract_jacobian(self.eval_g(x))
             return np.concatenate(np.array(y))
 
-    def Mstep1(self, rdiagx, initx, A_mat, alpha, agent):
+    def Mstep1(self, initx, agent):
         print "Mstep: "
-        self.nvar = self.mdps[agent].numberStates * self.mdps[agent].numerActions
-        x_L = np.ones((self.nvar), dtype=np.float_) * 0.000001
-        x_U = np.ones((self.nvar), dtype=np.float_) * (float(1) / float(1-config.gamma))
+        self.Mnvar = self.mdps[agent].numberStates * self.mdps[agent].numerActions
+        x_L = np.ones((self.Mnvar), dtype=np.float_) * 0.000001
+        x_U = np.ones((self.Mnvar), dtype=np.float_) * (float(1) / float(1-config.gamma))
 
-        self.ncon = self.mdps[agent].numberStates
-        g_L = np.array(alpha)
-        g_U = np.array(alpha)
+        self.Mncon = self.mdps[agent].numberStates
+        g_L = np.array(self.alphas[agent])
+        g_U = np.array(self.alphas[agent])
 
-        self.rdiagx = rdiagx
-        self.A_mat = A_mat
+        self.Mrdiagx = np.array(self.sums[agent])
+        self.MA_mat = np.array(self.As[agent])
 
-        self.nnzj = self.ncon * self.nvar
+        self.nnzj = self.Mncon * self.Mnvar
         self.nnzh = 0
 
-        nlp = pyipopt.create(self.nvar, x_L, x_U, self.ncon, g_L, g_U, self.nnzj, self.nnzh, self.eval_f, self.eval_grad_f, self.eval_g, self.eval_jac_g)
+        nlp = pyipopt.create(self.Mnvar, x_L, x_U, self.Mncon, g_L, g_U, self.nnzj, self.nnzh, self.eval_f, self.eval_grad_f, self.eval_g, self.eval_jac_g)
         x0 = np.array(initx[agent])
         x, zl, zu, constraint_multipliers, obj, status = nlp.solve(x0)
         nlp.close()
@@ -904,7 +890,7 @@ class EMMDP:
         xstar = cvxpy.Variable(num_of_var, 1)
         obj = np.transpose(rdiagx)*cvxpy.log(xstar)
         thetahat = float(config.theta) / float(config.R_max - config.R_min)
-        assert thetahat >= 0
+        assert thetahat > 0
         for i in xrange(0, len(self.constraints)):
             estepvalue = products[i]
             const = self.constraints[i]
