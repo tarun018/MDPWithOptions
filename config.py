@@ -1,5 +1,6 @@
 #flag=1 fileread
-flag = 0
+solver = 'ipopt'
+flag = 1
 agents = 5
 collectTimes = []
 transitTimes = []
@@ -7,8 +8,8 @@ T = [8]*agents
 nloc = [3]*agents
 shared = [[0],[1,4],[2,3]]
 nc = len(shared)
-creward = [0,0,0]
-theta = 0.1
+creward = [1,1,1]
+theta = 0.00001
 collectTimes.append([4]*nloc[0])
 collectTimes.append([8]*nloc[1])
 collectTimes.append([8]*nloc[2])
@@ -26,7 +27,7 @@ rewardCollection.append([4,4,5])
 rewardCollection.append([3,4,2])
 rewardCollection.append([3,4,2])
 rewardCollection.append([3,4,2])
-initialxval = 0.001
+initialxval = 0.00001
 alpha = 0.8
 delta = 0.000001
 R_min = min(creward)
