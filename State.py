@@ -63,7 +63,7 @@ class MDP:
             self.initiateActions()
             self.initiateStates()
             self.waste()
-            self.checkTransitionProbabilitySumTo1()
+            #self.checkTransitionProbabilitySumTo1()
             self.writeStatesToFile()
             self.writeActionsToFile()
             self.writeTransitionsToFile()
@@ -94,7 +94,7 @@ class MDP:
 
     def initiateStates(self):
         index = 1
-        for i in xrange(0, self.T+1):
+        for i in xrange(0, self.T+1, config.collectTimes[self.agent][0]):
             for j in xrange(0, self.nlocs):
                 for k in self.lst:
                     for t in [0,1]:
@@ -900,13 +900,13 @@ class EMMDP:
                 return np.concatenate(np.array(y))
 
         nlp = pyipopt.create(nvar, x_L, x_U, ncon, g_L, g_U, nnzj, nnzh, eval_f, eval_grad_f, eval_g, eval_jac_g)
-        nlp.str_option('linear_solver', 'mumps')
-        nlp.num_option('tol', 1e-7)
-        nlp.int_option('print_level', 1)
-        nlp.str_option('print_timing_statistics', 'yes')
-        nlp.str_option('mehrotra_algorithm', 'yes')
-        nlp.str_option('mu_strategy', 'adaptive')
-        nlp.str_option('warm_start_init_point', 'yes')
+        #nlp.str_option('linear_solver', 'mumps')
+        #nlp.num_option('tol', 1e-7)
+        #nlp.int_option('print_level', 1)
+        #nlp.str_option('print_timing_statistics', 'yes')
+        #nlp.str_option('mehrotra_algorithm', 'yes')
+        #nlp.str_option('mu_strategy', 'adaptive')
+        #nlp.str_option('warm_start_init_point', 'yes')
         x0 = np.array(initx[agent])
         x, zl, zu, constraint_multipliers, obj, status = nlp.solve(x0)
         nlp.close()

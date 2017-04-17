@@ -5,8 +5,8 @@ solver = 'ipopt'
 flag = 0
 
 agents = 3
-nPrivatePerAgent = 1
-nShared = 1
+nPrivatePerAgent = 2
+nShared = 2
 nLocs = (agents*nPrivatePerAgent) + nShared
 auction = [-1]*nLocs
 locs = []
@@ -78,7 +78,7 @@ theta = 0.1
 gamma = 0.8
 initialxval = 0.01
 alpha = 0.8
-delta = 0.0000001
+delta = 0.000001
 
 R_min = min(creward)
 for i in xrange(0, agents):
