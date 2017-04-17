@@ -11,9 +11,10 @@ from pathos.multiprocessing import ProcessingPool as Pool
 
 class State:
 
-    def __init__(self, ind, location, time, dvals, dold, actions):
+    def __init__(self, ind, location, actLocation, time, dvals, dold, actions):
         self.index = ind
         self.location = location
+        self.actualLocation = actLocation
         self.time = time
         self.dvals = dvals
         self.dold = dold
@@ -22,11 +23,11 @@ class State:
         self.reward = []
 
     def __repr__(self):
-        return "Index: " + str(self.index) + " Location: " + str(self.location) + " Time: " + str(self.time) + " Dvals " + str(self.dvals) + " Dold: " + str(self.dold)
+        return "Index: " + str(self.index) + " Location: " + str(self.location) + " Actual: " + str(self.actualLocation) + " Time: " + str(self.time) + " Dvals " + str(self.dvals) + " Dold: " + str(self.dold)
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
-            return self.index == other.index and self.location==other.location and self.time==other.time and self.dvals==other.dvals and self.dold==other.dold
+            return self.index == other.index and self.location==other.location and self.actualLocation == other.actualLocation and self.time==other.time and self.dvals==other.dvals and self.dold==other.dold
         return False
 
 class Action:
@@ -44,11 +45,12 @@ class Action:
         return False
 
 class MDP:
-    def __init__(self, T, nlocs, agent, collecTimes, transitTimes, alpha, flag):
+    def __init__(self, T, locs, agent, collecTimes, transitTimes, alpha, flag):
         self.T = T
-        self.nlocs = nlocs
+        self.locs = locs
+        self.nlocs = len(locs)
         self.agent = agent
-        self.lst = list(itertools.product([0, 1], repeat=nlocs))
+        self.lst = list(itertools.product([0, 1], repeat=self.nlocs))
         self.states = []
         self.actions = []
         self.collectTimes = collecTimes
@@ -56,7 +58,7 @@ class MDP:
         self.alpha = alpha
         self.start = []
         if(flag==0):
-            self.terminal = State(0, -1, -1, [-1] * self.nlocs, -1, self.actions)
+            self.terminal = State(0, -1, -1, -1, [-1] * self.nlocs, -1, self.actions)
             self.states.append(self.terminal)
             self.initiateActions()
             self.initiateStates()
@@ -96,7 +98,7 @@ class MDP:
             for j in xrange(0, self.nlocs):
                 for k in self.lst:
                     for t in [0,1]:
-                        st = State(index,j,i,k,t,self.actions)
+                        st = State(index,j,self.locs[j],i,k,t,self.actions)
                         self.states.append(st)
                         index = index + 1
 
@@ -192,39 +194,10 @@ class MDP:
 
         return 1
 
-    # def dummyTransition(self, s, sd):
-    #
-    #     sameds = all([s.dvals[j] == sd.dvals[j] for j in xrange(0, self.nlocs)])
-    #     # print sameds
-    #
-    #     if s.time == 0 and s == sd:
-    #         return 1
-    #
-    #     if s.location != sd.location:
-    #         return 0
-    #
-    #     if sd.time != s.time - config.dummyTime:
-    #         return 0
-    #
-    #     if sd.time < 0:
-    #         return 0
-    #
-    #     if sameds==False:
-    #         return 0
-    #
-    #     if sd.dold != s.dvals[s.location]:
-    #         return 0
-    #
-    #     if s.dold == 1 and s.dvals[s.location] == 0:
-    #         return 0
-    #
-    #     return 1
-
     def waste(self):
         removed = self.removeWasteStates()
         while removed != 0:
             removed = self.removeWasteStates()
-
 
     def removeWasteStates(self):
         wastestates = []
@@ -306,21 +279,10 @@ class MDP:
 
     def rewardFunction(self, s, a):
 
-        if s.time == 0 and s.dold == 0 and s.dvals[s.location] == 1:
-            return config.rewardCollection[self.agent][s.location]
-
-        #if a.name == "Collect":
         if s.dold == 0 and s.dvals[s.location] == 1:
             return config.rewardCollection[self.agent][s.location]
         else:
             return 0
-        # elif a.name == "Dummy":
-        #     if s.dold == 0 and s.dvals[s.location] == 1:
-        #         return config.rewardCollection
-        #     else:
-        #         return 0
-        # else:
-        #     return 0
 
     def writeTransitionsToFile(self):
         print "     Writing Transitions for Agent " +str(self.agent)
@@ -354,7 +316,7 @@ class MDP:
         print "     Writing States for Agent " +str(self.agent)
         stat = open("DomainStateData" + str(self.agent) + ".txt", 'w')
         for j in self.states:
-            stat.write(str(j.index)+","+str(j.location)+","+str(j.time)+",")
+            stat.write(str(j.index)+","+str(j.location)+","+str(j.actualLocation)+","+str(j.time)+",")
             for x in j.dvals:
                 stat.write(str(x)+",")
             stat.write(str(j.dold)+"\n")
@@ -387,12 +349,13 @@ class MDP:
             for row in reader:
                 ind = int(row[0])
                 loc = int(row[1])
-                tim = int(row[2])
+                acloc = int(row[2])
+                tim = int(row[3])
                 lst = []
                 for x in xrange(0, self.nlocs):
-                    lst.append(int(row[3+x]))
+                    lst.append(int(row[4+x]))
                 dold = int(row[len(row)-1])
-                s = State(ind, loc, tim, lst, dold, self.actions)
+                s = State(ind, loc, acloc, tim, lst, dold, self.actions)
                 self.states.append(s)
 
     def readTransition(self, filename):
@@ -591,7 +554,7 @@ class EMMDP:
     def generateMDPs(self):
         for i in xrange(0, self.num_agents):
             print "Generating MDP for Agent"+str(i)
-            a = MDP(config.T[i], config.nloc[i], i, config.collectTimes[i], config.transitTimes[i], config.alpha, config.flag)
+            a = MDP(config.T[i], config.locs[i], i, config.collectTimes[i], config.transitTimes[i], config.alpha, config.flag)
             self.mdps.append(a)
 
     def genPrimitiveEvents(self):
@@ -599,11 +562,11 @@ class EMMDP:
         index = 0
         for q in xrange(0,self.num_agents):
             a = self.mdps[q]
-            for z in xrange(0, a.nlocs):
+            for z in a.locs:
                 for i in a.states:
-                    if i.location == z and i.dvals[i.location] == 0 and i.dold == 0:
+                    if i.actualLocation == z and i.dvals[i.location] == 0 and i.dold == 0:
                         for k in a.states:
-                            if k.location == z and k.dvals[k.location] == 1 and k.dold == 0:
+                            if k.actualLocation == z and k.dvals[k.location] == 1 and k.dold == 0:
                                 if a.transition(i, a.actions[0], k) != 0:
                                     pe = PrimtiveEvent(q, i, a.actions[0], k, index)
                                     self.primitives.append(pe)
@@ -613,10 +576,10 @@ class EMMDP:
         print "Generating Events"
         index = 0
         for agent in xrange(0, self.num_agents):
-            for j in xrange(0, self.mdps[agent].nlocs):
+            for j in self.mdps[agent].locs:
                 arr = []
                 for i in self.primitives:
-                    if i.agent == agent and i.state.location == j:
+                    if i.agent == agent and i.state.actualLocation == j:
                         arr.append(i)
                 e = Event(agent, arr, index, "Agent " + str(agent) + " Collect at site "+str(j), j)
                 index = index + 1
@@ -625,13 +588,13 @@ class EMMDP:
     def genConstraints(self):
         print "Generating Constraints"
         index = 0
-        shared = config.shared
+        shared = config.sharedSites
         for x in xrange(0, len(shared)):
             local = []
             for y in self.events:
-                if y.site == x and y.agent in shared[x]:
+                if y.site == shared[x]:
                     local.append(y)
-            c = Constraint(len(shared[x]), local, config.creward[x], index)
+            c = Constraint(len(config.auction[shared[x]]), local, config.creward[x], index)
             index = index + 1
             self.constraints.append(c)
 
@@ -937,6 +900,13 @@ class EMMDP:
                 return np.concatenate(np.array(y))
 
         nlp = pyipopt.create(nvar, x_L, x_U, ncon, g_L, g_U, nnzj, nnzh, eval_f, eval_grad_f, eval_g, eval_jac_g)
+        nlp.str_option('linear_solver', 'mumps')
+        nlp.num_option('tol', 1e-7)
+        nlp.int_option('print_level', 1)
+        nlp.str_option('print_timing_statistics', 'yes')
+        nlp.str_option('mehrotra_algorithm', 'yes')
+        nlp.str_option('mu_strategy', 'adaptive')
+        nlp.str_option('warm_start_init_point', 'yes')
         x0 = np.array(initx[agent])
         x, zl, zu, constraint_multipliers, obj, status = nlp.solve(x0)
         nlp.close()
@@ -1028,6 +998,7 @@ class EMMDP:
 class Driver:
     print cvxpy.installed_solvers()
     a = EMMDP(config.agents)
+
     # for x in a.constraints:
     #     print x.num_agent
     #     for y in x.Events:
