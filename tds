@@ -1,0 +1,2535 @@
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0.2
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0.8
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0.2
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0.8
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0.2
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0.8
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0.2
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0.8
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+1
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 0 Location: -1 Actual: -1 Time: -1 Dvals [-1, -1, -1, -1] Dold: -1
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 1 Location: 0 Actual: 2 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 2 Location: 0 Actual: 2 Time: 0 Dvals (1, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 3 Location: 1 Actual: 3 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 4 Location: 1 Actual: 3 Time: 0 Dvals (0, 1, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 5 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 6 Location: 2 Actual: 4 Time: 0 Dvals (0, 0, 1, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 7 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 0) Dold: 0
+1
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 8 Location: 3 Actual: 6 Time: 0 Dvals (0, 0, 0, 1) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 9 Location: 0 Actual: 2 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 10 Location: 1 Actual: 3 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 11 Location: 2 Actual: 4 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+Index: 12 Location: 3 Actual: 6 Time: 64 Dvals (0, 0, 0, 0) Dold: 0
+0

@@ -63,7 +63,7 @@ class MDP:
             self.initiateActions()
             self.initiateStates()
             self.waste()
-            #self.checkTransitionProbabilitySumTo1()
+            self.checkTransitionProbabilitySumTo1()
             self.writeStatesToFile()
             self.writeActionsToFile()
             self.writeTransitionsToFile()
@@ -715,7 +715,7 @@ class EMMDP:
         print sum
         return sum
 
-    def EM(self):
+    def EM(self, NonLinear=False):
         initial_x = []
         for i in xrange(0, self.num_agents):
             numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
@@ -737,6 +737,11 @@ class EMMDP:
             self.Rs.append(R)
             self.newRs.append(newR)
             self.alphas.append(self.mdps[i].start)
+
+        if NonLinear:
+            x, obj = self.NonLinear(initial_x)
+            print obj
+            return
 
         sums, products = self.generateEstep(initial_x, self.newRs)
         for i in xrange(0, self.num_agents):
@@ -800,8 +805,8 @@ class EMMDP:
     def Mstep1(self, sums, products, initx, agent):
         print "Mstep: "
         nvar = self.mdps[agent].numberStates * self.mdps[agent].numerActions
-        x_L = np.ones((nvar), dtype=np.float_) * 0.000001
-        x_U = np.ones((nvar), dtype=np.float_) * (float(1) / float(1-config.gamma))
+        x_L = np.ones((nvar), dtype=np.float_) * 1e-7
+        x_U = np.ones((nvar), dtype=np.float_) * 1
 
         ncon = self.mdps[agent].numberStates
         g_L = np.array(self.alphas[agent])
@@ -902,11 +907,12 @@ class EMMDP:
         nlp = pyipopt.create(nvar, x_L, x_U, ncon, g_L, g_U, nnzj, nnzh, eval_f, eval_grad_f, eval_g, eval_jac_g)
         #nlp.str_option('linear_solver', 'mumps')
         #nlp.num_option('tol', 1e-7)
-        #nlp.int_option('print_level', 1)
-        #nlp.str_option('print_timing_statistics', 'yes')
+        #nlp.int_option('print_level', 0)
         #nlp.str_option('mehrotra_algorithm', 'yes')
-        #nlp.str_option('mu_strategy', 'adaptive')
-        #nlp.str_option('warm_start_init_point', 'yes')
+        #nlp.str_option('print_timing_statistics', 'yes')
+        nlp.int_option('max_iter', 100)
+        nlp.str_option('mu_strategy', 'adaptive')
+        nlp.str_option('warm_start_init_point', 'yes')
         x0 = np.array(initx[agent])
         x, zl, zu, constraint_multipliers, obj, status = nlp.solve(x0)
         nlp.close()
@@ -995,6 +1001,91 @@ class EMMDP:
         print "Done"
         return xstar.value, prob.value
 
+    def NonLinear(self, initx):
+
+        ncon = 0
+        nvar = 0
+        vars = []
+        vars.append(0)
+
+        for i in xrange(0, self.num_agents):
+            ncon += self.mdps[i].numberStates
+            vars.append(vars[i] + self.mdps[i].numberStates * self.mdps[i].numerActions)
+            nvar += self.mdps[i].numberStates * self.mdps[i].numerActions
+
+        nnzj = sum([self.mdps[i].numberStates * self.mdps[i].numerActions * self.mdps[i].numberStates for i in xrange(0, self.num_agents)])
+        #print vars, nvar, ncon, nnzj
+        nnzh = 0
+
+        x_L = np.ones((nvar), dtype=np.float_) * 0.000001
+        x_U = np.ones((nvar), dtype=np.float_) * (float(1) / float(1-config.gamma))
+
+        g_L = np.concatenate(np.array(self.alphas))
+        g_U = np.concatenate(np.array(self.alphas))
+
+        def eval_f(x, user_data=None):
+            obj = 0
+            x = np.array(x)
+            for i in xrange(0, self.num_agents):
+                obj += np.dot(np.array(self.Rs[i]), np.array(x[vars[i]:vars[i+1]]))
+
+            for j in xrange(0, len(self.constraints)):
+                cons = self.constraints[j]
+                prod = cons.reward
+                for eves in cons.Events:
+                    pesum = 0
+                    agent = eves.agent
+                    for peves in eves.pevents:
+                        s = peves.state
+                        a = peves.action
+                        sd = peves.statedash
+                        pesum += self.mdps[agent].transition(s, a, sd) * np.array(x[(vars[agent] + ( s.index * self.mdps[agent].numerActions)) + a.index])
+                    prod *= pesum
+                obj += np.asscalar(np.array(prod))
+            return -1*obj
+
+        def eval_grad_f(x, user_data=None):
+            x = algopy.UTPM.init_jacobian(x)
+            return algopy.UTPM.extract_jacobian(eval_f(x))
+
+        def eval_g(x, user_data=None):
+            index = 0
+            out = algopy.zeros(ncon, dtype=x)
+            for i in xrange(0, self.num_agents):
+                for j in xrange(0, self.mdps[i].numberStates):
+                    out[index] = np.dot(np.array(self.As[i])[j,:], np.array(x[vars[i]:vars[i+1]]))
+                    index += 1
+            return out
+
+        def eval_jac_g(x, flag, user_data=None):
+            if flag:
+                rows = []
+                cols = []
+                index = 0
+                for i in xrange(0, self.num_agents):
+                    for j in xrange(0, self.mdps[i].numberStates):
+                        for k in xrange(vars[i],vars[i+1]):
+                            rows.append(index)
+                            cols.append(k)
+                        index += 1
+                assert len(rows) == nnzj
+                assert len(cols) == nnzj
+                return (np.array(rows), np.array(cols))
+            else:
+                x = algopy.UTPM.init_jacobian(x)
+                y = algopy.UTPM.extract_jacobian(eval_g(x))
+                return np.concatenate(np.array(y))
+
+
+        nlp = pyipopt.create(nvar, x_L, x_U, ncon, g_L, g_U, nnzj, nnzh, eval_f, eval_grad_f, eval_g, eval_jac_g)
+        #nlp.int_option('max_iter', 150)
+        nlp.str_option('mu_strategy', 'adaptive')
+        nlp.str_option('warm_start_init_point', 'yes')
+        x0 = np.concatenate(np.array(initx))
+        x, zl, zu, constraint_multipliers, obj, status = nlp.solve(x0)
+        nlp.close()
+        return x, -1*obj
+
 class Driver:
     print cvxpy.installed_solvers()
     a = EMMDP(config.agents)
@@ -1016,4 +1107,4 @@ class Driver:
     #     sum += a.mdps[i].solveLP(config.gamma)
     # print sum
     a.genAMPL()
-    a.EM()
+    a.EM(NonLinear=True)

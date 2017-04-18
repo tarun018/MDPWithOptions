@@ -1,0 +1,53 @@
+Auctioned:  [2, [0, 1], 1, [0, 1], 0, 2, 0, 1]
+AgentWise:  [[1, 3, 4, 6], [1, 2, 3, 7], [0, 5]]
+SharedSites:  [1, 3]
+NoLocPerAgent:  [4, 4, 2]
+TotalTime:  [64, 64, 64]
+Collect:  [[32, 32, 32, 32], [16, 16, 16, 16], [64, 64]]
+Transit:  [[[32, 32, 32, 32], [32, 32, 32, 32], [32, 32, 32, 32], [32, 32, 32, 32]], [[16, 16, 16, 16], [16, 16, 16, 16], [16, 16, 16, 16], [16, 16, 16, 16]], [[64, 64], [64, 64]]]
+MDPRew:  [[9, 9, 8, 9], [5, 8, 5, 6], [5, 6]]
+ConsReward:  [13, 10]
+Rmin:  5.0
+Rmax:  13.0
+Could not import networkx
+['CVXOPT', 'ELEMENTAL', 'ECOS_BB', 'GLPK_MI', 'SCS', 'ECOS', 'GLPK', 'LS']
+Generating MDP for Agent0
+     Writing States for Agent 0
+     Writing Actions for Agent 0
+     Writing Transitions for Agent 0
+     Writing Rewards for Agent 0
+Generating MDP for Agent1
+     Writing States for Agent 1
+     Writing Actions for Agent 1
+     Writing Transitions for Agent 1
+     Writing Rewards for Agent 1
+Generating MDP for Agent2
+     Writing States for Agent 2
+     Writing Actions for Agent 2
+     Writing Transitions for Agent 2
+     Writing Rewards for Agent 2
+Generating Primitive Events
+Generating Events
+Generating Constraints
+Generating AMPL
+Iteration: 1
+Generating LP for 0
+Generating LP for 1
+Generating LP for 2
+Estep: 
+Done
+Mstep: 
+[PyIPOPT] Ipopt will use Hessian approximation.
+
+[PyIPOPT] Problem created
+
+******************************************************************************
+This program contains Ipopt, a library for large-scale nonlinear optimization.
+ Ipopt is released as open source code under the Eclipse Public License (EPL).
+         For more information visit http://projects.coin-or.org/Ipopt
+******************************************************************************
+
+Mstep: 
+[PyIPOPT] Ipopt will use Hessian approximation.
+
+[PyIPOPT] Problem created
