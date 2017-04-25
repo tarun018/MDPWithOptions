@@ -1107,4 +1107,4 @@ class Driver:
     #     sum += a.mdps[i].solveLP(config.gamma)
     # print sum
     a.genAMPL()
-    a.EM(NonLinear=True)
+    a.EM(NonLinear=False)
