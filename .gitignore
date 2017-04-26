@@ -92,3 +92,4 @@ ENV/
 ampl/
 Data/
 .idea/
+*.run

@@ -2,7 +2,9 @@ import random, csv
 import pickle
 #flag=1 fileread
 solver = 'ipopt'
-flag = 1
+flag = 0
+
+experiment = 1
 
 theta = 0.01
 gamma = 0.8
@@ -107,13 +109,13 @@ if flag == 0:
     print "Rmax: ", R_max
 
     def writeConfig1():
-        with open('../Data/objs.pickle', 'w') as f:
+        with open('../Data/objs'+str(experiment)+'.pickle', 'w') as f:
             pickle.dump([agents, nPrivatePerAgent, nShared, nLocs, auction, locs, sharedSites, nloc, T, collectTimes, transitTimes,
                          rewardCollection, creward, R_min, R_max ], f)
     writeConfig1()
 
 else:
-    with open('../Data/objs.pickle') as f:  # Python 3: open(..., 'rb')
+    with open('../Data/objs'+str(experiment)+'.pickle') as f:  # Python 3: open(..., 'rb')
         agents, nPrivatePerAgent, nShared, nLocs, auction, locs, sharedSites, nloc, T, collectTimes, transitTimes, \
         rewardCollection, creward, R_min, R_max = pickle.load(f)
 
