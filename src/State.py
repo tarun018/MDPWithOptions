@@ -885,7 +885,7 @@ class EMMDP:
 
     def runConfig(self, agent):
         print  "    Writting Running Config for Agent " + str(agent) + ": ",
-        runf = open('try'+str(agent)+'_exp_'+str(config.experiment)+'.run', 'w')
+        runf = open('single'+str(agent)+'_exp_'+str(config.experiment)+'.run', 'w')
         runf.write("reset;\n")
         runf.write("model single.mod;\n")
         runf.write("data "+'../Data/single'+str(agent)+'_exp_'+str(config.experiment)+'.dat'+";\n")
