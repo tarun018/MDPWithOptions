@@ -106,90 +106,14 @@ if flag == 0:
     print "Rmin: ", R_min
     print "Rmax: ", R_max
 
-    # def writeConfig():
-    #     datafile = open('Setting.txt','w')
-    #     datafile.write(str(agents)+",")
-    #     datafile.write(str(nPrivatePerAgent)+",")
-    #     datafile.write(str(nShared)+",")
-    #     datafile.write(str(nLocs))
-    #     datafile.write("\n")
-    #     # datafile.write(str(len(auction)) + "\n")
-    #     # for i in xrange(0, len(auction)):
-    #     #     if type(auction[i]) is int:
-    #     #         datafile.write(str(auction[i])+"\n")
-    #     #     else:
-    #     #         for vals in auction[i]:
-    #     #             datafile.write(str(vals)+",")
-    #     #         datafile.write("\n")
-    #     datafile.write(str(len(locs)) + "\n")
-    #     for i in xrange(0, len(locs)):
-    #         for vals in locs[i]:
-    #             datafile.write(str(vals)+",")
-    #         datafile.write("\n")
-    #     datafile.write("\n")
-    #
-    #     datafile.write(str(len(sharedSites)) + "\n")
-    #     for i in xrange(0, len(sharedSites)):
-    #         datafile.write(str(sharedSites[i])+",")
-    #     datafile.write("\n")
-    #     datafile.write("\n")
-    #
-    #     datafile.write(str(len(nloc)) + "\n")
-    #     for i in xrange(0, len(nloc)):
-    #         datafile.write(str(nloc[i])+",")
-    #     datafile.write("\n")
-    #     datafile.write("\n")
-    #
-    #     datafile.write(str(len(T)) + "\n")
-    #     for i in xrange(0, len(T)):
-    #         datafile.write(str(T[i])+",")
-    #     datafile.write("\n")
-    #     datafile.write("\n")
-    #
-    #     datafile.write(str(len(collectTimes)) + "\n")
-    #     for i in xrange(0, len(collectTimes)):
-    #         datafile.write(str(collectTimes[i][0])+",")
-    #     datafile.write("\n")
-    #     datafile.write("\n")
-    #
-    #     datafile.write(str(len(transitTimes)) + "\n")
-    #     for i in xrange(0, len(transitTimes)):
-    #         datafile.write(str(transitTimes[i][0][0])+",")
-    #     datafile.write("\n")
-    #     datafile.write("\n")
-    #
-    #     datafile.write(str(len(rewardCollection)) + "\n")
-    #     for i in xrange(0, len(rewardCollection)):
-    #         for j in xrange(0, len(rewardCollection[i])):
-    #             datafile.write(str(rewardCollection[i][j])+",")
-    #         datafile.write("\n")
-    #     datafile.write("\n")
-    #
-    #     datafile.write(str(len(creward)) + "\n")
-    #     for i in xrange(0, len(creward)):
-    #         datafile.write(str(creward[i])+",")
-    #     datafile.write("\n")
-    #     datafile.write("\n")
-    #
-    #     datafile.write(str(theta)+"\n")
-    #     datafile.write(str(gamma)+"\n")
-    #     datafile.write(str(initialxval)+"\n")
-    #     datafile.write(str(alpha)+"\n")
-    #     datafile.write(str(delta)+"\n")
-    #     datafile.write(str(R_min)+"\n")
-    #     datafile.write(str(R_max)+"\n")
-    #
-    #     datafile.close()
-
     def writeConfig1():
-        with open('objs.pickle', 'w') as f:
+        with open('../Data/objs.pickle', 'w') as f:
             pickle.dump([agents, nPrivatePerAgent, nShared, nLocs, auction, locs, sharedSites, nloc, T, collectTimes, transitTimes,
                          rewardCollection, creward, R_min, R_max ], f)
-    #writeConfig()
     writeConfig1()
 
 else:
-    with open('objs.pickle') as f:  # Python 3: open(..., 'rb')
+    with open('../Data/objs.pickle') as f:  # Python 3: open(..., 'rb')
         agents, nPrivatePerAgent, nShared, nLocs, auction, locs, sharedSites, nloc, T, collectTimes, transitTimes, \
         rewardCollection, creward, R_min, R_max = pickle.load(f)
 

@@ -70,12 +70,12 @@ class MDP:
             self.writeTransitionsToFile()
             self.writeRewardsToFile()
         else:
-            self.readActions("DomainActionData"+str(self.agent)+".txt")
-            self.readStates("DomainStateData"+str(self.agent)+".txt")
+            self.readActions("../Data/DomainActionData"+str(self.agent)+".txt")
+            self.readStates("../Data/DomainStateData"+str(self.agent)+".txt")
             self.terminal = self.states[0]
-            self.readTransition("DomainTransitionData"+str(self.agent)+".txt")
+            self.readTransition("../Data/DomainTransitionData"+str(self.agent)+".txt")
             #self.checkTransitionProbabilitySumTo1File()
-            self.readRewards("DomainRewardData"+str(self.agent)+".txt")
+            self.readRewards("../Data/DomainRewardData"+str(self.agent)+".txt")
         self.defineStart()
         self.numberStates = len(self.states)
         self.numerActions = len(self.actions)
@@ -242,7 +242,7 @@ class MDP:
         return len(wastestates)
 
     def checkTransitionProbabilitySumTo1(self):
-        fp = open('tds', 'w')
+        fp = open('../Data/tds', 'w')
         for k in self.actions:
             for i in self.states:
                 sum = 0
@@ -260,7 +260,7 @@ class MDP:
         fp.close()
 
     def checkTransitionProbabilitySumTo1File(self):
-        fp = open('tds', 'w')
+        fp = open('../Data/tds', 'w')
         for k in self.actions:
             for i in self.states:
                 sum = 0
@@ -287,7 +287,7 @@ class MDP:
 
     def writeTransitionsToFile(self):
         print "     Writing Transitions for Agent " +str(self.agent)
-        tran = open("DomainTransitionData"+str(self.agent)+".txt", 'w')
+        tran = open("../Data/DomainTransitionData"+str(self.agent)+".txt", 'w')
         for i in self.actions:
             for j in self.states:
                 for k in self.states:
@@ -302,7 +302,7 @@ class MDP:
 
     def writeRewardsToFile(self):
         print "     Writing Rewards for Agent " +str(self.agent)
-        rew = open("DomainRewardData"+str(self.agent)+".txt",'w')
+        rew = open("../Data/DomainRewardData"+str(self.agent)+".txt",'w')
         for i in self.states:
             for j in self.actions:
                 re = self.rewardFunction(i,j)
@@ -315,7 +315,7 @@ class MDP:
 
     def writeStatesToFile(self):
         print "     Writing States for Agent " +str(self.agent)
-        stat = open("DomainStateData" + str(self.agent) + ".txt", 'w')
+        stat = open("../Data/DomainStateData" + str(self.agent) + ".txt", 'w')
         for j in self.states:
             stat.write(str(j.index)+","+str(j.location)+","+str(j.actualLocation)+","+str(j.time)+",")
             for x in j.dvals:
@@ -325,7 +325,7 @@ class MDP:
 
     def writeActionsToFile(self):
         print "     Writing Actions for Agent " +str(self.agent)
-        act = open("DomainActionData" + str(self.agent) + ".txt", 'w')
+        act = open("../Data/DomainActionData" + str(self.agent) + ".txt", 'w')
         for j in self.actions:
             act.write(str(j.index)+","+str(j.gotox)+","+str(j.name)+"\n")
 
@@ -601,7 +601,7 @@ class EMMDP:
 
     def genAMPL(self):
         print "     Generating AMPL: ",
-        ampl = open('nl2.dat', 'w')
+        ampl = open('../Data/nl2.dat', 'w')
         ampl.write("param n := " + str(self.num_agents) + ";\n")
         ampl.write("\n")
         for i in xrange(0, self.num_agents):
@@ -694,7 +694,7 @@ class EMMDP:
 
     def genAMPLSingle(self, agent, initx=None):
         print "     Generating AMPL for Agent " + str(agent) + " : ",
-        ampl = open('single'+str(agent)+'.dat', 'w')
+        ampl = open('../Data/single'+str(agent)+'.dat', 'w')
         ampl.write("param n := " + str(self.num_agents) + ";\n")
         ampl.write("param agent := " + str(agent+1) + ";\n")
         ampl.write("param gamma := " + str(config.gamma) + ";\n")
@@ -886,7 +886,7 @@ class EMMDP:
         runf = open('single'+str(agent)+'.run', 'w')
         runf.write("reset;\n")
         runf.write("model single.mod;\n")
-        runf.write("data single"+str(agent)+".dat;\n")
+        runf.write("data ../Data/single"+str(agent)+".dat;\n")
         runf.write("option solver 'ampl/ampl_linux-intel64/minos';\n")
         runf.write("option minos_options 'feasibility_tolerance=1.0e-8 scale=no Completion=full';\n")
         runf.write("solve;\n")
@@ -943,9 +943,9 @@ class EMMDP:
         iter = 1
         print "NonLinear:"
         self.genAMPL()
-        os.system('./ampl/ampl_linux-intel64/ampl try.run > NonLinearOut.txt')
+        os.system('../ampl/ampl_linux-intel64/ampl try.run > ../Data/NonLinearOut.txt')
 
-        nonred = open('NonLinearOut.txt', 'r')
+        nonred = open('../Data/NonLinearOut.txt', 'r')
         for row in nonred:
             print row,
         nonred.close()
@@ -968,8 +968,8 @@ class EMMDP:
         print "Iteration: "+str(iter)
         xvals = []
         for i in xrange(0, self.num_agents):
-            os.system('./ampl/ampl_linux-intel64/ampl single'+str(i)+'.run > EMOut' + str(i) +'.txt')
-            x,status = self.processFile(filename='EMOut'+str(i)+'.txt', agent=i)
+            os.system('ampl/ampl_linux-intel64/ampl single'+str(i)+'.run > ../Data/EMOut' + str(i) +'.txt')
+            x,status = self.processFile(filename='../Data/EMOut'+str(i)+'.txt', agent=i)
             assert (sum(x) - float(1) / float(1 - config.gamma)) < 0.01
             xvals.append(x)
             #print "Status for Agent " + str(i) + ": ", status.rstrip()
@@ -982,8 +982,8 @@ class EMMDP:
             xvalues = []
             for i in xrange(0, self.num_agents):
                 self.genAMPLSingle(i, xvals)
-                os.system('./ampl/ampl_linux-intel64/ampl single' + str(i) + '.run > EMOut' + str(i) + '.txt')
-                x, status = self.processFile(filename='EMOut' + str(i) + '.txt', agent=i)
+                os.system('ampl/ampl_linux-intel64/ampl single' + str(i) + '.run > ../Data/EMOut' + str(i) + '.txt')
+                x, status = self.processFile(filename='../Data/EMOut' + str(i) + '.txt', agent=i)
                 assert (sum(x) - float(1) / float(1 - config.gamma)) < 0.01
                 xvalues.append(x)
                 #print "Status for Agent " + str(i) + ": ", status.rstrip()
