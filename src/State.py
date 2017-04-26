@@ -8,7 +8,7 @@ import types
 import pyipopt
 import algopy
 import os
-import matplotlib
+import matplotlib.pyplot as plt
 from pathos.multiprocessing import ProcessingPool as Pool
 
 class State:
@@ -71,12 +71,12 @@ class MDP:
             self.writeTransitionsToFile()
             self.writeRewardsToFile()
         else:
-            self.readActions("../Data/DomainActionData"+str(self.agent)+"_Exp_"+str(config.experiment)+".txt")
-            self.readStates("../Data/DomainStateData"+str(self.agent)+"_Exp_"+str(config.experiment)+".txt")
+            self.readActions("../Data/DomainActionData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
+            self.readStates("../Data/DomainStateData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
             self.terminal = self.states[0]
-            self.readTransition("../Data/DomainTransitionData"+str(self.agent)+"_Exp_"+str(config.experiment)+".txt")
+            self.readTransition("../Data/DomainTransitionData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
             #self.checkTransitionProbabilitySumTo1File()
-            self.readRewards("../Data/DomainRewardData"+str(self.agent)+"_Exp_"+str(config.experiment)+".txt")
+            self.readRewards("../Data/DomainRewardData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
         self.defineStart()
         self.numberStates = len(self.states)
         self.numerActions = len(self.actions)
@@ -953,8 +953,28 @@ class EMMDP:
         x = np.array(x)
         return x,status
 
+    def genGraphAndSave(self, iters, results, nonLinear):
+        iterations = range(1, iters+1)
+        line1, = plt.plot(iterations, results, marker='o', linestyle='-', color='r')
+        plt.xlabel('Number of Iterations')
+        plt.ylabel('Objective')
+        plt.title('EMMDP Experiment: ' + str(config.experiment))
+        nonlx = [iters+1]
+        nonly = [nonLinear]
+        line2, = plt.plot(nonlx, nonly, marker='^', linestyle='-', color='g')
+        #plt.xlim(0, 30)
+        #plt.xticks(NumofTargets)
+        #plt.legend([line1, line2, line3, line4, line5, line6, line7],
+        #          ["Speed 0.2", "Speed 0.5", "Speed 0.8", "Speed 1.0", "Speed 1.2", "Speed 1.5", "Speed 1.8"], loc=2)
+        #plt.show()
+        plt.legend([line1, line2] , ["EM", "NonLinear"], loc=4)
+
+        plt.savefig('../Results/Graph'+str(config.experiment)+'.png')
+
     def EMAMPL(self):
+        results = []
         iter = 1
+        nonlinearobj = 0
         print "NonLinear:"
         self.genAMPL()
         self.runConfigNonLinear()
@@ -962,6 +982,9 @@ class EMMDP:
 
         nonred = open('../Data/NonLinearOut'+str(config.experiment)+'.txt', 'r')
         for row in nonred:
+            if row.find('objective') != -1:
+                spli = row.split(' ')
+                nonlinearobj = float(spli[-1])
             print row,
         nonred.close()
 
@@ -989,7 +1012,9 @@ class EMMDP:
             xvals.append(x)
             #print "Status for Agent " + str(i) + ": ", status.rstrip()
 
-        print "Objective: ", self.objective(xvals, Rs)
+        initialobj = self.objective(xvals, Rs)
+        print "Objective: ", initialobj
+        results.append(initialobj)
 
         while(True):
             iter += 1
@@ -1006,9 +1031,12 @@ class EMMDP:
             print "Old Objective: ",oldobj
             xvals = xvalues
             newobj = self.objective(xvals, Rs)
+            results.append(newobj)
             print "New Objective: ", newobj;
             if abs(newobj - oldobj) < config.delta:
                 break
+
+        self.genGraphAndSave(iter, results, nonlinearobj)
 
     def EM(self, NonLinear=False):
         initial_x = []

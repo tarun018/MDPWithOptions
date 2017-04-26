@@ -2,7 +2,7 @@ import random, csv
 import pickle
 #flag=1 fileread
 solver = 'ipopt'
-flag = 0
+flag = 1
 
 experiment = 1
 
