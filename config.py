@@ -4,9 +4,20 @@ import pickle
 solver = 'ipopt'
 flag = 1
 
+theta = 0.01
+gamma = 0.8
+initialxval = 0.0001
+alpha = 0.8
+delta = 0.000001
+print "theta: ", theta
+print "gamma: ", gamma
+print "initialx: ", initialxval
+print "alpha: ", alpha
+print "delta: ", delta
+
 if flag == 0:
 
-    agents = 3
+    agents = 6
     nPrivatePerAgent = 2
     nShared = 2
     nLocs = (agents*nPrivatePerAgent) + nShared
@@ -53,7 +64,7 @@ if flag == 0:
 
     nloc = [len(lo) for lo in locs]
     for i in xrange(0, agents):
-        t = 2**random.randint(totalPow, totalPow)
+        t = 2**random.randint(totalPow-1, totalPow)
         collectTimes.append([t] * nloc[i])
         transitTimes.append([[t] * nloc[i]] * nloc[i])
 
@@ -79,19 +90,6 @@ if flag == 0:
 
     print "MDPRew: ", rewardCollection
     print "ConsReward: ", creward
-
-
-    theta = 0.00001
-    gamma = 0.8
-    initialxval = 0.001
-    alpha = 0.8
-    delta = 0.000001
-
-    print "theta: ", theta
-    print "gamma: ", gamma
-    print "initialx: ", initialxval
-    print "alpha: ", alpha
-    print "delta: ", delta
 
     R_min = min(creward)
     for i in xrange(0, agents):
@@ -186,15 +184,14 @@ if flag == 0:
     def writeConfig1():
         with open('objs.pickle', 'w') as f:
             pickle.dump([agents, nPrivatePerAgent, nShared, nLocs, auction, locs, sharedSites, nloc, T, collectTimes, transitTimes,
-                         rewardCollection, creward, R_min, R_max, theta, gamma, initialxval, alpha, delta ], f)
-
+                         rewardCollection, creward, R_min, R_max ], f)
     #writeConfig()
     writeConfig1()
 
 else:
     with open('objs.pickle') as f:  # Python 3: open(..., 'rb')
         agents, nPrivatePerAgent, nShared, nLocs, auction, locs, sharedSites, nloc, T, collectTimes, transitTimes, \
-        rewardCollection, creward, R_min, R_max, theta, gamma, initialxval, alpha, delta = pickle.load(f)
+        rewardCollection, creward, R_min, R_max = pickle.load(f)
 
         print "Agents: ", agents
         print "PrivatePer: ", nPrivatePerAgent
@@ -209,10 +206,5 @@ else:
         print "Transit: ", transitTimes
         print "MDPRew: ", rewardCollection
         print "ConsReward: ", creward
-        print "theta: ", theta
-        print "gamma: ", gamma
-        print "initialx: ", initialxval
-        print "alpha: ", alpha
-        print "delta: ", delta
         print "Rmin: ", R_min
         print "Rmax: ", R_max

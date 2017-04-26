@@ -1,0 +1,3 @@
+MINOS 5.51: optimal solution found.
+29 iterations, objective 31.33130547
+Nonlin evals: obj = 32, grad = 31.

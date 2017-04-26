@@ -7,6 +7,7 @@ import copy_reg
 import types
 import pyipopt
 import algopy
+import os
 from pathos.multiprocessing import ProcessingPool as Pool
 
 class State:
@@ -599,7 +600,7 @@ class EMMDP:
             self.constraints.append(c)
 
     def genAMPL(self):
-        print "Generating AMPL"
+        print "     Generating AMPL: ",
         ampl = open('nl2.dat', 'w')
         ampl.write("param n := " + str(self.num_agents) + ";\n")
         ampl.write("\n")
@@ -691,11 +692,213 @@ class EMMDP:
         ampl.write("\n")
         ampl.close()
 
+    def genAMPLSingle(self, agent, initx=None):
+        print "     Generating AMPL for Agent " + str(agent) + " : ",
+        ampl = open('single'+str(agent)+'.dat', 'w')
+        ampl.write("param n := " + str(self.num_agents) + ";\n")
+        ampl.write("param agent := " + str(agent+1) + ";\n")
+        ampl.write("param gamma := " + str(config.gamma) + ";\n")
+
+        for i in xrange(0, self.num_agents):
+            ampl.write("set S[" + str(i+1) + "] := ")
+            for x in self.mdps[i].states:
+                ampl.write(str(x.index+1)+" ")
+            ampl.write(";\n")
+            ampl.write("set A[" + str(i+1) + "] := ")
+            for x in self.mdps[i].actions:
+                ampl.write(str(x.index+1)+" ")
+            ampl.write(";\n")
+        ampl.write("\n")
+
+        ampl.write("param P := \n")
+        for i in xrange(0, self.num_agents):
+            for j in xrange(0, len(self.mdps[i].actions)):
+                ampl.write("[" + str(i + 1) + "," + str(j + 1) + ",*,*] : ")
+                for k in xrange(0, len(self.mdps[i].states)):
+                    ampl.write(str(k + 1) + " ")
+                ampl.write(":= \n")
+                for k in xrange(0, len(self.mdps[i].states)):
+                    ampl.write(str(k + 1) + " ")
+                    h = self.mdps[i].states[k].transition
+                    hh = [x[2] for x in h if x[0] == self.mdps[i].actions[j]]
+                    for g in hh:
+                        ampl.write(str(g) + " ")
+                    ampl.write("\n")
+            if i == self.num_agents - 1:
+                ampl.write(";")
+        ampl.write("\n")
+
+        ampl.write("param R := \n")
+        for i in xrange(0, self.num_agents):
+            ampl.write("[" + str(i + 1) + ",*,*] : ")
+            for j in xrange(0, len(self.mdps[i].actions)):
+                ampl.write(str(j + 1) + " ")
+            ampl.write(":= \n")
+            for j in xrange(0, len(self.mdps[i].states)):
+                ampl.write(str(j + 1) + " ")
+                h = self.mdps[i].states[j].reward
+                hh = [x[1] for x in h]
+                for g in hh:
+                    ampl.write(str(g) + " ")
+                ampl.write("\n")
+            if i == self.num_agents - 1:
+                ampl.write(";")
+        ampl.write("\n")
+
+        ampl.write("param alpha := \n")
+        for i in xrange(0, self.num_agents):
+            ampl.write("[" + str(i + 1) + ",*] := ")
+            for gg in xrange(0, len(self.mdps[i].start)):
+                ampl.write(str(gg + 1) + " " + str(self.mdps[i].start[gg]) + " ")
+            ampl.write("\n")
+        ampl.write(";\n")
+
+        ampl.write("set all_numcons := ")
+        for i in xrange(0, len(self.constraints)):
+            ampl.write(str(i+1)+" ")
+        ampl.write(";\n")
+
+        ampl.write("set all_numprims := ")
+        for i in xrange(0, len(self.primitives)):
+            ampl.write(str(i + 1) + " ")
+        ampl.write(";\n")
+
+        ampl.write("set all_numevents := ")
+        for i in xrange(0, len(self.events)):
+            ampl.write(str(i + 1) + " ")
+        ampl.write(";\n")
+
+        ampl.write("param all_creward := ")
+        for x in xrange(0, len(self.constraints)):
+            ampl.write(str(x+1)+" "+str(self.constraints[x].reward)+" ")
+        ampl.write(";\n")
+
+        ampl.write("param all_primitives : ")
+        for i in xrange(0, 4):
+            ampl.write(str(i + 1) + " ")
+        ampl.write(":= \n")
+        for z in self.primitives:
+                ampl.write(str(z.index + 1) + " " + str(z.agent + 1) + " " + str(z.state.index + 1) + " " +
+                           str(z.action.index + 1) + " " + str(z.statedash.index + 1) + "\n")
+        ampl.write(";\n")
+
+        for i in xrange(0, len(self.events)):
+            ampl.write("set all_events["+str(i+1)+"] := ")
+            for x in self.events[i].pevents:
+                ampl.write(str(x.index+1)+" ")
+            ampl.write(";\n")
+        ampl.write("\n")
+
+        for i in xrange(0, len(self.constraints)):
+            ampl.write("set all_cons["+str(i+1)+"] := ")
+            for x in self.constraints[i].Events:
+                ampl.write(str(x.index+1)+" ")
+            ampl.write(";\n")
+        ampl.write("\n")
+
+        events = []
+        consts = set()
+        primits = []
+
+        for cons in self.constraints:
+            for eves in cons.Events:
+                if eves.agent == agent:
+                    events.append(eves)
+                    primits.extend(eves.pevents)
+                    consts.add(cons.index)
+
+        ampl.write("set agent_numcons := ")
+        for con in consts:
+            ampl.write(str(con+1)+" ")
+        ampl.write(";\n")
+
+        ampl.write("set agent_numprims := ")
+        for prims in primits:
+            ampl.write(str(prims.index+1)+" ")
+        ampl.write(";\n")
+
+        ampl.write("set agent_numevents := ")
+        for es in events:
+            ampl.write(str(es.index+1)+" ")
+        ampl.write(";\n")
+
+        ampl.write("param agent_creward := ")
+        for x in consts:
+            ampl.write(str(x+1)+" "+str(self.constraints[x].reward)+" ")
+        ampl.write(";\n\n")
+
+        ampl.write("param agent_primitives : ")
+        for i in xrange(0, 4):
+            ampl.write(str(i + 1) + " ")
+        ampl.write(":= \n")
+        for z in primits:
+                ampl.write(str(z.index + 1) + " " + str(z.agent + 1) + " " + str(z.state.index + 1) + " " +
+                           str(z.action.index + 1) + " " + str(z.statedash.index + 1) + "\n")
+        ampl.write(";\n")
+
+        for es in events:
+            ampl.write("set agent_events["+str(es.index+1)+"] := ")
+            for x in es.pevents:
+                ampl.write(str(x.index+1)+" ")
+            ampl.write(";\n")
+        ampl.write("\n")
+
+        for co in consts:
+            ampl.write("set agent_cons["+str(co+1)+"] := ")
+            for x in self.constraints[co].Events:
+                if x.agent == agent:
+                    ampl.write(str(x.index+1)+" ")
+            ampl.write(";\n")
+        ampl.write("\n\n")
+
+        ampl.write("param theta := " + str(float(config.theta)) + ";\n")
+        ampl.write("param Rmax := " + str(config.R_max) + ";\n")
+        ampl.write("param Rmin := " + str(config.R_min) + ";\n\n")
+
+        ampl.write("param x := \n")
+        for k in xrange(0, self.num_agents):
+            ampl.write("[" + str(k + 1) + ",*,*] : ")
+            for j in xrange(0, len(self.mdps[k].actions)):
+                ampl.write(str(j + 1) + " ")
+            ampl.write(":= \n")
+            if initx is None:
+                for i in xrange(0, self.mdps[k].numberStates):
+                    ampl.write(str(i+1)+" ")
+                    for j in xrange(0, self.mdps[k].numerActions):
+                        ampl.write(str(config.initialxval)+" ")
+                    ampl.write("\n")
+            else:
+                for i in xrange(0, self.mdps[k].numberStates):
+                    ampl.write(str(i+1)+" ")
+                    for j in xrange(0, self.mdps[k].numerActions):
+                        s = self.mdps[k].states[i]
+                        a = self.mdps[k].actions[j]
+                        val = initx[k][(s.index * self.mdps[k].numerActions) + a.index]
+                        ampl.write(str(val)+" ")
+                    ampl.write("\n")
+        ampl.write(";\n")
+
+        ampl.close()
+        print "Done"
+
+    def runConfig(self, agent):
+        print  "    Writting Running Config for Agent " + str(agent) + ": ",
+        runf = open('single'+str(agent)+'.run', 'w')
+        runf.write("reset;\n")
+        runf.write("model single.mod;\n")
+        runf.write("data single"+str(agent)+".dat;\n")
+        runf.write("option solver 'ampl/ampl_linux-intel64/minos';\n")
+        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 scale=no Completion=full';\n")
+        runf.write("solve;\n")
+        runf.write("display {i in S[agent], j in A[agent]} : xstar[i,j] ;\n")
+        runf.close()
+        print "Done"
+
     def objective(self, xvals, Rs):
         sum = 0
         for i in xrange(0, self.num_agents):
             sum += np.dot(Rs[i], np.array(xvals[i]))
-            if abs(np.sum(np.array(xvals[i])) - (float(1) / float(1-config.gamma))) > config.delta:
+            if abs(np.sum(np.array(xvals[i])) - (float(1) / float(1-config.gamma))) > 0.01:
                 print "Warning", np.sum(xvals[i])
 
         for i in xrange(0, len(self.constraints)):
@@ -711,9 +914,86 @@ class EMMDP:
                     pesum += self.mdps[agent].transition(s,a,sd)*xvals[agent][(s.index*self.mdps[agent].numerActions)+a.index]
                 prod *= pesum
             sum += np.asscalar(prod)
-
-        print sum
+        #sum += config.theta * len(self.constraints)
         return sum
+
+    def processFile(self, filename, agent):
+        x = []
+        #xsa = np.zeros((self.mdps[agent].numberStates,self.mdps[agent].numerActions))
+        status = ""
+        red = open(filename, 'r')
+        for row in red:
+            splitted = row.split('=')
+            if len(splitted)==2 and splitted[0].count('x') > 0:
+                try:
+                    value = float(splitted[1])
+                except(ValueError):
+                    print "Error: " , splitted
+                # indistr = splitted[0][splitted[0].find('[')+1 : splitted[0].find(']')]
+                # indistr = indistr.split(',')
+                # xsa[int(indistr[0])-1,int(indistr[1])-1] = value
+                x.append(value)
+            elif len(splitted) >= 1:
+                status = status + row
+        assert len(x) == self.mdps[agent].numberStates * self.mdps[agent].numerActions
+        x = np.array(x)
+        return x,status
+
+    def EMAMPL(self):
+        iter = 1
+        print "NonLinear:"
+        self.genAMPL()
+        os.system('./ampl/ampl_linux-intel64/ampl try.run > NonLinearOut.txt')
+
+        nonred = open('NonLinearOut.txt', 'r')
+        for row in nonred:
+            print row,
+        nonred.close()
+
+        Rs = []
+        print "EM-AMPL: "
+        initial_x = []
+        for i in xrange(0, self.num_agents):
+            A, R, newR = self.mdps[i].generateLPAc(config.gamma)
+            Rs.append(R)
+            numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
+            lst = [config.initialxval]*numvar
+            initial_x.append(lst)
+        Rs = np.array(Rs)
+
+        for i in xrange(0, self.num_agents):
+            self.genAMPLSingle(i, initial_x)
+            self.runConfig(i)
+
+        print "Iteration: "+str(iter)
+        xvals = []
+        for i in xrange(0, self.num_agents):
+            os.system('./ampl/ampl_linux-intel64/ampl single'+str(i)+'.run > EMOut' + str(i) +'.txt')
+            x,status = self.processFile(filename='EMOut'+str(i)+'.txt', agent=i)
+            assert (sum(x) - float(1) / float(1 - config.gamma)) < 0.01
+            xvals.append(x)
+            #print "Status for Agent " + str(i) + ": ", status.rstrip()
+
+        print "Objective: ", self.objective(xvals, Rs)
+
+        while(True):
+            iter += 1
+            print "Iteration: " + str(iter)
+            xvalues = []
+            for i in xrange(0, self.num_agents):
+                self.genAMPLSingle(i, xvals)
+                os.system('./ampl/ampl_linux-intel64/ampl single' + str(i) + '.run > EMOut' + str(i) + '.txt')
+                x, status = self.processFile(filename='EMOut' + str(i) + '.txt', agent=i)
+                assert (sum(x) - float(1) / float(1 - config.gamma)) < 0.01
+                xvalues.append(x)
+                #print "Status for Agent " + str(i) + ": ", status.rstrip()
+            oldobj = self.objective(xvals, Rs)
+            print "Old Objective: ",oldobj
+            xvals = xvalues
+            newobj = self.objective(xvals, Rs)
+            print "New Objective: ", newobj;
+            if abs(newobj - oldobj) < config.delta:
+                break
 
     def EM(self, NonLinear=False):
         initial_x = []
@@ -751,7 +1031,8 @@ class EMMDP:
                 xstar_val, prob_val = self.Mstep(sums, products, initial_x, i)
             xvals.append(xstar_val)
             pvals.append(prob_val)
-        self.objective(xvals, self.Rs)
+        o = self.objective(xvals, self.Rs)
+        print "Objective: ", o
 
         while(True):
             num_iter += 1
@@ -767,9 +1048,11 @@ class EMMDP:
                 xvalues.append(xstar_val)
                 pvalues.append(prob_val)
             prevobj = self.objective(xvals, self.Rs)
+            print "PrevObj: ", prevobj
             xvals = xvalues
             pvals = pvalues
             newobj = self.objective(xvals, self.Rs)
+            print "NewObj: ", newobj
             if abs(newobj - prevobj) < config.delta:
                 print newobj
                 break
@@ -1106,5 +1389,5 @@ class Driver:
     # for i in xrange(0, a.num_agents):
     #     sum += a.mdps[i].solveLP(config.gamma)
     # print sum
-    a.genAMPL()
-    a.EM(NonLinear=False)
+    a.EMAMPL()
+    #a.EM(NonLinear=False)

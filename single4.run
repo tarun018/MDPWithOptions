@@ -1,0 +1,7 @@
+reset;
+model single.mod;
+data single4.dat;
+option solver 'ampl/ampl_linux-intel64/minos';
+option minos_options 'feasibility_tolerance=1.0e-8 scale=no Completion=full';
+solve;
+display {i in S[agent], j in A[agent]} : xstar[i,j] ;
