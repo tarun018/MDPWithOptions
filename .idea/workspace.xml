@@ -3,25 +3,42 @@
   <component name="ChangeListManager">
     <list default="true" id="59d3106a-70ef-477f-a148-a105708777e4" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainActionData0.txt" afterPath="$PROJECT_DIR$/DomainActionData0.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainActionData1.txt" afterPath="$PROJECT_DIR$/DomainActionData1.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainActionData3.txt" afterPath="$PROJECT_DIR$/DomainActionData3.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainRewardData0.txt" afterPath="$PROJECT_DIR$/DomainRewardData0.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainRewardData1.txt" afterPath="$PROJECT_DIR$/DomainRewardData1.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainRewardData2.txt" afterPath="$PROJECT_DIR$/DomainRewardData2.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainRewardData3.txt" afterPath="$PROJECT_DIR$/DomainRewardData3.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainRewardData4.txt" afterPath="$PROJECT_DIR$/DomainRewardData4.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainRewardData5.txt" afterPath="$PROJECT_DIR$/DomainRewardData5.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainStateData0.txt" afterPath="$PROJECT_DIR$/DomainStateData0.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainStateData1.txt" afterPath="$PROJECT_DIR$/DomainStateData1.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainStateData2.txt" afterPath="$PROJECT_DIR$/DomainStateData2.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainStateData3.txt" afterPath="$PROJECT_DIR$/DomainStateData3.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainStateData4.txt" afterPath="$PROJECT_DIR$/DomainStateData4.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainTransitionData2.txt" afterPath="$PROJECT_DIR$/DomainTransitionData2.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainStateData5.txt" afterPath="$PROJECT_DIR$/DomainStateData5.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainTransitionData0.txt" afterPath="$PROJECT_DIR$/DomainTransitionData0.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainTransitionData1.txt" afterPath="$PROJECT_DIR$/DomainTransitionData1.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DomainTransitionData3.txt" afterPath="$PROJECT_DIR$/DomainTransitionData3.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/State.py" afterPath="$PROJECT_DIR$/State.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EMOut0.txt" afterPath="$PROJECT_DIR$/EMOut0.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EMOut1.txt" afterPath="$PROJECT_DIR$/EMOut1.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EMOut2.txt" afterPath="$PROJECT_DIR$/EMOut2.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EMOut3.txt" afterPath="$PROJECT_DIR$/EMOut3.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EMOut4.txt" afterPath="$PROJECT_DIR$/EMOut4.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EMOut5.txt" afterPath="$PROJECT_DIR$/EMOut5.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/NonLinearOut.txt" afterPath="$PROJECT_DIR$/NonLinearOut.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.py" afterPath="$PROJECT_DIR$/config.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nl2.dat" afterPath="$PROJECT_DIR$/nl2.dat" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/objs.pickle" afterPath="$PROJECT_DIR$/objs.pickle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/single.mod" afterPath="$PROJECT_DIR$/single.mod" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/single0.dat" afterPath="$PROJECT_DIR$/single0.dat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/single1.dat" afterPath="$PROJECT_DIR$/single1.dat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/single2.dat" afterPath="$PROJECT_DIR$/single2.dat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/single3.dat" afterPath="$PROJECT_DIR$/single3.dat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/single4.dat" afterPath="$PROJECT_DIR$/single4.dat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/single5.dat" afterPath="$PROJECT_DIR$/single5.dat" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tds" afterPath="$PROJECT_DIR$/tds" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/try.run" afterPath="$PROJECT_DIR$/try.run" />
     </list>
     <ignored path="MDPWithOptions.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,8 +61,8 @@
       <file leaf-file-name="State.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/State.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="227">
-              <caret line="95" column="0" lean-forward="false" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+            <state relative-caret-position="894">
+              <caret line="932" column="46" lean-forward="false" selection-start-line="932" selection-start-column="46" selection-end-line="932" selection-end-column="46" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
                 <element signature="e#219#1102#0" expanded="false" />
@@ -85,7 +102,7 @@
                 <element signature="e#24383#31685#0" expanded="false" />
                 <element signature="e#31727#32300#0" expanded="false" />
                 <element signature="e#32346#33236#0" expanded="false" />
-                <element signature="e#33290#34159#0" expanded="false" />
+                <element signature="e#34191#36344#0" expanded="false" />
                 <element signature="e#36389#38605#0" expanded="false" />
                 <element signature="e#38654#39702#0" expanded="false" />
                 <element signature="e#39764#44522#0" expanded="false" />
@@ -500,7 +517,7 @@
             <element signature="e#24383#31685#0" expanded="false" />
             <element signature="e#31727#32300#0" expanded="false" />
             <element signature="e#32346#33236#0" expanded="false" />
-            <element signature="e#33290#34159#0" expanded="false" />
+            <element signature="e#34191#36344#0" expanded="false" />
             <element signature="e#36389#38605#0" expanded="false" />
             <element signature="e#38654#39702#0" expanded="false" />
             <element signature="e#39764#44522#0" expanded="false" />
@@ -553,7 +570,7 @@
             <element signature="e#24383#31685#0" expanded="false" />
             <element signature="e#31727#32300#0" expanded="false" />
             <element signature="e#32346#33236#0" expanded="false" />
-            <element signature="e#33290#34159#0" expanded="false" />
+            <element signature="e#34191#36344#0" expanded="false" />
             <element signature="e#36389#38605#0" expanded="false" />
             <element signature="e#38654#39702#0" expanded="false" />
             <element signature="e#39764#44522#0" expanded="false" />
@@ -634,7 +651,7 @@
             <element signature="e#24383#31685#0" expanded="false" />
             <element signature="e#31727#32300#0" expanded="false" />
             <element signature="e#32346#33236#0" expanded="false" />
-            <element signature="e#33290#34159#0" expanded="false" />
+            <element signature="e#34191#36344#0" expanded="false" />
             <element signature="e#36389#38605#0" expanded="false" />
             <element signature="e#38654#39702#0" expanded="false" />
             <element signature="e#39764#44522#0" expanded="false" />
@@ -722,7 +739,7 @@
             <element signature="e#24383#31685#0" expanded="false" />
             <element signature="e#31727#32300#0" expanded="false" />
             <element signature="e#32346#33236#0" expanded="false" />
-            <element signature="e#33290#34159#0" expanded="false" />
+            <element signature="e#34191#36344#0" expanded="false" />
             <element signature="e#36389#38605#0" expanded="false" />
             <element signature="e#38654#39702#0" expanded="false" />
             <element signature="e#39764#44522#0" expanded="false" />
@@ -796,7 +813,7 @@
             <element signature="e#24383#31685#0" expanded="false" />
             <element signature="e#31727#32300#0" expanded="false" />
             <element signature="e#32346#33236#0" expanded="false" />
-            <element signature="e#33290#34159#0" expanded="false" />
+            <element signature="e#34191#36344#0" expanded="false" />
             <element signature="e#36389#38605#0" expanded="false" />
             <element signature="e#38654#39702#0" expanded="false" />
             <element signature="e#39764#44522#0" expanded="false" />
@@ -863,7 +880,7 @@
             <element signature="e#24383#31685#0" expanded="false" />
             <element signature="e#31727#32300#0" expanded="false" />
             <element signature="e#32346#33236#0" expanded="false" />
-            <element signature="e#33290#34159#0" expanded="false" />
+            <element signature="e#34191#36344#0" expanded="false" />
             <element signature="e#36389#38605#0" expanded="false" />
             <element signature="e#38654#39702#0" expanded="false" />
             <element signature="e#39764#44522#0" expanded="false" />
@@ -930,7 +947,7 @@
             <element signature="e#24383#31685#0" expanded="false" />
             <element signature="e#31727#32300#0" expanded="false" />
             <element signature="e#32346#33236#0" expanded="false" />
-            <element signature="e#33290#34159#0" expanded="false" />
+            <element signature="e#34191#36344#0" expanded="false" />
             <element signature="e#36389#38605#0" expanded="false" />
             <element signature="e#38654#39702#0" expanded="false" />
             <element signature="e#39764#44522#0" expanded="false" />
@@ -997,7 +1014,7 @@
             <element signature="e#24383#31685#0" expanded="false" />
             <element signature="e#31727#32300#0" expanded="false" />
             <element signature="e#32346#33236#0" expanded="false" />
-            <element signature="e#33290#34159#0" expanded="false" />
+            <element signature="e#34191#36344#0" expanded="false" />
             <element signature="e#36389#38605#0" expanded="false" />
             <element signature="e#38654#39702#0" expanded="false" />
             <element signature="e#39764#44522#0" expanded="false" />
@@ -1165,8 +1182,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/State.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="95" column="0" lean-forward="false" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+        <state relative-caret-position="894">
+          <caret line="932" column="46" lean-forward="false" selection-start-line="932" selection-start-column="46" selection-end-line="932" selection-end-column="46" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
             <element signature="e#219#1102#0" expanded="false" />
@@ -1206,7 +1223,7 @@
             <element signature="e#24383#31685#0" expanded="false" />
             <element signature="e#31727#32300#0" expanded="false" />
             <element signature="e#32346#33236#0" expanded="false" />
-            <element signature="e#33290#34159#0" expanded="false" />
+            <element signature="e#34191#36344#0" expanded="false" />
             <element signature="e#36389#38605#0" expanded="false" />
             <element signature="e#38654#39702#0" expanded="false" />
             <element signature="e#39764#44522#0" expanded="false" />
