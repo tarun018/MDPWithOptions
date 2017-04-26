@@ -92,4 +92,5 @@ ENV/
 ampl/
 *.dat
 *.txt
+tds
 
