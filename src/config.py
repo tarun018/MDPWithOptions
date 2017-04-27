@@ -66,7 +66,7 @@ if flag == 0:
 
     nloc = [len(lo) for lo in locs]
     for i in xrange(0, agents):
-        t = 2**random.randint(totalPow-1, totalPow)
+        t = 2**random.randint(totalPow-2, totalPow)
         collectTimes.append([t] * nloc[i])
         transitTimes.append([[t] * nloc[i]] * nloc[i])
 
