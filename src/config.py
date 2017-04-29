@@ -1,14 +1,14 @@
 import random, csv
 import pickle
 #flag=1 fileread
-solver = 'ipopt'
+solver = 'minos'
 flag = 1
 
 experiment = 1
 
-theta = 0.01
+theta = 0.4
 gamma = 0.8
-initialxval = 0.0001
+initialxval = 0.01
 alpha = 0.8
 delta = 0.000001
 print "theta: ", theta
@@ -19,9 +19,9 @@ print "delta: ", delta
 
 if flag == 0:
 
-    agents = 6
-    nPrivatePerAgent = 2
-    nShared = 2
+    agents = 2
+    nPrivatePerAgent = 1
+    nShared = 1
     nLocs = (agents*nPrivatePerAgent) + nShared
     auction = [-1]*nLocs
     locs = []

@@ -65,7 +65,8 @@ class MDP:
             self.initiateActions()
             self.initiateStates()
             self.waste()
-            self.checkTransitionProbabilitySumTo1()
+            self.reindexStates()
+            #self.checkTransitionProbabilitySumTo1()
             self.writeStatesToFile()
             self.writeActionsToFile()
             self.writeTransitionsToFile()
@@ -235,12 +236,14 @@ class MDP:
         # print len(self.states)
         # print
 
+        return len(wastestates)
+
+    def reindexStates(self):
         index = 0
         for x in self.states:
             x.index = index
             index = index + 1
 
-        return len(wastestates)
 
     def checkTransitionProbabilitySumTo1(self):
         fp = open('../Data/tds'+str(config.experiment), 'w')
@@ -407,48 +410,49 @@ class MDP:
             else:
                 self.start.append(float(0))
 
-    def generateLPAc(self, gamma):
+    def generateLPAc(self, gamma, genA=False):
         print "Generating LP for "+str(self.agent)
-        decisionvar = []
-        for x in self.states:
-            triple = []
-            for y in self.states:
-                triplet = []
-                for a in y.possibleActions:
-                    if x.index == y.index:
-                        triplet.append(float(1))
-                    else:
-                        triplet.append(float(0))
-                triple.append(triplet)
-            decisionvar.append(triple)
-
-        for x in self.states:
-            incoming = []
-            for s in self.states:
-                for t in s.transition:
-                    if t[1]==x and t[2]!=0:
-                        incoming.append((s, t[0], t[2]))
-
-            for h in incoming:
-                decisionvar[x.index][h[0].index][h[1].index] -= gamma*float(h[2])
-
-        # for x in decisionvar:
-        #     for y in x:
-        #         for z in y:
-        #             print str(z) + ",",
-        #         print "",
-        #     print
-        #
-        # print
-        # print
         A_mat = []
-        for x in decisionvar:
-            lit = []
-            for t in x:
-                lit.extend(t)
-            A_mat.append(lit)
+        if genA is True:
 
-        newA = A_mat
+            decisionvar = []
+            for x in self.states:
+                triple = []
+                for y in self.states:
+                    triplet = []
+                    for a in y.possibleActions:
+                        if x.index == y.index:
+                            triplet.append(float(1))
+                        else:
+                            triplet.append(float(0))
+                    triple.append(triplet)
+                decisionvar.append(triple)
+
+            for x in self.states:
+                incoming = []
+                for s in self.states:
+                    for t in s.transition:
+                        if t[1]==x and t[2]!=0:
+                            incoming.append((s, t[0], t[2]))
+
+                for h in incoming:
+                    decisionvar[x.index][h[0].index][h[1].index] -= gamma*float(h[2])
+
+            # for x in decisionvar:
+            #     for y in x:
+            #         for z in y:
+            #             print str(z) + ",",
+            #         print "",
+            #     print
+            #
+            # print
+            # print
+            A_mat = []
+            for x in decisionvar:
+                lit = []
+                for t in x:
+                    lit.extend(t)
+                A_mat.append(lit)
 
         # for x in A_mat:
         #     print x
@@ -473,7 +477,7 @@ class MDP:
         return A_mat, R_mat, newR
 
     def solveLP(self, gamma):
-        A, R, newR = self.generateLPAc(gamma)
+        A, R, newR = self.generateLPAc(gamma, genA=True)
         #print len(R)
         R_mat = np.array(R)[np.newaxis].T
         A_mat = np.array(A)
@@ -889,8 +893,8 @@ class EMMDP:
         runf.write("reset;\n")
         runf.write("model single.mod;\n")
         runf.write("data "+'../Data/single'+str(agent)+'_exp_'+str(config.experiment)+'.dat'+";\n")
-        runf.write("option solver 'ampl/ampl_linux-intel64/minos';\n")
-        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 scale=no Completion=full';\n")
+        runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
+        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 scale=no Completion=full';\n")
         runf.write("solve;\n")
         runf.write("display {i in S[agent], j in A[agent]} : xstar[i,j] ;\n")
         runf.close()
@@ -902,8 +906,8 @@ class EMMDP:
         runf.write("reset;\n")
         runf.write("model try.mod;\n")
         runf.write("data " + '../Data/nl2_exp_'+str(config.experiment)+'.dat' + ";\n")
-        runf.write("option solver 'ampl/ampl_linux-intel64/minos';\n")
-        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 scale=no Completion=full';\n")
+        runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
+        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 scale=no Completion=full';\n")
         runf.write("solve;\n")
         runf.close()
         print "Done"
@@ -938,7 +942,7 @@ class EMMDP:
         red = open(filename, 'r')
         for row in red:
             splitted = row.split('=')
-            if len(splitted)==2 and splitted[0].count('x') > 0:
+            if len(splitted)==2 and splitted[0].find('xstar') != -1:
                 try:
                     value = float(splitted[1])
                 except(ValueError):
@@ -978,13 +982,16 @@ class EMMDP:
         print "NonLinear:"
         self.genAMPL()
         self.runConfigNonLinear()
-        os.system('../ampl/ampl_linux-intel64/ampl try_exp_'+str(config.experiment)+'.run > ../Data/NonLinearOut'+str(config.experiment)+'.txt')
+        os.system('../ampl/ampl try_exp_'+str(config.experiment)+'.run > ../Data/NonLinearOut'+str(config.experiment)+'.txt')
 
         nonred = open('../Data/NonLinearOut'+str(config.experiment)+'.txt', 'r')
         for row in nonred:
             if row.find('objective') != -1:
                 spli = row.split(' ')
-                nonlinearobj = float(spli[-1])
+                try:
+                    nonlinearobj = float(spli[-1])
+                except(ValueError):
+                    print "Not able to parse.", spli[-1]
             print row,
         nonred.close()
 
@@ -992,7 +999,7 @@ class EMMDP:
         print "EM-AMPL: "
         initial_x = []
         for i in xrange(0, self.num_agents):
-            A, R, newR = self.mdps[i].generateLPAc(config.gamma)
+            A, R, newR = self.mdps[i].generateLPAc(config.gamma, genA=False)
             Rs.append(R)
             numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
             lst = [config.initialxval]*numvar
@@ -1006,7 +1013,7 @@ class EMMDP:
         print "Iteration: "+str(iter)
         xvals = []
         for i in xrange(0, self.num_agents):
-            os.system('ampl/ampl_linux-intel64/ampl single'+str(i)+'_exp_'+str(config.experiment)+'.run > ../Data/EMOut' + str(i) +'_exp_'+str(config.experiment)+'.txt')
+            os.system('ampl/ampl single'+str(i)+'_exp_'+str(config.experiment)+'.run > ../Data/EMOut' + str(i) +'_exp_'+str(config.experiment)+'.txt')
             x,status = self.processFile(filename='../Data/EMOut'+str(i)+'_exp_'+str(config.experiment)+'.txt', agent=i)
             assert (sum(x) - float(1) / float(1 - config.gamma)) < 0.01
             xvals.append(x)
@@ -1022,7 +1029,8 @@ class EMMDP:
             xvalues = []
             for i in xrange(0, self.num_agents):
                 self.genAMPLSingle(i, xvals)
-                os.system('ampl/ampl_linux-intel64/ampl single' + str(i) + '_exp_' + str(config.experiment) + '.run > ../Data/EMOut' + str(i) + '_exp_' + str(config.experiment) + '.txt')
+            for i in xrange(0, self.num_agents):
+                os.system('ampl/ampl single' + str(i) + '_exp_' + str(config.experiment) + '.run > ../Data/EMOut' + str(i) + '_exp_' + str(config.experiment) + '.txt')
                 x, status = self.processFile(filename='../Data/EMOut' + str(i) + '_exp_' + str(config.experiment) + '.txt', agent=i)
                 assert (sum(x) - float(1) / float(1 - config.gamma)) < 0.01
                 xvalues.append(x)
@@ -1055,7 +1063,7 @@ class EMMDP:
 
         print "Iteration: " + str(num_iter)
         for i in xrange(0, self.num_agents):
-            A, R, newR = self.mdps[i].generateLPAc(config.gamma)
+            A, R, newR = self.mdps[i].generateLPAc(config.gamma, genA=True)
             self.As.append(A)
             self.Rs.append(R)
             self.newRs.append(newR)

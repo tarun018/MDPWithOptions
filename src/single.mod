@@ -35,10 +35,8 @@ param crewardcap{i in agent_numcons} = agent_creward[i] / (Rmax - Rmin);
 
 param x{i in 1..n, j in S[i], k in A[i]};
 var xstar{i in S[agent], j in A[agent]};
-param z{i in all_numcons, j in all_cons[i]} = sum{k in all_events[j]} x[all_primitives[k,1], all_primitives[k,2], all_primitives[k,3]] * (1-gamma) * 
-P[all_primitives[k,1], all_primitives[k,3], all_primitives[k,2], all_primitives[k,4]];
+param z{i in all_numcons, j in all_cons[i]} = sum{k in all_events[j]} x[all_primitives[k,1], all_primitives[k,2], all_primitives[k,3]] *  P[all_primitives[k,1], all_primitives[k,3], all_primitives[k,2], all_primitives[k,4]];
 var zstar{i in agent_numcons, j in agent_cons[i]};
-
 
 maximize ER: 
 ( sum{i in S[agent], j in A[agent]} x[agent,i,j] * Rcap[i,j] * (1-gamma) * log(xstar[i,j])) +
@@ -48,11 +46,9 @@ maximize ER:
 
 subject to Flow {i in S[agent]}:
 sum{j in A[agent]} xstar[i,j] - 
-gamma * sum{l in S[agent], m in A[agent]} xstar[l,m]*P[agent,m,l,i] = alpha[agent,i];
+gamma * sum{l in S[agent], m in A[agent]} xstar[l,m]*P[agent,m,l,i] == alpha[agent,i];
 
 subject to Positive {i in S[agent], j in A[agent]}: xstar[i,j] >= 0.00000001;
 
 subject to defineZStar{i in agent_numcons, j in agent_cons[i]}:
-zstar[i,j] = sum{k in agent_events[j]} xstar[agent_primitives[k,2],agent_primitives[k,3]] * (1-gamma) *
-P[agent, agent_primitives[k,3], agent_primitives[k,2], agent_primitives[k,4]];
-
+zstar[i,j] == sum{k in agent_events[j]} xstar[agent_primitives[k,2],agent_primitives[k,3]] * P[agent, agent_primitives[k,3], agent_primitives[k,2], agent_primitives[k,4]];
