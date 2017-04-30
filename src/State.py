@@ -5,10 +5,13 @@ import config
 import itertools
 import copy_reg
 import types
+from copy import deepcopy
 import pyipopt
 import algopy
 import os
 import matplotlib.pyplot as plt
+from jnius import autoclass
+import time
 from pathos.multiprocessing import ProcessingPool as Pool
 
 class State:
@@ -887,7 +890,7 @@ class EMMDP:
         ampl.close()
         print "Done"
 
-    def runConfig(self, agent):
+    def runConfigEMAMPL(self, agent):
         print  "    Writting Running Config for Agent " + str(agent) + ": ",
         runf = open('single'+str(agent)+'_exp_'+str(config.experiment)+'.run', 'w')
         runf.write("reset;\n")
@@ -897,6 +900,14 @@ class EMMDP:
         runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 scale=no Completion=full';\n")
         runf.write("solve;\n")
         runf.write("display {i in S[agent], j in A[agent]} : xstar[i,j] ;\n")
+        runf.close()
+        print "Done"
+
+    def runConfig(self, agent):
+        print  "    Writting Running Config for Agent " + str(agent) + ": ",
+        runf = open('single'+str(agent)+'_exp_'+str(config.experiment)+'.run', 'w')
+        runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
+        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 scale=no Completion=full';\n")
         runf.close()
         print "Done"
 
@@ -975,6 +986,117 @@ class EMMDP:
 
         plt.savefig('../Results/Graph'+str(config.experiment)+'.png')
 
+    def EMJavaAMPL(self):
+        AMPL = autoclass('com.ampl.AMPL')
+        DataFrame = autoclass('com.ampl.DataFrame')
+        Objective = autoclass('com.ampl.Objective')
+        Parameter = autoclass('com.ampl.Parameter')
+        Variable = autoclass('com.ampl.Variable')
+        Tuple = autoclass('com.ampl.Tuple')
+        VarInstance = autoclass('com.ampl.VariableInstance')
+        Double = autoclass('java.lang.Double')
+        ampl = AMPL()
+        ampl.reset()
+
+        results = []
+        iter = 1
+        print "NonLinear:"
+        self.genAMPL()
+
+        dataDirectory = "../Data/"
+
+        start_time_non = time.time()
+
+        ampl.read("try.mod")
+        ampl.readData(dataDirectory + "nl2_exp_"+str(config.experiment)+".dat")
+        ampl.solve()
+
+        end_time_non = time.time()
+
+        obj = ampl.getObjective("ER")
+        nonlinearobj = obj.value()
+        print nonlinearobj
+        print "Non Linear Time:  %s seconds \n\n\n\n\n\n" %(end_time_non - start_time_non)
+
+        ampl.reset()
+        Rs = []
+        print "EM-AMPL: "
+        initial_x = []
+        for i in xrange(0, self.num_agents):
+            A, R, newR = self.mdps[i].generateLPAc(config.gamma, genA=False)
+            Rs.append(R)
+            numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
+            lst = [config.initialxval]*numvar
+            initial_x.append(lst)
+        Rs = np.array(Rs)
+
+        for i in xrange(0, self.num_agents):
+            self.genAMPLSingle(i, initial_x)
+            self.runConfig(i)
+
+        overallEMStartTime = time.time()
+        iterStartTime = time.time()
+
+        xvals = []
+        print "Iteration: " + str(iter)
+        for i in xrange(0, self.num_agents):
+            ampl.reset()
+            ampl.read("single.mod")
+            ampl.readData(dataDirectory + 'single'+str(i)+'_exp_'+str(config.experiment)+'.dat')
+            ampl.read('single'+str(i)+'_exp_'+str(config.experiment)+'.run')
+            ampl.solve()
+
+            var = ampl.getVariable("xstar")
+            var_vals = var.getValues()
+            xstar_val = var_vals.getColumn('val')
+            xvals.append(np.array(xstar_val))
+
+        iterEndTime = time.time()
+
+        initialobj = self.objective(xvals, Rs)
+        print "\nObjective: ", initialobj
+        print "Iteration %s time: %s\n\n" %(str(iter), str(iterEndTime-iterStartTime))
+        results.append(initialobj)
+        while(True):
+            iter += 1
+            print "Iteration: " + str(iter)
+            iterStartTime = time.time()
+            xvalues = []
+            xvalsAsParam = np.concatenate(xvals)
+            xvalsParamFinal = [Double(k) for k in xvalsAsParam]
+            for i in xrange(0, self.num_agents):
+                ampl.reset()
+                ampl.read("single.mod")
+                ampl.readData(dataDirectory + 'single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
+                ampl.read('single' + str(i) + '_exp_' + str(config.experiment) + '.run')
+                paramx = ampl.getParameter("x")
+                paramx_val = paramx.getValues()
+                paramx_val.setColumn('val', xvalsParamFinal)
+                xvalsParamFinal = [Double(k) for k in xvalsAsParam]
+                paramx.setValues(paramx_val)
+
+                ampl.solve()
+                var = ampl.getVariable("xstar")
+                var_vals = var.getValues()
+                xstar_val = var_vals.getColumn('val')
+                xvalues.append(np.array(xstar_val))
+
+            iterEndTime = time.time()
+            oldobj = self.objective(xvals, Rs)
+            print "\n\nOld Objective: ",oldobj
+            xvals = xvalues
+            newobj = self.objective(xvals, Rs)
+            results.append(newobj)
+            print "New Objective: ", newobj;
+            print "Iteration %s time: %s\n\n" % (str(iter), str(iterEndTime - iterStartTime))
+            print "\n"
+            if abs(newobj - oldobj) < config.delta:
+                print "Overall EM Time: %s"%(time.time() - overallEMStartTime)
+                break
+
+
+        self.genGraphAndSave(iter, results, nonlinearobj)
+
     def EMAMPL(self):
         results = []
         iter = 1
@@ -1008,7 +1130,7 @@ class EMMDP:
 
         for i in xrange(0, self.num_agents):
             self.genAMPLSingle(i, initial_x)
-            self.runConfig(i)
+            self.runConfigEMAMPL(i)
 
         print "Iteration: "+str(iter)
         xvals = []
@@ -1440,5 +1562,7 @@ class Driver:
     # for i in xrange(0, a.num_agents):
     #     sum += a.mdps[i].solveLP(config.gamma)
     # print sum
-    a.EMAMPL()
+    #a.EMAMPL()
+    a.EMJavaAMPL()
+    #a.EMAMPL()
     #a.EM(NonLinear=False)
