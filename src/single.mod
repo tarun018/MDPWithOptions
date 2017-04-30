@@ -48,7 +48,7 @@ subject to Flow {i in S[agent]}:
 sum{j in A[agent]} xstar[i,j] - 
 gamma * sum{l in S[agent], m in A[agent]} xstar[l,m]*P[agent,m,l,i] == alpha[agent,i];
 
-subject to Positive {i in S[agent], j in A[agent]}: xstar[i,j] >= 0.00000001;
+subject to Positive {i in S[agent], j in A[agent]}: xstar[i,j] >= 0.000001;
 
 subject to defineZStar{i in agent_numcons, j in agent_cons[i]}:
 zstar[i,j] == sum{k in agent_events[j]} xstar[agent_primitives[k,2],agent_primitives[k,3]] * P[agent, agent_primitives[k,3], agent_primitives[k,2], agent_primitives[k,4]];

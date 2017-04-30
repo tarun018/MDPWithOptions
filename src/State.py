@@ -219,14 +219,20 @@ class MDP:
         return 1
 
     def waste(self):
-        removed = self.removeWasteStates()
+        iter = 1
+        removed = self.removeWasteStates(iter)
         while removed != 0:
-            removed = self.removeWasteStates()
+            iter += 1
+            removed = self.removeWasteStates(iter)
 
-    def removeWasteStates(self):
+    def removeWasteStates(self, iter):
         wastestates = []
+        sum = 0
+        tots = len(self.states)
         for i in self.states:
-
+            sum += 1
+            if sum%50 == 0:
+                print "["+str(iter)+"] Done. "+str(sum)+" Out of: "+str(tots)
             if i == self.terminal:
                 continue
 
@@ -935,7 +941,7 @@ class EMMDP:
         runf.write("model single.mod;\n")
         runf.write("data "+'../Data/single'+str(agent)+'_exp_'+str(config.experiment)+'.dat'+";\n")
         runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
-        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 scale=no Completion=full';\n")
+        #runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 scale=no Completion=full';\n")
         runf.write("solve;\n")
         runf.write("display {i in S[agent], j in A[agent]} : xstar[i,j] ;\n")
         runf.close()
@@ -945,7 +951,7 @@ class EMMDP:
         print  "    Writting Running Config for Agent " + str(agent) + ": ",
         runf = open('single'+str(agent)+'_exp_'+str(config.experiment)+'.run', 'w')
         runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
-        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 scale=no Hessian_dimension=100 Completion=full';\n")
+        #runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 scale=no Hessian_dimension=100 Completion=full';\n")
         runf.close()
         print "Done"
 

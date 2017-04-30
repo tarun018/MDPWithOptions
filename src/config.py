@@ -4,11 +4,11 @@ import pickle
 solver = 'minos'
 flag = 1
 
-experiment = 1
+experiment = 3
 
-theta = 0.4
+theta = 0.001
 gamma = 0.8
-initialxval = 0.01
+initialxval = 0.0001
 alpha = 0.8
 delta = 0.000001
 print "theta: ", theta
@@ -19,9 +19,9 @@ print "delta: ", delta
 
 if flag == 0:
 
-    agents = 3
-    nPrivatePerAgent = 2
-    nShared = 2
+    agents = 6
+    nPrivatePerAgent = 3
+    nShared = 3
     nLocs = (agents*nPrivatePerAgent) + nShared
     auction = [-1]*nLocs
     locs = []
