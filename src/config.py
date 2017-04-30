@@ -21,7 +21,7 @@ if flag == 0:
 
     agents = 2
     nPrivatePerAgent = 1
-    nShared = 1
+    nShared = 2
     nLocs = (agents*nPrivatePerAgent) + nShared
     auction = [-1]*nLocs
     locs = []

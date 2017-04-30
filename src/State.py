@@ -9,9 +9,12 @@ from copy import deepcopy
 import pyipopt
 import algopy
 import os
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from jnius import autoclass
 import time
+import multiprocessing
 from pathos.multiprocessing import ProcessingPool as Pool
 
 class State:
@@ -26,6 +29,12 @@ class State:
         self.possibleActions = actions
         self.transition = []
         self.reward = []
+
+    def setTransition(self, tran):
+        self.transition = tran
+
+    def setReward(self, rew):
+        self.reward = rew
 
     def __repr__(self):
         return "Index: " + str(self.index) + " Location: " + str(self.location) + " Actual: " + str(self.actualLocation) + " Time: " + str(self.time) + " Dvals " + str(self.dvals) + " Dold: " + str(self.dold)
@@ -51,12 +60,13 @@ class Action:
 
 class MDP:
     def __init__(self, T, locs, agent, collecTimes, transitTimes, alpha, flag):
+        self.manager = multiprocessing.Manager()
         self.T = T
         self.locs = locs
         self.nlocs = len(locs)
         self.agent = agent
         self.lst = list(itertools.product([0, 1], repeat=self.nlocs))
-        self.states = []
+        self.states = self.manager.list()
         self.actions = []
         self.collectTimes = collecTimes
         self.transitTimes = transitTimes
@@ -67,13 +77,6 @@ class MDP:
             self.states.append(self.terminal)
             self.initiateActions()
             self.initiateStates()
-            self.waste()
-            self.reindexStates()
-            #self.checkTransitionProbabilitySumTo1()
-            self.writeStatesToFile()
-            self.writeActionsToFile()
-            self.writeTransitionsToFile()
-            self.writeRewardsToFile()
         else:
             self.readActions("../Data/DomainActionData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
             self.readStates("../Data/DomainStateData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
@@ -81,6 +84,17 @@ class MDP:
             self.readTransition("../Data/DomainTransitionData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
             #self.checkTransitionProbabilitySumTo1File()
             self.readRewards("../Data/DomainRewardData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
+
+    def wasteRemovalParallel(self):
+        self.waste()
+
+    def AfterWasteRemoval(self):
+        self.reindexStates()
+        # self.checkTransitionProbabilitySumTo1()
+        self.writeStatesToFile()
+        self.writeActionsToFile()
+        self.writeTransitionsToFile()
+        self.writeRewardsToFile()
         self.defineStart()
         self.numberStates = len(self.states)
         self.numerActions = len(self.actions)
@@ -243,10 +257,14 @@ class MDP:
 
     def reindexStates(self):
         index = 0
+        lst = []
         for x in self.states:
-            x.index = index
+            a = State(index, x.location, x.actualLocation, x.time, x.dvals, x.dold, self.actions)
+            a.setReward(x.reward)
+            a.setTransition(x.transition)
+            lst.append(a)
             index = index + 1
-
+        self.states = lst
 
     def checkTransitionProbabilitySumTo1(self):
         fp = open('../Data/tds'+str(config.experiment), 'w')
@@ -463,6 +481,7 @@ class MDP:
         R_mat = []
         for x in self.states:
             for y in x.possibleActions:
+                assert len(x.reward) != 0
                 for r in x.reward:
                     if r[0]==y:
                         R_mat.append(r[1])
@@ -473,6 +492,7 @@ class MDP:
         R_max = config.R_max
         for x in self.states:
             for y in x.possibleActions:
+                assert len(x.reward) != 0
                 for r in x.reward:
                     if r[0]==y:
                         newR.append(float(r[1])/float(R_max-R_min))
@@ -561,10 +581,18 @@ class EMMDP:
         self.genConstraints()
 
     def generateMDPs(self):
+        prs = []
         for i in xrange(0, self.num_agents):
             print "Generating MDP for Agent"+str(i)
             a = MDP(config.T[i], config.locs[i], i, config.collectTimes[i], config.transitTimes[i], config.alpha, config.flag)
+            prs.append(multiprocessing.Process(target=a.wasteRemovalParallel))
             self.mdps.append(a)
+        for pros in prs:
+            pros.start()
+        for pros in prs:
+            pros.join()
+        for i in xrange(0, self.num_agents):
+           self.mdps[i].AfterWasteRemoval()
 
     def genPrimitiveEvents(self):
         print "Generating Primitive Events"
