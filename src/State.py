@@ -66,13 +66,14 @@ class MDP:
         self.nlocs = len(locs)
         self.agent = agent
         self.lst = list(itertools.product([0, 1], repeat=self.nlocs))
-        self.states = self.manager.list()
+        self.states = []
         self.actions = []
         self.collectTimes = collecTimes
         self.transitTimes = transitTimes
         self.alpha = alpha
         self.start = []
         if(flag==0):
+            self.states = self.manager.list()
             self.terminal = State(0, -1, -1, -1, [-1] * self.nlocs, -1, self.actions)
             self.states.append(self.terminal)
             self.initiateActions()
@@ -84,6 +85,9 @@ class MDP:
             self.readTransition("../Data/DomainTransitionData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
             #self.checkTransitionProbabilitySumTo1File()
             self.readRewards("../Data/DomainRewardData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
+            self.defineStart()
+            self.numberStates = len(self.states)
+            self.numerActions = len(self.actions)
 
     def wasteRemovalParallel(self):
         self.waste()
@@ -581,18 +585,24 @@ class EMMDP:
         self.genConstraints()
 
     def generateMDPs(self):
-        prs = []
-        for i in xrange(0, self.num_agents):
-            print "Generating MDP for Agent"+str(i)
-            a = MDP(config.T[i], config.locs[i], i, config.collectTimes[i], config.transitTimes[i], config.alpha, config.flag)
-            prs.append(multiprocessing.Process(target=a.wasteRemovalParallel))
-            self.mdps.append(a)
-        for pros in prs:
-            pros.start()
-        for pros in prs:
-            pros.join()
-        for i in xrange(0, self.num_agents):
-           self.mdps[i].AfterWasteRemoval()
+        if config.flag == 0:
+            prs = []
+            for i in xrange(0, self.num_agents):
+                print "Generating MDP for Agent"+str(i)
+                a = MDP(config.T[i], config.locs[i], i, config.collectTimes[i], config.transitTimes[i], config.alpha, config.flag)
+                prs.append(multiprocessing.Process(target=a.wasteRemovalParallel))
+                self.mdps.append(a)
+            for pros in prs:
+                pros.start()
+            for pros in prs:
+                pros.join()
+            for i in xrange(0, self.num_agents):
+               self.mdps[i].AfterWasteRemoval()
+        else:
+            for i in xrange(0, self.num_agents):
+                print "Generating MDP for Agent"+str(i)
+                a = MDP(config.T[i], config.locs[i], i, config.collectTimes[i], config.transitTimes[i], config.alpha, config.flag)
+                self.mdps.append(a)
 
     def genPrimitiveEvents(self):
         print "Generating Primitive Events"
@@ -935,7 +945,7 @@ class EMMDP:
         print  "    Writting Running Config for Agent " + str(agent) + ": ",
         runf = open('single'+str(agent)+'_exp_'+str(config.experiment)+'.run', 'w')
         runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
-        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 scale=no Completion=full';\n")
+        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 scale=no Hessian_dimension=100 Completion=full';\n")
         runf.close()
         print "Done"
 

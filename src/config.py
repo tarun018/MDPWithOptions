@@ -2,7 +2,7 @@ import random, csv
 import pickle
 #flag=1 fileread
 solver = 'minos'
-flag = 0
+flag = 1
 
 experiment = 1
 
@@ -19,8 +19,8 @@ print "delta: ", delta
 
 if flag == 0:
 
-    agents = 2
-    nPrivatePerAgent = 1
+    agents = 3
+    nPrivatePerAgent = 2
     nShared = 2
     nLocs = (agents*nPrivatePerAgent) + nShared
     auction = [-1]*nLocs
