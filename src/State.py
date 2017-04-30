@@ -1036,6 +1036,7 @@ class EMMDP:
 
         overallEMStartTime = time.time()
         iterStartTime = time.time()
+        sumIterTime = 0
 
         xvals = []
         print "Iteration: " + str(iter)
@@ -1056,6 +1057,8 @@ class EMMDP:
         initialobj = self.objective(xvals, Rs)
         print "\nObjective: ", initialobj
         print "Iteration %s time: %s\n\n" %(str(iter), str(iterEndTime-iterStartTime))
+        sumIterTime += iterEndTime - iterStartTime
+
         results.append(initialobj)
         while(True):
             iter += 1
@@ -1089,9 +1092,16 @@ class EMMDP:
             results.append(newobj)
             print "New Objective: ", newobj;
             print "Iteration %s time: %s\n\n" % (str(iter), str(iterEndTime - iterStartTime))
+            sumIterTime += iterEndTime - iterStartTime
+
             print "\n"
             if abs(newobj - oldobj) < config.delta:
+                print "NonLinear Obj: ", nonlinearobj
+                print "EM Obj: ", newobj
+                print "AvgIterTime: ", sumIterTime/iter
+                print "NonLinearTime: ", end_time_non - start_time_non
                 print "Overall EM Time: %s"%(time.time() - overallEMStartTime)
+                print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(nonlinearobj)) * 100) + "%"
                 break
 
 

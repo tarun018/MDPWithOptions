@@ -2,7 +2,7 @@ import random, csv
 import pickle
 #flag=1 fileread
 solver = 'minos'
-flag = 1
+flag = 0
 
 experiment = 1
 
