@@ -4,7 +4,7 @@ import pickle
 solver = 'minos'
 flag = 1
 
-experiment = 3
+experiment = 1
 
 theta = 0.001
 gamma = 0.8

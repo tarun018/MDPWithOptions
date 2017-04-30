@@ -986,7 +986,7 @@ class EMMDP:
                     sd = peves.statedash
                     pesum += self.mdps[agent].transition(s,a,sd)*xvals[agent][(s.index*self.mdps[agent].numerActions)+a.index]
                 prod *= pesum
-            sum += np.asscalar(prod)
+            sum += prod
         #sum += config.theta * len(self.constraints)
         return sum
 
@@ -1030,6 +1030,36 @@ class EMMDP:
 
         plt.savefig('../Results/Graph'+str(config.experiment)+'.png')
 
+    def doIter(self, queue, i, ampl):
+        ampl.reset()
+        ampl.read("single.mod")
+        dataDirectory = "../Data/"
+        ampl.readData(dataDirectory + 'single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
+        ampl.read('single' + str(i) + '_exp_' + str(config.experiment) + '.run')
+        ampl.solve()
+        var = ampl.getVariable("xstar")
+        var_vals = var.getValues()
+        xstar_val = var_vals.getColumn('val')
+        queue.put(xstar_val)
+
+    def doSuccIter(self, queue, i, ampl):
+        ampl.reset()
+        ampl.read("single.mod")
+        dataDirectory = "../Data/"
+        ampl.readData(dataDirectory + 'single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
+        ampl.read('single' + str(i) + '_exp_' + str(config.experiment) + '.run')
+        paramx = ampl.getParameter("x")
+        paramx_val = paramx.getValues()
+        global xvalsParamFinal
+        paramx_val.setColumn('val', xvalsParamFinal)
+        paramx.setValues(paramx_val)
+
+        ampl.solve()
+        var = ampl.getVariable("xstar")
+        var_vals = var.getValues()
+        xstar_val = var_vals.getColumn('val')
+        queue.put(xstar_val)
+
     def EMJavaAMPL(self):
         AMPL = autoclass('com.ampl.AMPL')
         DataFrame = autoclass('com.ampl.DataFrame')
@@ -1045,7 +1075,9 @@ class EMMDP:
         results = []
         iter = 1
         print "NonLinear:"
-        self.genAMPL()
+
+        if config.flag == 0:
+            self.genAMPL()
 
         dataDirectory = "../Data/"
 
@@ -1063,10 +1095,12 @@ class EMMDP:
         print "Non Linear Time:  %s seconds \n\n\n\n\n\n" %(end_time_non - start_time_non)
 
         ampl.reset()
+        ampl = []
         Rs = []
         print "EM-AMPL: "
         initial_x = []
         for i in xrange(0, self.num_agents):
+            ampl.append(AMPL())
             A, R, newR = self.mdps[i].generateLPAc(config.gamma, genA=False)
             Rs.append(R)
             numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
@@ -1074,28 +1108,41 @@ class EMMDP:
             initial_x.append(lst)
         Rs = np.array(Rs)
 
-        for i in xrange(0, self.num_agents):
-            self.genAMPLSingle(i, initial_x)
-            self.runConfig(i)
+        if config.flag == 0:
+            for i in xrange(0, self.num_agents):
+                self.genAMPLSingle(i, initial_x)
+                self.runConfig(i)
 
         overallEMStartTime = time.time()
         iterStartTime = time.time()
         sumIterTime = 0
 
         xvals = []
+        pros = []
+        ququs = []
         print "Iteration: " + str(iter)
         for i in xrange(0, self.num_agents):
-            ampl.reset()
-            ampl.read("single.mod")
-            ampl.readData(dataDirectory + 'single'+str(i)+'_exp_'+str(config.experiment)+'.dat')
-            ampl.read('single'+str(i)+'_exp_'+str(config.experiment)+'.run')
-            ampl.solve()
+            q1 = multiprocessing.Queue()
+            ququs.append(q1)
+            pr = multiprocessing.Process(target=self.doIter, args=(q1, i, ampl[i]))
+            pros.append(pr)
+            #ampl.solve()
 
-            var = ampl.getVariable("xstar")
-            var_vals = var.getValues()
-            xstar_val = var_vals.getColumn('val')
-            xvals.append(np.array(xstar_val))
+        for x in pros:
+            x.start()
+        for x in pros:
+            x.join()
 
+        for i in xrange(0, self.num_agents):
+            dd = ququs[i].get()
+            xvals.append(dd)
+
+        for x in pros:
+            x.terminate()
+        for x in ququs:
+            x.close()
+
+        xvals = np.array(xvals)
         iterEndTime = time.time()
 
         initialobj = self.objective(xvals, Rs)
@@ -1109,24 +1156,33 @@ class EMMDP:
             print "Iteration: " + str(iter)
             iterStartTime = time.time()
             xvalues = []
+            global xvalsAsParam
             xvalsAsParam = np.concatenate(xvals)
+            global xvalsParamFinal
             xvalsParamFinal = [Double(k) for k in xvalsAsParam]
+            ququs = []
+            pros = []
             for i in xrange(0, self.num_agents):
-                ampl.reset()
-                ampl.read("single.mod")
-                ampl.readData(dataDirectory + 'single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
-                ampl.read('single' + str(i) + '_exp_' + str(config.experiment) + '.run')
-                paramx = ampl.getParameter("x")
-                paramx_val = paramx.getValues()
-                paramx_val.setColumn('val', xvalsParamFinal)
+                q1 = multiprocessing.Queue()
+                ququs.append(q1)
+                pr = multiprocessing.Process(target=self.doSuccIter, args=(q1, i, ampl[i]))
+                pros.append(pr)
+                global xvalsParamFinal
                 xvalsParamFinal = [Double(k) for k in xvalsAsParam]
-                paramx.setValues(paramx_val)
 
-                ampl.solve()
-                var = ampl.getVariable("xstar")
-                var_vals = var.getValues()
-                xstar_val = var_vals.getColumn('val')
-                xvalues.append(np.array(xstar_val))
+            for x in pros:
+                x.start()
+            for x in pros:
+                x.join()
+
+            for i in xrange(0, self.num_agents):
+                dd = ququs[i].get()
+                xvalues.append(dd)
+
+            for x in pros:
+                x.terminate()
+            for x in ququs:
+                x.close()
 
             iterEndTime = time.time()
             oldobj = self.objective(xvals, Rs)
