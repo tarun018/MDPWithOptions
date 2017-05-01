@@ -3,7 +3,11 @@ param agent;
 param gamma;
 set S{1..n} ordered;
 set A{1..n} ordered;
-param P{i in 1..n, j in A[i], k in S[i], l in S[i]};
+
+set sparseP within {i in 1..n,A[i],S[i],S[i]};
+param sparsePVal{sparseP};
+
+param P{i in 1..n, j in A[i], k in S[i], l in S[i]} default 0;
 param R{i in 1..n, j in S[i], k in A[i]};
 param alpha{i in 1..n, j in S[i]};
 

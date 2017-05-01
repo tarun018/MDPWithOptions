@@ -673,20 +673,14 @@ class EMMDP:
         ampl.write("param gamma := " + str(config.gamma) + ";\n")
         ampl.write("\n")
 
-        ampl.write("param P := \n")
+        ampl.write("param: sparseP: sparsePVal:= \n")
         for i in xrange(0, self.num_agents):
             for j in xrange(0, len(self.mdps[i].actions)):
-                ampl.write("[" + str(i + 1) + "," + str(j + 1) + ",*,*] : ")
                 for k in xrange(0, len(self.mdps[i].states)):
-                    ampl.write(str(k + 1) + " ")
-                ampl.write(":= \n")
-                for k in xrange(0, len(self.mdps[i].states)):
-                    ampl.write(str(k + 1) + " ")
                     h = self.mdps[i].states[k].transition
-                    hh = [x[2] for x in h if x[0] == self.mdps[i].actions[j]]
-                    for g in hh:
-                        ampl.write(str(g) + " ")
-                    ampl.write("\n")
+                    hh = [(x[1],x[2]) for x in h if x[0] == self.mdps[i].actions[j] and x[2] != 0 ]
+                    for valsac in hh:
+                        ampl.write(str(i+1) + " " + str(self.mdps[i].actions[j].index+1) + " " + str(self.mdps[i].states[k].index+1) + " " +str(valsac[0].index+1) + " " + str(valsac[1]) + "\n")
             if i == self.num_agents - 1:
                 ampl.write(";")
         ampl.write("\n")
@@ -743,6 +737,8 @@ class EMMDP:
                 ampl.write(str(x.index+1)+" ")
             ampl.write(";\n")
         ampl.write("\n")
+
+        ampl.write("for {(i,j,k,l) in sparseP} {	let P[i,j,k,l] := sparsePVal[i,j,k,l]; }")
         ampl.close()
         print "Done"
 
@@ -764,20 +760,14 @@ class EMMDP:
             ampl.write(";\n")
         ampl.write("\n")
 
-        ampl.write("param P := \n")
+        ampl.write("param: sparseP: sparsePVal:= \n")
         for i in xrange(0, self.num_agents):
             for j in xrange(0, len(self.mdps[i].actions)):
-                ampl.write("[" + str(i + 1) + "," + str(j + 1) + ",*,*] : ")
                 for k in xrange(0, len(self.mdps[i].states)):
-                    ampl.write(str(k + 1) + " ")
-                ampl.write(":= \n")
-                for k in xrange(0, len(self.mdps[i].states)):
-                    ampl.write(str(k + 1) + " ")
                     h = self.mdps[i].states[k].transition
-                    hh = [x[2] for x in h if x[0] == self.mdps[i].actions[j]]
-                    for g in hh:
-                        ampl.write(str(g) + " ")
-                    ampl.write("\n")
+                    hh = [(x[1],x[2]) for x in h if x[0] == self.mdps[i].actions[j] and x[2] != 0 ]
+                    for valsac in hh:
+                        ampl.write(str(i+1) + " " + str(self.mdps[i].actions[j].index+1) + " " + str(self.mdps[i].states[k].index+1) + " " +str(valsac[0].index+1) + " " + str(valsac[1]) + "\n")
             if i == self.num_agents - 1:
                 ampl.write(";")
         ampl.write("\n")
@@ -931,6 +921,8 @@ class EMMDP:
                         ampl.write(str(val)+" ")
                     ampl.write("\n")
         ampl.write(";\n")
+
+        ampl.write("for {(i,j,k,l) in sparseP} {	let P[i,j,k,l] := sparsePVal[i,j,k,l]; }")
 
         ampl.close()
         print "Done"
@@ -1097,7 +1089,7 @@ class EMMDP:
         overallEMStartTime = time.time()
         iterStartTime = time.time()
         sumIterTime = 0
-
+        newobj = 0
         signal.alarm(config.timetorunsec)
         try:
             xvals = []
@@ -1166,6 +1158,13 @@ class EMMDP:
                     print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
                     break
         except TimeoutException:
+            print "EM Time's Up: "
+            print "NonLinear Obj: ", nonlinearobj
+            print "EM Obj: ", newobj
+            print "AvgIterTime: ", sumIterTime / iter
+            print "NonLinearTime: ", end_time_non - start_time_non
+            print "Overall EM Time: %s" % (time.time() - overallEMStartTime)
+            print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
             pass
         else:
             signal.alarm(0)
