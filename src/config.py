@@ -4,6 +4,8 @@ import pickle
 solver = 'minos'
 flag = 1
 
+timetorunsec = 1800
+
 experiment = 3
 
 theta = 0.001

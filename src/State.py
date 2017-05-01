@@ -1,4 +1,5 @@
 import csv
+import signal
 import numpy as np
 import cvxpy
 import config
@@ -1045,15 +1046,29 @@ class EMMDP:
         results = []
         iter = 1
         print "NonLinear:"
-        self.genAMPL()
+        if config.flag == 0:
+            self.genAMPL()
 
         dataDirectory = "../Data/"
 
         start_time_non = time.time()
 
-        ampl.read("try.mod")
-        ampl.readData(dataDirectory + "nl2_exp_"+str(config.experiment)+".dat")
-        ampl.solve()
+        def timeout_handler(signum, frame):  # Custom signal handler
+            raise TimeoutException
+
+        # Change the behavior of SIGALRM
+        signal.signal(signal.SIGALRM, timeout_handler)
+
+        signal.alarm(config.timetorunsec)
+
+        try:
+            ampl.read("try.mod")
+            ampl.readData(dataDirectory + "nl2_exp_"+str(config.experiment)+".dat")
+            ampl.solve()
+        except TimeoutException:
+            print "Non Linear Unable to Solve."
+        else:
+            signal.alarm(0)
 
         end_time_non = time.time()
 
@@ -1074,82 +1089,86 @@ class EMMDP:
             initial_x.append(lst)
         Rs = np.array(Rs)
 
-        for i in xrange(0, self.num_agents):
-            self.genAMPLSingle(i, initial_x)
-            self.runConfig(i)
+        if config.flag == 0:
+            for i in xrange(0, self.num_agents):
+                self.genAMPLSingle(i, initial_x)
+                self.runConfig(i)
 
         overallEMStartTime = time.time()
         iterStartTime = time.time()
         sumIterTime = 0
 
-        xvals = []
-        print "Iteration: " + str(iter)
-        for i in xrange(0, self.num_agents):
-            ampl.reset()
-            ampl.read("single.mod")
-            ampl.readData(dataDirectory + 'single'+str(i)+'_exp_'+str(config.experiment)+'.dat')
-            ampl.read('single'+str(i)+'_exp_'+str(config.experiment)+'.run')
-            ampl.solve()
-
-            var = ampl.getVariable("xstar")
-            var_vals = var.getValues()
-            xstar_val = var_vals.getColumn('val')
-            xvals.append(np.array(xstar_val))
-
-        iterEndTime = time.time()
-
-        initialobj = self.objective(xvals, Rs)
-        print "\nObjective: ", initialobj
-        print "Iteration %s time: %s\n\n" %(str(iter), str(iterEndTime-iterStartTime))
-        sumIterTime += iterEndTime - iterStartTime
-
-        results.append(initialobj)
-        while(True):
-            iter += 1
+        signal.alarm(config.timetorunsec)
+        try:
+            xvals = []
             print "Iteration: " + str(iter)
-            iterStartTime = time.time()
-            xvalues = []
-            xvalsAsParam = np.concatenate(xvals)
-            xvalsParamFinal = [Double(k) for k in xvalsAsParam]
             for i in xrange(0, self.num_agents):
                 ampl.reset()
                 ampl.read("single.mod")
-                ampl.readData(dataDirectory + 'single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
-                ampl.read('single' + str(i) + '_exp_' + str(config.experiment) + '.run')
-                paramx = ampl.getParameter("x")
-                paramx_val = paramx.getValues()
-                paramx_val.setColumn('val', xvalsParamFinal)
-                xvalsParamFinal = [Double(k) for k in xvalsAsParam]
-                paramx.setValues(paramx_val)
-
+                ampl.readData(dataDirectory + 'single'+str(i)+'_exp_'+str(config.experiment)+'.dat')
+                ampl.read('single'+str(i)+'_exp_'+str(config.experiment)+'.run')
                 ampl.solve()
+
                 var = ampl.getVariable("xstar")
                 var_vals = var.getValues()
                 xstar_val = var_vals.getColumn('val')
-                xvalues.append(np.array(xstar_val))
+                xvals.append(np.array(xstar_val))
 
             iterEndTime = time.time()
-            oldobj = self.objective(xvals, Rs)
-            print "\n\nOld Objective: ",oldobj
-            xvals = xvalues
-            newobj = self.objective(xvals, Rs)
-            results.append(newobj)
-            print "New Objective: ", newobj;
-            print "Iteration %s time: %s\n\n" % (str(iter), str(iterEndTime - iterStartTime))
+
+            initialobj = self.objective(xvals, Rs)
+            print "\nObjective: ", initialobj
+            print "Iteration %s time: %s\n\n" %(str(iter), str(iterEndTime-iterStartTime))
             sumIterTime += iterEndTime - iterStartTime
 
-            print "\n"
-            if abs(newobj - oldobj) < config.delta:
-                print "NonLinear Obj: ", nonlinearobj
-                print "EM Obj: ", newobj
-                print "AvgIterTime: ", sumIterTime/iter
-                print "NonLinearTime: ", end_time_non - start_time_non
-                print "Overall EM Time: %s"%(time.time() - overallEMStartTime)
-                print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(nonlinearobj)) * 100) + "%"
-                break
+            results.append(initialobj)
+            while(True):
+                iter += 1
+                print "Iteration: " + str(iter)
+                iterStartTime = time.time()
+                xvalues = []
+                xvalsAsParam = np.concatenate(xvals)
+                xvalsParamFinal = [Double(k) for k in xvalsAsParam]
+                for i in xrange(0, self.num_agents):
+                    ampl.reset()
+                    ampl.read("single.mod")
+                    ampl.readData(dataDirectory + 'single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
+                    ampl.read('single' + str(i) + '_exp_' + str(config.experiment) + '.run')
+                    paramx = ampl.getParameter("x")
+                    paramx_val = paramx.getValues()
+                    paramx_val.setColumn('val', xvalsParamFinal)
+                    xvalsParamFinal = [Double(k) for k in xvalsAsParam]
+                    paramx.setValues(paramx_val)
 
+                    ampl.solve()
+                    var = ampl.getVariable("xstar")
+                    var_vals = var.getValues()
+                    xstar_val = var_vals.getColumn('val')
+                    xvalues.append(np.array(xstar_val))
 
-        self.genGraphAndSave(iter, results, nonlinearobj)
+                iterEndTime = time.time()
+                oldobj = self.objective(xvals, Rs)
+                print "\n\nOld Objective: ",oldobj
+                xvals = xvalues
+                newobj = self.objective(xvals, Rs)
+                results.append(newobj)
+                print "New Objective: ", newobj;
+                print "Iteration %s time: %s\n\n" % (str(iter), str(iterEndTime - iterStartTime))
+                sumIterTime += iterEndTime - iterStartTime
+
+                print "\n"
+                if abs(newobj - oldobj) < config.delta:
+                    print "NonLinear Obj: ", nonlinearobj
+                    print "EM Obj: ", newobj
+                    print "AvgIterTime: ", sumIterTime/iter
+                    print "NonLinearTime: ", end_time_non - start_time_non
+                    print "Overall EM Time: %s"%(time.time() - overallEMStartTime)
+                    print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
+                    break
+        except TimeoutException:
+            self.genGraphAndSave(len(results), results, nonlinearobj)
+        else:
+            signal.alarm(0)
 
     def EMAMPL(self):
         results = []
@@ -1595,6 +1614,9 @@ class EMMDP:
         x, zl, zu, constraint_multipliers, obj, status = nlp.solve(x0)
         nlp.close()
         return x, -1*obj
+
+class TimeoutException(Exception):   # Custom exception class
+    pass
 
 class Driver:
     print cvxpy.installed_solvers()
