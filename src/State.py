@@ -1166,9 +1166,11 @@ class EMMDP:
                     print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
                     break
         except TimeoutException:
-            self.genGraphAndSave(len(results), results, nonlinearobj)
+            pass
         else:
             signal.alarm(0)
+
+        self.genGraphAndSave(len(results), results, nonlinearobj)
 
     def EMAMPL(self):
         results = []
