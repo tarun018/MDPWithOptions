@@ -1,12 +1,13 @@
 import random, csv
 import pickle
+import math
 #flag=1 fileread
 solver = 'minos'
 flag = 0
 
 timetorunsec = 100
 
-experiment = 2
+experiment = 1
 
 theta = 0.001
 gamma = 0.8
@@ -21,9 +22,12 @@ print "delta: ", delta
 
 if flag == 0:
 
-    agents = 2
+    agents = 6
     nPrivatePerAgent = 1
-    nShared = 1
+    nShared = 10
+    minSharing = 2
+    maxSharing = 4
+    agentMax = [math.ceil(float(nShared*maxSharing)/float(agents))]*agents
     nLocs = (agents*nPrivatePerAgent) + nShared
     auction = [-1]*nLocs
     locs = []
@@ -38,13 +42,19 @@ if flag == 0:
             lst.append(num)
         locs.append(lst)
 
+    allowedvalues = list(range(0, agents))
     for i in xrange(0, nLocs):
         if auction[i] != -1:
             continue
-        tobesharedbetween = random.randint(2, agents)
+        tobesharedbetween = random.randint(2, 4)
         setOfAgents = set()
         while len(setOfAgents) < tobesharedbetween:
-            setOfAgents.add(random.randint(0, agents-1))
+            selectedAgent = random.choice(allowedvalues)
+            setOfAgents.add(selectedAgent)
+        for vals in list(setOfAgents):
+            agentMax[vals] -= 1
+            if agentMax[vals] == 0:
+                allowedvalues.remove(vals)
         auction[i] = list(setOfAgents)
         for j in list(setOfAgents):
             locs[j].append(i)

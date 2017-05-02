@@ -364,10 +364,12 @@ class MDP:
         act = open("../Data/DomainActionData" + str(self.agent) +"_exp_"+str(config.experiment)+ ".txt", 'w')
         for j in self.actions:
             act.write(str(j.index)+","+str(j.gotox)+","+str(j.name)+"\n")
+        act.close()
 
     def readActions(self, filename):
         print "     Reading Actions for Agent " +str(self.agent)
-        with open(filename, 'rb') as csvfile:
+        f = open(filename, 'rb')
+        with f as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 ind = int(row[0])
@@ -378,10 +380,12 @@ class MDP:
                 name = row[2]
                 a = Action(ind, name, gotox)
                 self.actions.append(a)
+        f.close()
 
     def readStates(self, filename):
         print "     Reading States for Agent " +str(self.agent)
-        with open(filename, 'rb') as csvfile:
+        f = open(filename, 'rb')
+        with f as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 ind = int(row[0])
@@ -394,6 +398,7 @@ class MDP:
                 dold = int(row[len(row)-1])
                 s = State(ind, loc, acloc, tim, lst, dold, self.actions)
                 self.states.append(s)
+        f.close()
 
     def readTransition(self, filename):
         print "     Reading Transitions for Agent " +str(self.agent)
@@ -401,7 +406,8 @@ class MDP:
             s.transition = []
         stateIndex = 0
         actionIndex = 0
-        with open(filename, 'rb') as csvfile:
+        f = open(filename, 'rb')
+        with f as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 if len(row) == 0:
@@ -412,12 +418,14 @@ class MDP:
                     triple = (self.actions[actionIndex], self.states[sp], float(row[sp]))
                     self.states[stateIndex].transition.append(triple)
                 stateIndex += 1
+        f.close()
 
     def readRewards(self, filename):
         print "     Reading Rewards for Agent " +str(self.agent)
         tosend = []
         stateIndex = 0
-        with open(filename, 'rb') as csvfile:
+        f = open(filename, 'rb')
+        with f as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 if len(row)==0:
@@ -428,6 +436,7 @@ class MDP:
                 self.states[stateIndex].reward = tosend
                 tosend = []
                 stateIndex += 1
+        f.close()
 
     def defineStart(self):
         sum = 0
