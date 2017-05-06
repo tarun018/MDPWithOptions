@@ -1,14 +1,14 @@
 import csv
 import signal
 import numpy as np
-import cvxpy
+#import cvxpy
 import config
 import itertools
 import copy_reg
 import types
 from copy import deepcopy
-import pyipopt
-import algopy
+#import pyipopt
+#import algopy
 import os
 import matplotlib
 matplotlib.use('Agg')
@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from jnius import autoclass
 import time
 import multiprocessing
-from pathos.multiprocessing import ProcessingPool as Pool
+#from pathos.multiprocessing import ProcessingPool as Pool
 
 class State:
 
@@ -122,7 +122,11 @@ class MDP:
         for i in xrange(0, self.T+1, config.collectTimes[self.agent][0]):
             for j in xrange(0, self.nlocs):
                 for k in self.lst:
-                    for t in [0,1]:
+                    if k[j]==0:
+                       lyst = [0]
+                    elif k[j]==1:
+                       lyst = [0,1]
+                    for t in lyst:
                         st = State(index,j,self.locs[j],i,k,t,self.actions)
                         self.states.append(st)
                         index = index + 1
@@ -953,7 +957,7 @@ class EMMDP:
         print  "    Writting Running Config for Agent " + str(agent) + ": ",
         runf = open('single'+str(agent)+'_exp_'+str(config.experiment)+'.run', 'w')
         runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
-        #runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 scale=no Hessian_dimension=100 Completion=full';\n")
+        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 Completion=full';\n")
         runf.close()
         print "Done"
 
@@ -964,7 +968,7 @@ class EMMDP:
         runf.write("model try.mod;\n")
         runf.write("data " + '../Data/nl2_exp_'+str(config.experiment)+'.dat' + ";\n")
         runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
-        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 scale=no Completion=full';\n")
+        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 Completion=full';\n")
         runf.write("solve;\n")
         runf.close()
         print "Done"
@@ -1063,9 +1067,13 @@ class EMMDP:
         signal.alarm(config.timetorunsec)
 
         try:
+            print "In here1"
             ampl.read("try.mod")
+	    print "In here2"
             ampl.readData(dataDirectory + "nl2_exp_"+str(config.experiment)+".dat")
+            print "In here3"
             ampl.solve()
+            print "In here4"
         except TimeoutException:
             print "Non Linear Unable to Solve."
         else:
@@ -1167,7 +1175,7 @@ class EMMDP:
                     print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
                     break
         except TimeoutException:
-            print "EM Time's Up: "
+            print "\n\n EM Time's Up: "
             print "NonLinear Obj: ", nonlinearobj
             print "EM Obj: ", newobj
             print "AvgIterTime: ", sumIterTime / iter
@@ -1629,7 +1637,7 @@ class TimeoutException(Exception):   # Custom exception class
     pass
 
 class Driver:
-    print cvxpy.installed_solvers()
+    #print cvxpy.installed_solvers()
     a = EMMDP(config.agents)
 
     # for x in a.constraints:

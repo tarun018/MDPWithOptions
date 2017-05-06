@@ -5,15 +5,15 @@ import math
 solver = 'minos'
 flag = 0
 
-timetorunsec = 100
+timetorunsec = 600
 
-experiment = 1
+experiment = 21
 
-theta = 0.001
+theta = 0.1
 gamma = 0.8
-initialxval = 0.0001
+initialxval = 0.1
 alpha = 0.8
-delta = 0.000001
+delta = 0.00001
 print "theta: ", theta
 print "gamma: ", gamma
 print "initialx: ", initialxval
@@ -22,11 +22,15 @@ print "delta: ", delta
 
 if flag == 0:
 
-    agents = 6
-    nPrivatePerAgent = 1
-    nShared = 10
+    agents = 100
+    nPrivatePerAgent = 3
+    nShared = 50
     minSharing = 2
-    maxSharing = 4
+    maxSharing = 5
+    minT = 18
+    maxT = 18
+    minTaction = 10
+    maxTaction = 12
     agentMax = [math.ceil(float(nShared*maxSharing)/float(agents))]*agents
     nLocs = (agents*nPrivatePerAgent) + nShared
     auction = [-1]*nLocs
@@ -46,7 +50,7 @@ if flag == 0:
     for i in xrange(0, nLocs):
         if auction[i] != -1:
             continue
-        tobesharedbetween = random.randint(2, 4)
+        tobesharedbetween = random.randint(minSharing, maxSharing)
         setOfAgents = set()
         while len(setOfAgents) < tobesharedbetween:
             selectedAgent = random.choice(allowedvalues)
@@ -73,12 +77,12 @@ if flag == 0:
 
     collectTimes = []
     transitTimes = []
-    totalPow = random.randint(4,6)
+    totalPow = random.randint(minT, maxT)
     T = [2**totalPow]*agents
 
     nloc = [len(lo) for lo in locs]
     for i in xrange(0, agents):
-        t = 2**random.randint(totalPow-2, totalPow)
+        t = 2**random.randint(minTaction, maxTaction)
         collectTimes.append([t] * nloc[i])
         transitTimes.append([[t] * nloc[i]] * nloc[i])
 
