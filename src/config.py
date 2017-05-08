@@ -7,7 +7,7 @@ flag = 0
 
 timetorunsec = 600
 
-experiment = 21
+experiment = 212
 
 theta = 0.1
 gamma = 0.8
@@ -22,15 +22,15 @@ print "delta: ", delta
 
 if flag == 0:
 
-    agents = 100
-    nPrivatePerAgent = 3
-    nShared = 50
+    agents = 5
+    nPrivatePerAgent = 2
+    nShared = 2
     minSharing = 2
-    maxSharing = 5
-    minT = 18
-    maxT = 18
-    minTaction = 10
-    maxTaction = 12
+    maxSharing = 3
+    minT = 10
+    maxT = 10
+    minTaction = 8
+    maxTaction = 8
     agentMax = [math.ceil(float(nShared*maxSharing)/float(agents))]*agents
     nLocs = (agents*nPrivatePerAgent) + nShared
     auction = [-1]*nLocs

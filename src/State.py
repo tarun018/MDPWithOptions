@@ -225,23 +225,95 @@ class MDP:
 
     def waste(self):
         iter = 1
-        removed = self.removeWasteStates(iter)
+        removed, prevs1 = self.removeWasteStates(iter)
         while removed != 0:
             iter += 1
-            removed = self.removeWasteStates(iter)
+            removed, rst = self.succRemoval(prevs1, iter)
+            prevs1 = rst
+
+    def succRemoval(self, removedSt, iter):
+
+        defRem = []
+        mayeb = []
+        sumd = 0
+        val = 0
+        tots = len(removedSt)
+        start = time.time()
+        offset = 5
+        for rms in removedSt:
+
+            sumd += 1
+            if sumd % offset == 0:
+                end = time.time()
+                val += float(end - start)
+                ntimes = float(sumd / offset)
+                avg = float(val) / float(ntimes)
+                timerem = (float(tots - sumd) / float(offset)) * avg
+                print "[" + str(self.agent) + "," + str(iter) + "] Done. " + str(sumd) + " Out of: " + str(tots)+ " Avg: "+str(avg) + " Rem: "+str(timerem)
+                start = time.time()
+
+            for sts in self.states:
+
+                if sts == self.terminal:
+                    continue
+
+                if sts.dold == 1 and sts.dvals[sts.location] == 0:
+                    print "10 anomaly"
+                    defRem.append(sts)
+                    continue
+
+                sameds = all([sts.dvals[j] == 0 for j in xrange(0, self.nlocs)])
+                if sts.time == config.T[self.agent] and sameds == True and sts.dold == 0:
+                    continue
+
+                for a in self.actions:
+                    if self.transition(rms, a, sts) != 0:
+                        mayeb.append(sts)
+
+        for i in mayeb:
+            flag = 0
+            for j in self.states:
+                for k in self.actions:
+                    if self.transition(j, k, i) != 0:
+                        flag = 1
+                        break
+                if flag == 1:
+                    break
+            if flag == 0:
+                defRem.append(i)
+
+        prevs = []
+        for sts in defRem:
+            if sts in self.states:
+                prevs.append(sts)
+                self.states.remove(sts)
+
+        print "For agent " + str(self.agent)+ " Iter "+str(iter)+" done and removed "+str(len(prevs))+"."
+        return len(prevs), prevs
 
     def removeWasteStates(self, iter):
         wastestates = []
         sum = 0
+        val = 0
+        start = time.time()
         tots = len(self.states)
+        removedSt = []
+        offset = 5
         for i in self.states:
             sum += 1
-            if sum%50 == 0:
-                print "["+str(iter)+"] Done. "+str(sum)+" Out of: "+str(tots)
+            if sum%offset == 0:
+                end = time.time()
+                val += float(end-start)
+                ntimes = float(sum / offset)
+                avg = float(val) / float(ntimes)
+                timerem = (float(tots - sum) / float(offset)) * avg
+                print "["+str(self.agent)+","+str(iter)+"] Done. "+str(sum)+" Out of: "+str(tots)+ " Avg: "+str(avg) + " Rem: "+str(timerem)
+                start = time.time()
             if i == self.terminal:
                 continue
 
             if i.dold == 1 and i.dvals[i.location] == 0:
+                print "10 anomaly"
                 wastestates.append(i)
                 continue
 
@@ -264,11 +336,12 @@ class MDP:
         # print len(wastestates)
         # print wastestates
         for x in wastestates:
+            removedSt.append(x)
             self.states.remove(x)
         # print len(self.states)
         # print
-
-        return len(wastestates)
+        print "For agent " + str(self.agent)+ " Iter "+str(iter)+" done and removed "+str(len(wastestates))+"."
+        return len(wastestates), removedSt
 
     def reindexStates(self):
         index = 0
@@ -617,7 +690,7 @@ class EMMDP:
             for pros in prs:
                 pros.join()
             for i in xrange(0, self.num_agents):
-               self.mdps[i].AfterWasteRemoval()
+                self.mdps[i].AfterWasteRemoval()
         else:
             for i in xrange(0, self.num_agents):
                 print "Generating MDP for Agent"+str(i)
