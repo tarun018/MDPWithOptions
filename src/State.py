@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 from jnius import autoclass
 import time
 import multiprocessing
+import pickle
 #from pathos.multiprocessing import ProcessingPool as Pool
 
 class State:
@@ -80,12 +81,11 @@ class MDP:
             self.initiateActions()
             self.initiateStates()
         else:
-            self.readActions("../Data/DomainActionData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
-            self.readStates("../Data/DomainStateData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
+            self.readActions("../Data/DomainActionData"+str(self.agent)+"_exp_"+str(config.experiment)+".pickle")
+            self.readStates("../Data/DomainStateData"+str(self.agent)+"_exp_"+str(config.experiment)+".pickle")
             self.terminal = self.states[0]
-            self.readTransition("../Data/DomainTransitionData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
-            #self.checkTransitionProbabilitySumTo1File()
-            self.readRewards("../Data/DomainRewardData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt")
+            self.writeTransitions()
+            self.writeRewards()
             self.defineStart()
             self.numberStates = len(self.states)
             self.numerActions = len(self.actions)
@@ -98,8 +98,8 @@ class MDP:
         # self.checkTransitionProbabilitySumTo1()
         self.writeStatesToFile()
         self.writeActionsToFile()
-        self.writeTransitionsToFile()
-        self.writeRewardsToFile()
+        self.writeTransitions()
+        self.writeRewards()
         self.defineStart()
         self.numberStates = len(self.states)
         self.numerActions = len(self.actions)
@@ -269,6 +269,7 @@ class MDP:
                 for a in self.actions:
                     if self.transition(rms, a, sts) != 0:
                         mayeb.append(sts)
+                        break
 
         for i in mayeb:
             flag = 0
@@ -372,25 +373,6 @@ class MDP:
                     print "WARNING: k: " + str(k) + " i: " + str(i) + " Sum: " + str(sum)
         fp.close()
 
-    def checkTransitionProbabilitySumTo1File(self):
-        fp = open('../Data/tds'+str(config.experiment), 'w')
-        for k in self.actions:
-            for i in self.states:
-                sum = 0
-                for j in self.states:
-                    fp.write(str(i))
-                    fp.write("\n")
-                    fp.write(str(j))
-                    fp.write("\n")
-                    tran = [xx[2] for xx in i.transition if xx[0]==k and xx[1]==j]
-                    tran = tran[0]
-                    sum += tran
-                    fp.write(str(tran))
-                    fp.write("\n")
-                if (sum != 1):
-                    print "WARNING: k: " + str(k) + " i: " + str(i) + " Sum: " + str(sum)
-        fp.close()
-
     def rewardFunction(self, s, a):
 
         if s.dold == 0 and s.dvals[s.location] == 1:
@@ -398,121 +380,43 @@ class MDP:
         else:
             return 0
 
-    def writeTransitionsToFile(self):
+    def writeTransitions(self):
         print "     Writing Transitions for Agent " +str(self.agent)
-        tran = open("../Data/DomainTransitionData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt", 'w')
         for i in self.actions:
             for j in self.states:
                 for k in self.states:
                     tt = self.transition(j,i,k)
                     j.transition.append((i, k, tt))
-                    tran.write(str(tt))
-                    if k != self.states[len(self.states)-1]:
-                        tran.write(",")
-                tran.write("\n")
-            tran.write("\n")
-        tran.close()
 
-    def writeRewardsToFile(self):
+    def writeRewards(self):
         print "     Writing Rewards for Agent " +str(self.agent)
-        rew = open("../Data/DomainRewardData"+str(self.agent)+"_exp_"+str(config.experiment)+".txt",'w')
         for i in self.states:
             for j in self.actions:
                 re = self.rewardFunction(i,j)
-                rew.write(str(re))
                 i.reward.append((j, re))
-                if j != self.actions[len(self.actions)-1]:
-                    rew.write(",")
-            rew.write("\n")
-        rew.close()
 
     def writeStatesToFile(self):
         print "     Writing States for Agent " +str(self.agent)
-        stat = open("../Data/DomainStateData" + str(self.agent) +"_exp_"+str(config.experiment)+ ".txt", 'w')
-        for j in self.states:
-            stat.write(str(j.index)+","+str(j.location)+","+str(j.actualLocation)+","+str(j.time)+",")
-            for x in j.dvals:
-                stat.write(str(x)+",")
-            stat.write(str(j.dold)+"\n")
+        stat = open("../Data/DomainStateData" + str(self.agent) +"_exp_"+str(config.experiment)+ ".pickle", 'w')
+        pickle.dump(self.states, stat)
         stat.close()
 
     def writeActionsToFile(self):
         print "     Writing Actions for Agent " +str(self.agent)
-        act = open("../Data/DomainActionData" + str(self.agent) +"_exp_"+str(config.experiment)+ ".txt", 'w')
-        for j in self.actions:
-            act.write(str(j.index)+","+str(j.gotox)+","+str(j.name)+"\n")
+        act = open("../Data/DomainActionData" + str(self.agent) +"_exp_"+str(config.experiment)+ ".pickle", 'w')
+        pickle.dump(self.actions,act)
         act.close()
 
     def readActions(self, filename):
         print "     Reading Actions for Agent " +str(self.agent)
         f = open(filename, 'rb')
-        with f as csvfile:
-            reader = csv.reader(csvfile, delimiter=',')
-            for row in reader:
-                ind = int(row[0])
-                if str(row[1])=="None":
-                    gotox = None
-                else:
-                    gotox = int(row[1])
-                name = row[2]
-                a = Action(ind, name, gotox)
-                self.actions.append(a)
+        self.actions = pickle.load(f)
         f.close()
 
     def readStates(self, filename):
         print "     Reading States for Agent " +str(self.agent)
         f = open(filename, 'rb')
-        with f as csvfile:
-            reader = csv.reader(csvfile, delimiter=',')
-            for row in reader:
-                ind = int(row[0])
-                loc = int(row[1])
-                acloc = int(row[2])
-                tim = int(row[3])
-                lst = []
-                for x in xrange(0, self.nlocs):
-                    lst.append(int(row[4+x]))
-                dold = int(row[len(row)-1])
-                s = State(ind, loc, acloc, tim, lst, dold, self.actions)
-                self.states.append(s)
-        f.close()
-
-    def readTransition(self, filename):
-        print "     Reading Transitions for Agent " +str(self.agent)
-        for s in self.states:
-            s.transition = []
-        stateIndex = 0
-        actionIndex = 0
-        f = open(filename, 'rb')
-        with f as csvfile:
-            reader = csv.reader(csvfile, delimiter=',')
-            for row in reader:
-                if len(row) == 0:
-                    stateIndex = 0
-                    actionIndex = actionIndex + 1
-                    continue
-                for sp in xrange(0, len(self.states)):
-                    triple = (self.actions[actionIndex], self.states[sp], float(row[sp]))
-                    self.states[stateIndex].transition.append(triple)
-                stateIndex += 1
-        f.close()
-
-    def readRewards(self, filename):
-        print "     Reading Rewards for Agent " +str(self.agent)
-        tosend = []
-        stateIndex = 0
-        f = open(filename, 'rb')
-        with f as csvfile:
-            reader = csv.reader(csvfile, delimiter=',')
-            for row in reader:
-                if len(row)==0:
-                    continue
-                for ap in xrange(0, len(self.actions)):
-                    triple = (self.actions[ap], float(row[ap]))
-                    tosend.append(triple)
-                self.states[stateIndex].reward = tosend
-                tosend = []
-                stateIndex += 1
+        self.states = pickle.load(f)
         f.close()
 
     def defineStart(self):
@@ -1142,7 +1046,7 @@ class EMMDP:
         try:
             print "In here1"
             ampl.read("try.mod")
-	    print "In here2"
+            print "In here2"
             ampl.readData(dataDirectory + "nl2_exp_"+str(config.experiment)+".dat")
             print "In here3"
             ampl.solve()
@@ -1200,8 +1104,8 @@ class EMMDP:
 
             initialobj = self.objective(xvals, Rs)
             print "\nObjective: ", initialobj
-            print "Iteration %s time: %s\n\n" %(str(iter), str(iterEndTime-iterStartTime))
-            sumIterTime += iterEndTime - iterStartTime
+            print "Iteration %s time: %s\n\n" %(str(iter), str(float(iterEndTime-iterStartTime)/self.num_agents))
+            sumIterTime += float(iterEndTime-iterStartTime)/self.num_agents
 
             results.append(initialobj)
             while(True):
@@ -1235,8 +1139,8 @@ class EMMDP:
                 newobj = self.objective(xvals, Rs)
                 results.append(newobj)
                 print "New Objective: ", newobj;
-                print "Iteration %s time: %s\n\n" % (str(iter), str(iterEndTime - iterStartTime))
-                sumIterTime += iterEndTime - iterStartTime
+                print "Iteration %s time: %s\n\n" % (str(iter), str(float(iterEndTime-iterStartTime)/self.num_agents))
+                sumIterTime += float(iterEndTime-iterStartTime)/self.num_agents
 
                 print "\n"
                 if abs(newobj - oldobj) < config.delta:
@@ -1244,7 +1148,7 @@ class EMMDP:
                     print "EM Obj: ", newobj
                     print "AvgIterTime: ", sumIterTime/iter
                     print "NonLinearTime: ", end_time_non - start_time_non
-                    print "Overall EM Time: %s"%(time.time() - overallEMStartTime)
+                    print "Overall EM Time: %s"%(sumIterTime)
                     print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
                     break
         except TimeoutException:
@@ -1253,9 +1157,8 @@ class EMMDP:
             print "EM Obj: ", newobj
             print "AvgIterTime: ", sumIterTime / iter
             print "NonLinearTime: ", end_time_non - start_time_non
-            print "Overall EM Time: %s" % (time.time() - overallEMStartTime)
+            print "Overall EM Time: %s" % (sumIterTime)
             print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
-            pass
         else:
             signal.alarm(0)
 
