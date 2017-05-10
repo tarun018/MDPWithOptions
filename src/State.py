@@ -386,7 +386,8 @@ class MDP:
             for j in self.states:
                 for k in self.states:
                     tt = self.transition(j,i,k)
-                    j.transition.append((i, k, tt))
+                    if tt!=0:
+                        j.transition.append((i.index, k.index, tt))
 
     def writeRewards(self):
         print "     Writing Rewards for Agent " +str(self.agent)
@@ -437,44 +438,7 @@ class MDP:
         A_mat = []
         if genA is True:
 
-            decisionvar = []
-            for x in self.states:
-                triple = []
-                for y in self.states:
-                    triplet = []
-                    for a in y.possibleActions:
-                        if x.index == y.index:
-                            triplet.append(float(1))
-                        else:
-                            triplet.append(float(0))
-                    triple.append(triplet)
-                decisionvar.append(triple)
-
-            for x in self.states:
-                incoming = []
-                for s in self.states:
-                    for t in s.transition:
-                        if t[1]==x and t[2]!=0:
-                            incoming.append((s, t[0], t[2]))
-
-                for h in incoming:
-                    decisionvar[x.index][h[0].index][h[1].index] -= gamma*float(h[2])
-
-            # for x in decisionvar:
-            #     for y in x:
-            #         for z in y:
-            #             print str(z) + ",",
-            #         print "",
-            #     print
-            #
-            # print
-            # print
-            A_mat = []
-            for x in decisionvar:
-                lit = []
-                for t in x:
-                    lit.extend(t)
-                A_mat.append(lit)
+            pass
 
         # for x in A_mat:
         #     print x
@@ -669,9 +633,9 @@ class EMMDP:
             for j in xrange(0, len(self.mdps[i].actions)):
                 for k in xrange(0, len(self.mdps[i].states)):
                     h = self.mdps[i].states[k].transition
-                    hh = [(x[1],x[2]) for x in h if x[0] == self.mdps[i].actions[j] and x[2] != 0 ]
+                    hh = [(x[1],x[2]) for x in h if x[0] == self.mdps[i].actions[j].index and x[2] != 0 ]
                     for valsac in hh:
-                        ampl.write(str(i+1) + " " + str(self.mdps[i].actions[j].index+1) + " " + str(self.mdps[i].states[k].index+1) + " " +str(valsac[0].index+1) + " " + str(valsac[1]) + "\n")
+                        ampl.write(str(i+1) + " " + str(self.mdps[i].actions[j].index+1) + " " + str(self.mdps[i].states[k].index+1) + " " +str(valsac[0]+1) + " " + str(valsac[1]) + "\n")
             if i == self.num_agents - 1:
                 ampl.write(";")
         ampl.write("\n")
@@ -756,9 +720,9 @@ class EMMDP:
             for j in xrange(0, len(self.mdps[i].actions)):
                 for k in xrange(0, len(self.mdps[i].states)):
                     h = self.mdps[i].states[k].transition
-                    hh = [(x[1],x[2]) for x in h if x[0] == self.mdps[i].actions[j] and x[2] != 0 ]
+                    hh = [(x[1],x[2]) for x in h if x[0] == self.mdps[i].actions[j].index and x[2] != 0 ]
                     for valsac in hh:
-                        ampl.write(str(i+1) + " " + str(self.mdps[i].actions[j].index+1) + " " + str(self.mdps[i].states[k].index+1) + " " +str(valsac[0].index+1) + " " + str(valsac[1]) + "\n")
+                        ampl.write(str(i+1) + " " + str(self.mdps[i].actions[j].index+1) + " " + str(self.mdps[i].states[k].index+1) + " " +str(valsac[0]+1) + " " + str(valsac[1]) + "\n")
             if i == self.num_agents - 1:
                 ampl.write(";")
         ampl.write("\n")
@@ -935,7 +899,8 @@ class EMMDP:
         print  "    Writting Running Config for Agent " + str(agent) + ": ",
         runf = open('single'+str(agent)+'_exp_'+str(config.experiment)+'.run', 'w')
         runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
-        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 Completion=full';\n")
+        runf.write("option solver_msg 0;\n")
+        #runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 Completion=full';\n")
         runf.close()
         print "Done"
 
@@ -946,8 +911,9 @@ class EMMDP:
         runf.write("model try.mod;\n")
         runf.write("data " + '../Data/nl2_exp_'+str(config.experiment)+'.dat' + ";\n")
         runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
-        runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 Completion=full';\n")
-        runf.write("solve;\n")
+        runf.write("option solver_msg 0;\n")
+        #runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 Completion=full';\n")
+        runf.write("solve > multi.out;\n")
         runf.close()
         print "Done"
 
@@ -996,7 +962,7 @@ class EMMDP:
         x = np.array(x)
         return x,status
 
-    def genGraphAndSave(self, iters, results, nonLinear):
+    def genGraphAndSave(self, iters, results, nonLinear, times, nlptime):
         iterations = range(1, iters+1)
         line1, = plt.plot(iterations, results, marker='o', linestyle='-', color='r')
         plt.xlabel('Number of Iterations')
@@ -1012,7 +978,24 @@ class EMMDP:
         #plt.show()
         plt.legend([line1, line2] , ["EM", "NonLinear"], loc=4)
 
-        plt.savefig('../Results/Graph'+str(config.experiment)+'.png')
+        plt.savefig('../Results/ObjGraph'+str(config.experiment)+'.png')
+        plt.clf()
+        plt.figure()
+
+        line1, = plt.plot(iterations, times, marker='^', linestyle='-', color='b')
+        plt.xlabel('Number of Iterations')
+        plt.ylabel('Time in seconds')
+        plt.title('EMMDP Experiment: ' + str(config.experiment))
+        nonlx = [iters + 1]
+        nonly = [nlptime]
+        line2, = plt.plot(nonlx, nonly, marker='o', linestyle='-', color='k')
+        # plt.xlim(0, 30)
+        # plt.xticks(NumofTargets)
+        # plt.legend([line1, line2, line3, line4, line5, line6, line7],
+        #          ["Speed 0.2", "Speed 0.5", "Speed 0.8", "Speed 1.0", "Speed 1.2", "Speed 1.5", "Speed 1.8"], loc=2)
+        # plt.show()
+        plt.legend([line1, line2], ["EM", "NonLinear"], loc=1)
+        plt.savefig('../Results/TimeGraph' + str(config.experiment) + '.png')
 
     def timeout_handler(self, signum, frame):  # Custom signal handler
         raise TimeoutException
@@ -1030,40 +1013,35 @@ class EMMDP:
         ampl.reset()
 
         results = []
+        times = []
         iter = 1
         print "NonLinear:"
         if config.flag == 0:
             self.genAMPL()
 
         dataDirectory = "../Data/"
-
+        nonlinearobj = 0.0001
         start_time_non = time.time()
-
-        # Change the behavior of SIGALRM
-        signal.signal(signal.SIGALRM, self.timeout_handler)
-
-        signal.alarm(config.timetorunsec)
-
+        import multiprocessing.pool
+        ampl.read("try.mod")
+        ampl.readData(dataDirectory + "nl2_exp_"+str(config.experiment)+".dat")
+        pool = multiprocessing.pool.ThreadPool(processes=1)
+        result = pool.apply_async(ampl.solve)
         try:
-            print "In here1"
-            ampl.read("try.mod")
-            print "In here2"
-            ampl.readData(dataDirectory + "nl2_exp_"+str(config.experiment)+".dat")
-            print "In here3"
-            ampl.solve()
-            print "In here4"
-        except TimeoutException:
-            print "Non Linear Unable to Solve."
-        else:
-            signal.alarm(0)
+            result.get(timeout=config.timetorunsec)
+            obj = ampl.getObjective("ER")
+            nonlinearobj = obj.value()
+            print nonlinearobj
+        except multiprocessing.TimeoutError:
+            print("Process timed out")
+        pool.terminate()
+        print("Pool terminated")
 
         end_time_non = time.time()
+        nlptime = end_time_non - start_time_non
+        print "Non Linear Time:  %s seconds \n\n\n\n\n\n" % nlptime
 
-        obj = ampl.getObjective("ER")
-        nonlinearobj = obj.value()
-        print nonlinearobj
-        print "Non Linear Time:  %s seconds \n\n\n\n\n\n" %(end_time_non - start_time_non)
-
+        ampl = AMPL()
         ampl.reset()
         Rs = []
         print "EM-AMPL: "
@@ -1081,7 +1059,7 @@ class EMMDP:
                 self.genAMPLSingle(i, initial_x)
                 self.runConfig(i)
 
-        overallEMStartTime = time.time()
+        signal.signal(signal.SIGALRM, self.timeout_handler)
         iterStartTime = time.time()
         sumIterTime = 0
         newobj = 0
@@ -1103,12 +1081,14 @@ class EMMDP:
 
             iterEndTime = time.time()
 
-            initialobj = self.objective(xvals, Rs)
-            print "\nObjective: ", initialobj
-            print "Iteration %s time: %s\n\n" %(str(iter), str(float(iterEndTime-iterStartTime)/self.num_agents))
+            newobj = self.objective(xvals, Rs)
+            print "\nObjective: ", newobj
+            iterTime = float(iterEndTime-iterStartTime)/self.num_agents
+            times.append(iterTime)
+            print "Iteration %s time: %s\n\n" %(str(iter), str(iterTime))
             sumIterTime += float(iterEndTime-iterStartTime)/self.num_agents
 
-            results.append(initialobj)
+            results.append(newobj)
             while(True):
                 iter += 1
                 print "Iteration: " + str(iter)
@@ -1139,8 +1119,10 @@ class EMMDP:
                 xvals = xvalues
                 newobj = self.objective(xvals, Rs)
                 results.append(newobj)
-                print "New Objective: ", newobj;
-                print "Iteration %s time: %s\n\n" % (str(iter), str(float(iterEndTime-iterStartTime)/self.num_agents))
+                print "New Objective: ", newobj
+                iterTime = float(iterEndTime - iterStartTime) / self.num_agents
+                times.append(iterTime)
+                print "Iteration %s time: %s\n\n" % (str(iter), str(iterTime))
                 sumIterTime += float(iterEndTime-iterStartTime)/self.num_agents
 
                 print "\n"
@@ -1152,7 +1134,8 @@ class EMMDP:
                     print "Overall EM Time: %s"%(sumIterTime)
                     print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
                     break
-        except TimeoutException:
+        except TimeoutException as e:
+            print e
             print "\n\n EM Time's Up: "
             print "NonLinear Obj: ", nonlinearobj
             print "EM Obj: ", newobj
@@ -1163,7 +1146,7 @@ class EMMDP:
         else:
             signal.alarm(0)
 
-        self.genGraphAndSave(len(results), results, nonlinearobj)
+        self.genGraphAndSave(len(results), results, nonlinearobj, times, nlptime)
 
     def EMAMPL(self):
         results = []

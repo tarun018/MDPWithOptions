@@ -5,7 +5,7 @@ import math
 solver = 'minos'
 flag = 1
 
-timetorunsec = 1
+timetorunsec = 50
 
 experiment = 1001
 
@@ -26,13 +26,13 @@ if flag == 0:
 
     agents = 2
     nPrivatePerAgent = 1
-    nShared = 2
+    nShared = 1
     minSharing = 2
     maxSharing = 2
     minT = 6
     maxT = 6
-    minTaction = 2
-    maxTaction = 2
+    minTaction = 3
+    maxTaction = 3
     agentMax = [math.ceil(float(nShared*maxSharing)/float(agents))]*agents
     nLocs = (agents*nPrivatePerAgent) + nShared
     auction = [-1]*nLocs
