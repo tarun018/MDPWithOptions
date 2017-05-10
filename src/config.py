@@ -5,9 +5,11 @@ import math
 solver = 'minos'
 flag = 1
 
-timetorunsec = 10
+timetorunsec = 1
 
-experiment = 212
+experiment = 1001
+
+offset = 500
 
 theta = 0.1
 gamma = 0.8
@@ -24,13 +26,13 @@ if flag == 0:
 
     agents = 2
     nPrivatePerAgent = 1
-    nShared = 1
+    nShared = 2
     minSharing = 2
     maxSharing = 2
-    minT = 10
-    maxT = 10
-    minTaction = 7
-    maxTaction = 7
+    minT = 6
+    maxT = 6
+    minTaction = 2
+    maxTaction = 2
     agentMax = [math.ceil(float(nShared*maxSharing)/float(agents))]*agents
     nLocs = (agents*nPrivatePerAgent) + nShared
     auction = [-1]*nLocs

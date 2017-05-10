@@ -239,7 +239,7 @@ class MDP:
         val = 0
         tots = len(removedSt)
         start = time.time()
-        offset = 5
+        offset = config.offset
         for rms in removedSt:
 
             sumd += 1
@@ -299,7 +299,7 @@ class MDP:
         start = time.time()
         tots = len(self.states)
         removedSt = []
-        offset = 5
+        offset = config.offset
         for i in self.states:
             sum += 1
             if sum%offset == 0:
@@ -585,8 +585,9 @@ class EMMDP:
         if config.flag == 0:
             prs = []
             for i in xrange(0, self.num_agents):
-                print "Generating MDP for Agent"+str(i)
+                print "Generating MDP for Agent"+str(i),
                 a = MDP(config.T[i], config.locs[i], i, config.collectTimes[i], config.transitTimes[i], config.alpha, config.flag)
+                print len(a.states)
                 prs.append(multiprocessing.Process(target=a.wasteRemovalParallel))
                 self.mdps.append(a)
             for pros in prs:
@@ -1013,6 +1014,9 @@ class EMMDP:
 
         plt.savefig('../Results/Graph'+str(config.experiment)+'.png')
 
+    def timeout_handler(self, signum, frame):  # Custom signal handler
+        raise TimeoutException
+
     def EMJavaAMPL(self):
         AMPL = autoclass('com.ampl.AMPL')
         DataFrame = autoclass('com.ampl.DataFrame')
@@ -1035,11 +1039,8 @@ class EMMDP:
 
         start_time_non = time.time()
 
-        def timeout_handler(signum, frame):  # Custom signal handler
-            raise TimeoutException
-
         # Change the behavior of SIGALRM
-        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.signal(signal.SIGALRM, self.timeout_handler)
 
         signal.alarm(config.timetorunsec)
 
