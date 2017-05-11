@@ -81,8 +81,8 @@ class MDP:
             self.initiateActions()
             self.initiateStates()
         else:
-            self.readActions("../Data/DomainActionData"+str(self.agent)+"_exp_"+str(config.experiment)+".pickle")
-            self.readStates("../Data/DomainStateData"+str(self.agent)+"_exp_"+str(config.experiment)+".pickle")
+            self.readActions(config.workDir+"Data/DomainActionData"+str(self.agent)+"_exp_"+str(config.experiment)+".pickle")
+            self.readStates(config.workDir+"Data/DomainStateData"+str(self.agent)+"_exp_"+str(config.experiment)+".pickle")
             self.terminal = self.states[0]
             self.writeTransitions()
             self.writeRewards()
@@ -356,7 +356,7 @@ class MDP:
         self.states = lst
 
     def checkTransitionProbabilitySumTo1(self):
-        fp = open('../Data/tds'+str(config.experiment), 'w')
+        fp = open(config.workDir+'Data/tds'+str(config.experiment), 'w')
         for k in self.actions:
             for i in self.states:
                 sum = 0
@@ -398,13 +398,13 @@ class MDP:
 
     def writeStatesToFile(self):
         print "     Writing States for Agent " +str(self.agent)
-        stat = open("../Data/DomainStateData" + str(self.agent) +"_exp_"+str(config.experiment)+ ".pickle", 'w')
+        stat = open(config.workDir+"Data/DomainStateData" + str(self.agent) +"_exp_"+str(config.experiment)+ ".pickle", 'w')
         pickle.dump(self.states, stat)
         stat.close()
 
     def writeActionsToFile(self):
         print "     Writing Actions for Agent " +str(self.agent)
-        act = open("../Data/DomainActionData" + str(self.agent) +"_exp_"+str(config.experiment)+ ".pickle", 'w')
+        act = open(config.workDir+"Data/DomainActionData" + str(self.agent) +"_exp_"+str(config.experiment)+ ".pickle", 'w')
         pickle.dump(self.actions,act)
         act.close()
 
@@ -609,7 +609,7 @@ class EMMDP:
 
     def genAMPL(self):
         print "     Generating AMPL: ",
-        ampl = open('../Data/nl2_exp_'+str(config.experiment)+'.dat', 'w')
+        ampl = open(config.workDir+'Data/nl2_exp_'+str(config.experiment)+'.dat', 'w')
         ampl.write("param n := " + str(self.num_agents) + ";\n")
         ampl.write("\n")
         for i in xrange(0, self.num_agents):
@@ -699,7 +699,7 @@ class EMMDP:
 
     def genAMPLSingle(self, agent, initx=None):
         print "     Generating AMPL for Agent " + str(agent) + " : ",
-        ampl = open('../Data/single'+str(agent)+'_exp_'+str(config.experiment)+'.dat', 'w')
+        ampl = open(config.workDir+'Data/single'+str(agent)+'_exp_'+str(config.experiment)+'.dat', 'w')
         ampl.write("param n := " + str(self.num_agents) + ";\n")
         ampl.write("param agent := " + str(agent+1) + ";\n")
         ampl.write("param gamma := " + str(config.gamma) + ";\n")
@@ -887,7 +887,7 @@ class EMMDP:
         runf = open('single'+str(agent)+'_exp_'+str(config.experiment)+'.run', 'w')
         runf.write("reset;\n")
         runf.write("model single.mod;\n")
-        runf.write("data "+'../Data/single'+str(agent)+'_exp_'+str(config.experiment)+'.dat'+";\n")
+        runf.write("data "+config.workDir+'Data/single'+str(agent)+'_exp_'+str(config.experiment)+'.dat'+";\n")
         runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
         #runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 scale=no Completion=full';\n")
         runf.write("solve;\n")
@@ -909,7 +909,7 @@ class EMMDP:
         runf = open('try_exp_'+str(config.experiment)+'.run', 'w')
         runf.write("reset;\n")
         runf.write("model try.mod;\n")
-        runf.write("data " + '../Data/nl2_exp_'+str(config.experiment)+'.dat' + ";\n")
+        runf.write("data " + config.workDir+ 'Data/nl2_exp_'+str(config.experiment)+'.dat' + ";\n")
         runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
         runf.write("option solver_msg 0;\n")
         #runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 Completion=full';\n")
@@ -1019,12 +1019,11 @@ class EMMDP:
         if config.flag == 0:
             self.genAMPL()
 
-        dataDirectory = "../Data/"
         nonlinearobj = 0.0001
         start_time_non = time.time()
         import multiprocessing.pool
         ampl.read("try.mod")
-        ampl.readData(dataDirectory + "nl2_exp_"+str(config.experiment)+".dat")
+        ampl.readData(config.workDir+"Data/nl2_exp_"+str(config.experiment)+".dat")
         pool = multiprocessing.pool.ThreadPool(processes=1)
         result = pool.apply_async(ampl.solve)
         try:
@@ -1070,7 +1069,7 @@ class EMMDP:
             for i in xrange(0, self.num_agents):
                 ampl.reset()
                 ampl.read("single.mod")
-                ampl.readData(dataDirectory + 'single'+str(i)+'_exp_'+str(config.experiment)+'.dat')
+                ampl.readData(config.workDir+'Data/single'+str(i)+'_exp_'+str(config.experiment)+'.dat')
                 ampl.read('single'+str(i)+'_exp_'+str(config.experiment)+'.run')
                 ampl.solve()
 
@@ -1099,7 +1098,7 @@ class EMMDP:
                 for i in xrange(0, self.num_agents):
                     ampl.reset()
                     ampl.read("single.mod")
-                    ampl.readData(dataDirectory + 'single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
+                    ampl.readData(config.workDir+'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
                     ampl.read('single' + str(i) + '_exp_' + str(config.experiment) + '.run')
                     paramx = ampl.getParameter("x")
                     paramx_val = paramx.getValues()
@@ -1155,9 +1154,9 @@ class EMMDP:
         print "NonLinear:"
         self.genAMPL()
         self.runConfigNonLinear()
-        os.system('../ampl/ampl try_exp_'+str(config.experiment)+'.run > ../Data/NonLinearOut'+str(config.experiment)+'.txt')
+        os.system('../ampl/ampl try_exp_'+str(config.experiment)+'.run > '+config.workDir+'Data/NonLinearOut'+str(config.experiment)+'.txt')
 
-        nonred = open('../Data/NonLinearOut'+str(config.experiment)+'.txt', 'r')
+        nonred = open(config.workDir+'Data/NonLinearOut'+str(config.experiment)+'.txt', 'r')
         for row in nonred:
             if row.find('objective') != -1:
                 spli = row.split(' ')
@@ -1186,8 +1185,8 @@ class EMMDP:
         print "Iteration: "+str(iter)
         xvals = []
         for i in xrange(0, self.num_agents):
-            os.system('ampl/ampl single'+str(i)+'_exp_'+str(config.experiment)+'.run > ../Data/EMOut' + str(i) +'_exp_'+str(config.experiment)+'.txt')
-            x,status = self.processFile(filename='../Data/EMOut'+str(i)+'_exp_'+str(config.experiment)+'.txt', agent=i)
+            os.system('ampl/ampl single'+str(i)+'_exp_'+str(config.experiment)+'.run > '+config.workDir+'Data/EMOut' + str(i) +'_exp_'+str(config.experiment)+'.txt')
+            x,status = self.processFile(filename=config.workDir+'Data/EMOut'+str(i)+'_exp_'+str(config.experiment)+'.txt', agent=i)
             assert (sum(x) - float(1) / float(1 - config.gamma)) < 0.01
             xvals.append(x)
             #print "Status for Agent " + str(i) + ": ", status.rstrip()
@@ -1203,8 +1202,8 @@ class EMMDP:
             for i in xrange(0, self.num_agents):
                 self.genAMPLSingle(i, xvals)
             for i in xrange(0, self.num_agents):
-                os.system('ampl/ampl single' + str(i) + '_exp_' + str(config.experiment) + '.run > ../Data/EMOut' + str(i) + '_exp_' + str(config.experiment) + '.txt')
-                x, status = self.processFile(filename='../Data/EMOut' + str(i) + '_exp_' + str(config.experiment) + '.txt', agent=i)
+                os.system('ampl/ampl single' + str(i) + '_exp_' + str(config.experiment) + '.run > '+config.workDir+'Data/EMOut' + str(i) + '_exp_' + str(config.experiment) + '.txt')
+                x, status = self.processFile(filename=config.workDir+'Data/EMOut' + str(i) + '_exp_' + str(config.experiment) + '.txt', agent=i)
                 assert (sum(x) - float(1) / float(1 - config.gamma)) < 0.01
                 xvalues.append(x)
                 #print "Status for Agent " + str(i) + ": ", status.rstrip()

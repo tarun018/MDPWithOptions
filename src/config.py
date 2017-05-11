@@ -11,6 +11,8 @@ experiment = 1001
 
 offset = 500
 
+workDir = "../"
+
 theta = 0.1
 gamma = 0.8
 initialxval = 0.1
@@ -25,14 +27,14 @@ print "delta: ", delta
 if flag == 0:
 
     agents = 2
-    nPrivatePerAgent = 1
-    nShared = 1
+    nPrivatePerAgent = 2
+    nShared = 2
     minSharing = 2
     maxSharing = 2
     minT = 6
     maxT = 6
-    minTaction = 3
-    maxTaction = 3
+    minTaction = 1
+    maxTaction = 1
     agentMax = [math.ceil(float(nShared*maxSharing)/float(agents))]*agents
     nLocs = (agents*nPrivatePerAgent) + nShared
     auction = [-1]*nLocs
@@ -127,13 +129,13 @@ if flag == 0:
     print "Rmax: ", R_max
 
     def writeConfig1():
-        with open('../Data/objs'+str(experiment)+'.pickle', 'w') as f:
+        with open(workDir+'Data/objs'+str(experiment)+'.pickle', 'w') as f:
             pickle.dump([agents, nPrivatePerAgent, nShared, nLocs, auction, locs, sharedSites, nloc, T, collectTimes, transitTimes,
                          rewardCollection, creward, R_min, R_max ], f)
     writeConfig1()
 
 else:
-    with open('../Data/objs'+str(experiment)+'.pickle') as f:  # Python 3: open(..., 'rb')
+    with open(workDir+'Data/objs'+str(experiment)+'.pickle') as f:  # Python 3: open(..., 'rb')
         agents, nPrivatePerAgent, nShared, nLocs, auction, locs, sharedSites, nloc, T, collectTimes, transitTimes, \
         rewardCollection, creward, R_min, R_max = pickle.load(f)
 
