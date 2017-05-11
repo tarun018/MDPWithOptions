@@ -17,6 +17,7 @@ from jnius import autoclass
 import time
 import multiprocessing
 import pickle
+import math
 #from pathos.multiprocessing import ProcessingPool as Pool
 
 class State:
@@ -1000,6 +1001,23 @@ class EMMDP:
     def timeout_handler(self, signum, frame):  # Custom signal handler
         raise TimeoutException
 
+    def doIter(self, arg):
+        i, ampl = arg
+        ampl.solve()
+        var = ampl.getVariable("xstar")
+        var_vals = var.getValues()
+        xstar_val = var_vals.getColumn('val')
+        return xstar_val
+
+    def doSuccIter(self, arg):
+        i,ampl = arg
+        print "InHere"
+        ampl.solve()
+        var = ampl.getVariable("xstar")
+        var_vals = var.getValues()
+        xstar_val = var_vals.getColumn('val')
+        return xstar_val
+
     def EMJavaAMPL(self):
         AMPL = autoclass('com.ampl.AMPL')
         DataFrame = autoclass('com.ampl.DataFrame')
@@ -1036,12 +1054,12 @@ class EMMDP:
         pool.terminate()
         print("Pool terminated")
 
+        os.system('killall ampl')
+
         end_time_non = time.time()
         nlptime = end_time_non - start_time_non
         print "Non Linear Time:  %s seconds \n\n\n\n\n\n" % nlptime
 
-        ampl = AMPL()
-        ampl.reset()
         Rs = []
         print "EM-AMPL: "
         initial_x = []
@@ -1059,70 +1077,97 @@ class EMMDP:
                 self.runConfig(i)
 
         signal.signal(signal.SIGALRM, self.timeout_handler)
-        iterStartTime = time.time()
+
         sumIterTime = 0
         newobj = 0
         signal.alarm(config.timetorunsec)
         try:
             xvals = []
+            args = []
+            pool = multiprocessing.pool.ThreadPool(processes=self.num_agents)
             print "Iteration: " + str(iter)
             for i in xrange(0, self.num_agents):
+                ampl = AMPL()
                 ampl.reset()
                 ampl.read("single.mod")
-                ampl.readData(config.workDir+'Data/single'+str(i)+'_exp_'+str(config.experiment)+'.dat')
-                ampl.read('single'+str(i)+'_exp_'+str(config.experiment)+'.run')
-                ampl.solve()
-
-                var = ampl.getVariable("xstar")
-                var_vals = var.getValues()
-                xstar_val = var_vals.getColumn('val')
-                xvals.append(np.array(xstar_val))
+                ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
+                ampl.read('single' + str(i) + '_exp_' + str(config.experiment) + '.run')
+                args.append((i, ampl))
+            iterStartTime = time.time()
+            pr = pool.map_async(self.doIter, args)
+            try:
+                rss = pr.get(timeout=int(math.ceil(config.timetorunsec - (sumIterTime + time.time() - iterStartTime))))
+                for i in xrange(0, self.num_agents):
+                    xvals.append(np.array(rss[i]))
+            except multiprocessing.TimeoutError:
+                print("Process timed out")
+            pool.terminate()
+            pool.join()
+            print("Pool terminated")
 
             iterEndTime = time.time()
 
             newobj = self.objective(xvals, Rs)
             print "\nObjective: ", newobj
-            iterTime = float(iterEndTime-iterStartTime)/self.num_agents
+            iterTime = float(iterEndTime-iterStartTime)
             times.append(iterTime)
             print "Iteration %s time: %s\n\n" %(str(iter), str(iterTime))
-            sumIterTime += float(iterEndTime-iterStartTime)/self.num_agents
+            sumIterTime += float(iterTime)
+
+            #signal.alarm(0)
+            #signal.alarm(int(math.ceil(config.timetorunsec - sumIterTime)))
 
             results.append(newobj)
             while(True):
                 iter += 1
                 print "Iteration: " + str(iter)
-                iterStartTime = time.time()
+                pools = multiprocessing.pool.ThreadPool(processes=self.num_agents)
+                args = []
                 xvalues = []
                 xvalsAsParam = np.concatenate(xvals)
                 xvalsParamFinal = [Double(k) for k in xvalsAsParam]
                 for i in xrange(0, self.num_agents):
+                    ampl = AMPL()
                     ampl.reset()
                     ampl.read("single.mod")
-                    ampl.readData(config.workDir+'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
+                    ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
                     ampl.read('single' + str(i) + '_exp_' + str(config.experiment) + '.run')
                     paramx = ampl.getParameter("x")
                     paramx_val = paramx.getValues()
                     paramx_val.setColumn('val', xvalsParamFinal)
-                    xvalsParamFinal = [Double(k) for k in xvalsAsParam]
                     paramx.setValues(paramx_val)
-
-                    ampl.solve()
-                    var = ampl.getVariable("xstar")
-                    var_vals = var.getValues()
-                    xstar_val = var_vals.getColumn('val')
-                    xvalues.append(np.array(xstar_val))
+                    xvalsParamFinal = [Double(k) for k in xvalsAsParam]
+                    args.append((i, ampl))
+                iterStartTime = time.time()
+                pros = pools.map_async(self.doSuccIter, args)
+                try:
+                    rsss = pros.get(timeout=int(math.ceil(config.timetorunsec - (sumIterTime + time.time() - iterStartTime))))
+                    for i in xrange(0, self.num_agents):
+                        xvalues.append(np.array(rsss[i]))
+                except multiprocessing.TimeoutError:
+                    print("Process timed out")
+                pools.terminate()
+                pools.join()
+                print("Pool terminated")
 
                 iterEndTime = time.time()
+
                 oldobj = self.objective(xvals, Rs)
                 print "\n\nOld Objective: ",oldobj
+                #print np.size(xvals), np.size(xvalues)
                 xvals = xvalues
                 newobj = self.objective(xvals, Rs)
                 results.append(newobj)
                 print "New Objective: ", newobj
-                iterTime = float(iterEndTime - iterStartTime) / self.num_agents
+                iterTime = float(iterEndTime - iterStartTime)
                 times.append(iterTime)
                 print "Iteration %s time: %s\n\n" % (str(iter), str(iterTime))
-                sumIterTime += float(iterEndTime-iterStartTime)/self.num_agents
+                sumIterTime += float(iterEndTime-iterStartTime)
+                #signal.alarm(0)
+                #signal.alarm(int(math.ceil(config.timetorunsec - sumIterTime)))
+
+                os.system('killall ampl')
+
 
                 print "\n"
                 if abs(newobj - oldobj) < config.delta:
