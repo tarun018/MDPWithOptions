@@ -5,8 +5,7 @@ import math
 solver = 'minos'
 flag = 1
 
-timetorunsecN = 5
-timetorunsecE = 150
+timetorunsec = 5
 
 experiment = 1002
 

@@ -968,6 +968,11 @@ class EMMDP:
 
     def doIter(self, arg):
         i, ampl = arg
+        ampl.reset()
+        ampl.read("single.mod")
+        ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
+        ampl.read(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
+
         ampl.solve()
         var = ampl.getVariable("xstar")
         var_vals = var.getValues()
@@ -975,7 +980,20 @@ class EMMDP:
         return xstar_val
 
     def doSuccIter(self, arg):
-        i,ampl = arg
+        i,ampl, xvalsParamFinal = arg
+        # Double = autoclass('java.lang.Double')
+        # global xvalsAsParam
+        # xvalsParamFinal = [Double(k) for k in xvalsAsParam]
+        ampl.reset()
+        ampl.read("single.mod")
+        ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
+        ampl.read(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
+        paramx = ampl.getParameter("x")
+        paramx_val = paramx.getValues()
+        paramx_val.setColumn('val', xvalsParamFinal)
+        paramx.setValues(paramx_val)
+
+
         ampl.solve()
         var = ampl.getVariable("xstar")
         var_vals = var.getValues()
@@ -989,11 +1007,11 @@ class EMMDP:
         nonlinearobj = 0
         nlptime = 0
         try:
-            start = time.time()
             os.system("rm -rf "+config.workDir+"Data/myfile"+str(config.experiment)+".nl")
             os.system("rm -rf "+config.workDir+"Data/myfile"+str(config.experiment)+".sol")
             ampl.read(config.workDir+"Data/nl2_exp_"+str(config.experiment)+".run")
             os.system("pkill -f ampl")
+            start = time.time()
             os.system("./ampl/minos -s "+config.workDir+"Data/myfile"+str(config.experiment)+".nl")
             end = time.time()
             nlptime = end-start
@@ -1049,7 +1067,7 @@ class EMMDP:
         nonlinearobj = 0
         nlptime = 0
         try:
-            nonlinearobj, nlptime = result.get(timeout=config.timetorunsecN)
+            nonlinearobj, nlptime = result.get(timeout=config.timetorunsec)
         except multiprocessing.TimeoutError:
             print("Process timed out")
         pool.terminate()
@@ -1061,7 +1079,7 @@ class EMMDP:
         signal.signal(signal.SIGALRM, self.timeout_handler)
         sumIterTime = 0
         newobj = 0
-        signal.alarm(config.timetorunsecE)
+        signal.alarm(config.timetorunsec)
         try:
             xvals = []
             args = []
@@ -1070,20 +1088,16 @@ class EMMDP:
             print "Iteration: " + str(iter)
             for i in xrange(0, self.num_agents):
                 ampl = AMPL()
-                ampl.reset()
-                ampl.read("single.mod")
-                ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
-                ampl.read(config.workDir+'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
                 args.append((i, ampl))
             daend = time.time()
 
-            datot = float(daend - dastart) / float(self.num_agents)
+            datot = 0
             sumIterTime += datot
 
             iterStartTime = time.time()
             pr = pool.map_async(self.doIter, args)
             try:
-                rss = pr.get(timeout=int(math.ceil(config.timetorunsecE - (sumIterTime + time.time() - iterStartTime))))
+                rss = pr.get(timeout=int(math.ceil(config.timetorunsec - (sumIterTime + time.time() - iterStartTime))))
                 for i in xrange(0, self.num_agents):
                     xvals.append(np.array(rss[i]))
             except multiprocessing.TimeoutError:
@@ -1105,7 +1119,6 @@ class EMMDP:
 
             os.system('pkill -f ampl')
             os.system('pkill -f minos')
-
             results.append(newobj)
             while(True):
                 try:
@@ -1119,25 +1132,17 @@ class EMMDP:
                     dastart = time.time()
                     for i in xrange(0, self.num_agents):
                         ampl = AMPL()
-                        ampl.reset()
-                        ampl.read("single.mod")
-                        ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
-                        ampl.read(config.workDir+'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
-                        paramx = ampl.getParameter("x")
-                        paramx_val = paramx.getValues()
-                        paramx_val.setColumn('val', xvalsParamFinal)
-                        paramx.setValues(paramx_val)
                         xvalsParamFinal = [Double(k) for k in xvalsAsParam]
-                        args.append((i, ampl))
+                        args.append((i, ampl, xvalsParamFinal))
                     daend = time.time()
 
-                    datot = float(daend - dastart) / float(self.num_agents)
+                    datot = 0
                     sumIterTime += datot
 
                     iterStartTime = time.time()
                     pros = pools.map_async(self.doSuccIter, args)
                     try:
-                        rsss = pros.get(timeout=int(math.ceil(config.timetorunsecE - (sumIterTime + time.time() - iterStartTime))))
+                        rsss = pros.get(timeout=int(math.ceil(config.timetorunsec - (sumIterTime + time.time() - iterStartTime))))
                         for i in xrange(0, self.num_agents):
                             xvalues.append(np.array(rsss[i]))
                     except multiprocessing.TimeoutError:
@@ -1176,6 +1181,10 @@ class EMMDP:
                             print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
                         break
                 except jnius.JavaException as e:
+                    pool.terminate()
+                    pool.join()
+                    os.system('pkill -f ampl')
+                    os.system('pkill -f minos')
                     iter -= 1
                     print "Rerun"
                     continue
