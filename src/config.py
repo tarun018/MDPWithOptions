@@ -5,13 +5,14 @@ import math
 solver = 'minos'
 flag = 1
 
-timetorunsec = 500
+timetorunsecN = 5
+timetorunsecE = 150
 
-experiment = 1002
+experiment = 1001
 
 offset = 500
-
-workDir = "../"
+GenRun = 1
+workDir = "/home/tarun/PycharmProjects/MDPWithOptions/"
 
 theta = 0.1
 gamma = 0.8
