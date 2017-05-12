@@ -1077,9 +1077,6 @@ class EMMDP:
                 args.append((i, ampl))
             daend = time.time()
 
-            datot = float(daend - dastart) / float(self.num_agents)
-            sumIterTime += datot
-
             iterStartTime = time.time()
             pr = pool.map_async(self.doIter, args)
             try:
@@ -1098,7 +1095,7 @@ class EMMDP:
             print "\nObjective: ", newobj
             iterTime = float(iterEndTime-iterStartTime)
 
-            totTime = float(iterTime) + float(datot)
+            totTime = float(iterTime)
             times.append(totTime)
             print "Iteration %s time: %s\n\n" %(str(iter), str(totTime))
             sumIterTime += float(iterTime)
@@ -1131,9 +1128,6 @@ class EMMDP:
                         args.append((i, ampl))
                     daend = time.time()
 
-                    datot = float(daend - dastart) / float(self.num_agents)
-                    sumIterTime += datot
-
                     iterStartTime = time.time()
                     pros = pools.map_async(self.doSuccIter, args)
                     try:
@@ -1156,7 +1150,7 @@ class EMMDP:
                     results.append(newobj)
                     print "New Objective: ", newobj
                     iterTime = float(iterEndTime-iterStartTime)
-                    totTime = float(iterTime) + float(datot)
+                    totTime = float(iterTime)
                     times.append(totTime)
                     print "Iteration %s time: %s\n\n" %(str(iter), str(totTime))
                     sumIterTime += float(iterTime)
@@ -1176,6 +1170,10 @@ class EMMDP:
                             print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
                         break
                 except jnius.JavaException as e:
+                    pool.terminate()
+                    pool.join()
+                    os.system('pkill -f ampl')
+                    os.system('pkill -f minos')
                     iter -= 1
                     print "Rerun"
                     continue
