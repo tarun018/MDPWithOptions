@@ -968,10 +968,6 @@ class EMMDP:
 
     def doIter(self, arg):
         i, ampl = arg
-        ampl.reset()
-        ampl.read("single.mod")
-        ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
-        ampl.read(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
 
         ampl.solve()
         var = ampl.getVariable("xstar")
@@ -981,13 +977,7 @@ class EMMDP:
 
     def doSuccIter(self, arg):
         i,ampl, xvalsParamFinal = arg
-        # Double = autoclass('java.lang.Double')
-        # global xvalsAsParam
-        # xvalsParamFinal = [Double(k) for k in xvalsAsParam]
-        ampl.reset()
-        ampl.read("single.mod")
-        ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
-        ampl.read(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
+
         paramx = ampl.getParameter("x")
         paramx_val = paramx.getValues()
         paramx_val.setColumn('val', xvalsParamFinal)
@@ -1007,11 +997,11 @@ class EMMDP:
         nonlinearobj = 0
         nlptime = 0
         try:
+            start = time.time()
             os.system("rm -rf "+config.workDir+"Data/myfile"+str(config.experiment)+".nl")
             os.system("rm -rf "+config.workDir+"Data/myfile"+str(config.experiment)+".sol")
             ampl.read(config.workDir+"Data/nl2_exp_"+str(config.experiment)+".run")
             os.system("pkill -f ampl")
-            start = time.time()
             os.system("./ampl/minos -s "+config.workDir+"Data/myfile"+str(config.experiment)+".nl")
             end = time.time()
             nlptime = end-start
@@ -1033,6 +1023,18 @@ class EMMDP:
             print "Non Linear Not Able"
             print e
         return nonlinearobj, nlptime
+
+    def resetAMPLs(self):
+        ampls = []
+        AMPL = autoclass('com.ampl.AMPL')
+        for i in xrange(0, self.num_agents):
+            ampl = AMPL()
+            ampl.reset()
+            ampl.read("single.mod")
+            ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
+            ampl.read(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
+            ampls.append(ampl)
+        return ampls
 
     def EMJavaAMPL(self):
         AMPL = autoclass('com.ampl.AMPL')
@@ -1068,7 +1070,8 @@ class EMMDP:
         nlptime = 0
         try:
             nonlinearobj, nlptime = result.get(timeout=config.timetorunsec)
-        except multiprocessing.TimeoutError:
+        except (Exception, multiprocessing.TimeoutError) as e:
+            print e
             print("Process timed out")
         pool.terminate()
         print("Pool terminated")
@@ -1081,6 +1084,7 @@ class EMMDP:
         newobj = 0
         signal.alarm(config.timetorunsec)
         try:
+            ampls = []
             xvals = []
             args = []
             pool = multiprocessing.pool.ThreadPool(processes=self.num_agents)
@@ -1088,23 +1092,31 @@ class EMMDP:
             print "Iteration: " + str(iter)
             for i in xrange(0, self.num_agents):
                 ampl = AMPL()
+                ampl.reset()
+                ampl.read("single.mod")
+                ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
+                ampl.read(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
+                ampls.append(ampl)
                 args.append((i, ampl))
             daend = time.time()
 
-            datot = 0
+            datot = daend - dastart
             sumIterTime += datot
 
             iterStartTime = time.time()
             pr = pool.map_async(self.doIter, args)
             try:
-                rss = pr.get(timeout=int(math.ceil(config.timetorunsec - (sumIterTime + time.time() - iterStartTime))))
+                rss = pr.get(timeout=int(math.ceil(config.timetorunsec - sumIterTime)))
                 for i in xrange(0, self.num_agents):
                     xvals.append(np.array(rss[i]))
-            except multiprocessing.TimeoutError:
+            except multiprocessing.TimeoutError as e:
+                print e
                 print("Process timed out")
-            pool.terminate()
-            pool.join()
-            print("Pool terminated")
+                pool.terminate()
+                pool.join()
+                print("Pool terminated")
+                os.system('pkill -f ampl')
+                os.system('pkill -f minos')
 
             iterEndTime = time.time()
 
@@ -1117,39 +1129,38 @@ class EMMDP:
             print "Iteration %s time: %s\n\n" %(str(iter), str(totTime))
             sumIterTime += float(iterTime)
 
-            os.system('pkill -f ampl')
-            os.system('pkill -f minos')
             results.append(newobj)
             while(True):
                 try:
                     iter += 1
                     print "Iteration: " + str(iter)
-                    pools = multiprocessing.pool.ThreadPool(processes=self.num_agents)
                     args = []
                     xvalues = []
                     xvalsAsParam = np.concatenate(xvals)
                     xvalsParamFinal = [Double(k) for k in xvalsAsParam]
                     dastart = time.time()
                     for i in xrange(0, self.num_agents):
-                        ampl = AMPL()
                         xvalsParamFinal = [Double(k) for k in xvalsAsParam]
-                        args.append((i, ampl, xvalsParamFinal))
+                        args.append((i, ampls[i], xvalsParamFinal))
                     daend = time.time()
 
                     datot = 0
                     sumIterTime += datot
 
                     iterStartTime = time.time()
-                    pros = pools.map_async(self.doSuccIter, args)
+                    pros = pool.map_async(self.doSuccIter, args)
                     try:
-                        rsss = pros.get(timeout=int(math.ceil(config.timetorunsec - (sumIterTime + time.time() - iterStartTime))))
+                        rsss = pros.get(timeout=int(math.ceil(config.timetorunsec - sumIterTime)))
                         for i in xrange(0, self.num_agents):
                             xvalues.append(np.array(rsss[i]))
-                    except multiprocessing.TimeoutError:
+                    except multiprocessing.TimeoutError as e:
+                        print e
                         print("Process timed out")
-                    pools.terminate()
-                    pools.join()
-                    print("Pool terminated")
+                        pool.terminate()
+                        pool.join()
+                        print("Pool terminated")
+                        os.system('pkill -f ampl')
+                        os.system('pkill -f minos')
 
                     iterEndTime = time.time()
 
@@ -1165,9 +1176,6 @@ class EMMDP:
                     times.append(totTime)
                     print "Iteration %s time: %s\n\n" %(str(iter), str(totTime))
                     sumIterTime += float(iterTime)
-                    os.system('pkill -f ampl')
-                    os.system('pkill -f minos')
-
 
                     print "\n"
                     if abs(newobj - oldobj) < config.delta:
@@ -1180,11 +1188,14 @@ class EMMDP:
                         if nonlinearobj != 0:
                             print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
                         break
-                except jnius.JavaException as e:
+                except (Exception, jnius.JavaException) as e:
+                    print e
                     pool.terminate()
                     pool.join()
                     os.system('pkill -f ampl')
                     os.system('pkill -f minos')
+                    ampls = self.resetAMPLs()
+                    pool = multiprocessing.pool.ThreadPool(processes=self.num_agents)
                     iter -= 1
                     print "Rerun"
                     continue
