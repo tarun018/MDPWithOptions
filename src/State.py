@@ -989,11 +989,11 @@ class EMMDP:
         nonlinearobj = 0
         nlptime = 0
         try:
-            start = time.time()
             os.system("rm -rf "+config.workDir+"Data/myfile"+str(config.experiment)+".nl")
             os.system("rm -rf "+config.workDir+"Data/myfile"+str(config.experiment)+".sol")
             ampl.read(config.workDir+"Data/nl2_exp_"+str(config.experiment)+".run")
             os.system("pkill -f ampl")
+            start = time.time()
             os.system("./ampl/minos -s "+config.workDir+"Data/myfile"+str(config.experiment)+".nl")
             end = time.time()
             nlptime = end-start
@@ -1176,6 +1176,16 @@ class EMMDP:
                     os.system('pkill -f minos')
                     iter -= 1
                     print "Rerun"
+                    print e
+                    continue
+                except Exception as e:
+                    pool.terminate()
+                    pool.join()
+                    os.system('pkill -f ampl')
+                    os.system('pkill -f minos')
+                    iter -= 1
+                    print "Rerun"
+                    print e
                     continue
 
         except TimeoutException as e:
