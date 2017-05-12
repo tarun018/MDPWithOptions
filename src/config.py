@@ -8,7 +8,7 @@ flag = 1
 timetorunsecN = 5
 timetorunsecE = 150
 
-experiment = 1001
+experiment = 1002
 
 offset = 500
 GenRun = 1

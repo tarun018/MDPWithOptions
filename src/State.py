@@ -990,8 +990,10 @@ class EMMDP:
         nlptime = 0
         try:
             start = time.time()
+            os.system("rm -rf "+config.workDir+"Data/myfile"+str(config.experiment)+".nl")
+            os.system("rm -rf "+config.workDir+"Data/myfile"+str(config.experiment)+".sol")
             ampl.read(config.workDir+"Data/nl2_exp_"+str(config.experiment)+".run")
-            os.system("killall ampl")
+            os.system("pkill -f ampl")
             os.system("./ampl/minos -s "+config.workDir+"Data/myfile"+str(config.experiment)+".nl")
             end = time.time()
             nlptime = end-start
@@ -1052,8 +1054,8 @@ class EMMDP:
             print("Process timed out")
         pool.terminate()
         print("Pool terminated")
-        os.system('killall ampl')
-
+        os.system('pkill -f ampl')
+        os.system('pkill -f minos')
 
         print "EM-AMPL: "
         signal.signal(signal.SIGALRM, self.timeout_handler)
@@ -1064,6 +1066,7 @@ class EMMDP:
             xvals = []
             args = []
             pool = multiprocessing.pool.ThreadPool(processes=self.num_agents)
+            dastart = time.time()
             print "Iteration: " + str(iter)
             for i in xrange(0, self.num_agents):
                 ampl = AMPL()
@@ -1072,6 +1075,11 @@ class EMMDP:
                 ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
                 ampl.read(config.workDir+'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
                 args.append((i, ampl))
+            daend = time.time()
+
+            datot = float(daend - dastart) / float(self.num_agents)
+            sumIterTime += datot
+
             iterStartTime = time.time()
             pr = pool.map_async(self.doIter, args)
             try:
@@ -1089,72 +1097,89 @@ class EMMDP:
             newobj = self.objective(xvals, Rs)
             print "\nObjective: ", newobj
             iterTime = float(iterEndTime-iterStartTime)
-            times.append(iterTime)
-            print "Iteration %s time: %s\n\n" %(str(iter), str(iterTime))
+
+            totTime = float(iterTime) + float(datot)
+            times.append(totTime)
+            print "Iteration %s time: %s\n\n" %(str(iter), str(totTime))
             sumIterTime += float(iterTime)
 
-            os.system('killall ampl')
+            os.system('pkill -f ampl')
+            os.system('pkill -f minos')
 
             results.append(newobj)
             while(True):
-                iter += 1
-                print "Iteration: " + str(iter)
-                pools = multiprocessing.pool.ThreadPool(processes=self.num_agents)
-                args = []
-                xvalues = []
-                xvalsAsParam = np.concatenate(xvals)
-                xvalsParamFinal = [Double(k) for k in xvalsAsParam]
-                for i in xrange(0, self.num_agents):
-                    ampl = AMPL()
-                    ampl.reset()
-                    ampl.read("single.mod")
-                    ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
-                    ampl.read(config.workDir+'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
-                    paramx = ampl.getParameter("x")
-                    paramx_val = paramx.getValues()
-                    paramx_val.setColumn('val', xvalsParamFinal)
-                    paramx.setValues(paramx_val)
-                    xvalsParamFinal = [Double(k) for k in xvalsAsParam]
-                    args.append((i, ampl))
-                iterStartTime = time.time()
-                pros = pools.map_async(self.doSuccIter, args)
                 try:
-                    rsss = pros.get(timeout=int(math.ceil(config.timetorunsecE - (sumIterTime + time.time() - iterStartTime))))
+                    iter += 1
+                    print "Iteration: " + str(iter)
+                    pools = multiprocessing.pool.ThreadPool(processes=self.num_agents)
+                    args = []
+                    xvalues = []
+                    xvalsAsParam = np.concatenate(xvals)
+                    xvalsParamFinal = [Double(k) for k in xvalsAsParam]
+                    dastart = time.time()
                     for i in xrange(0, self.num_agents):
-                        xvalues.append(np.array(rsss[i]))
-                except multiprocessing.TimeoutError:
-                    print("Process timed out")
-                pools.terminate()
-                pools.join()
-                print("Pool terminated")
+                        ampl = AMPL()
+                        ampl.reset()
+                        ampl.read("single.mod")
+                        ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
+                        ampl.read(config.workDir+'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
+                        paramx = ampl.getParameter("x")
+                        paramx_val = paramx.getValues()
+                        paramx_val.setColumn('val', xvalsParamFinal)
+                        paramx.setValues(paramx_val)
+                        xvalsParamFinal = [Double(k) for k in xvalsAsParam]
+                        args.append((i, ampl))
+                    daend = time.time()
 
-                iterEndTime = time.time()
+                    datot = float(daend - dastart) / float(self.num_agents)
+                    sumIterTime += datot
 
-                oldobj = self.objective(xvals, Rs)
-                print "\n\nOld Objective: ",oldobj
-                #print np.size(xvals), np.size(xvalues)
-                xvals = xvalues
-                newobj = self.objective(xvals, Rs)
-                results.append(newobj)
-                print "New Objective: ", newobj
-                iterTime = float(iterEndTime - iterStartTime)
-                times.append(iterTime)
-                print "Iteration %s time: %s\n\n" % (str(iter), str(iterTime))
-                sumIterTime += float(iterEndTime-iterStartTime)
-                os.system('killall ampl')
+                    iterStartTime = time.time()
+                    pros = pools.map_async(self.doSuccIter, args)
+                    try:
+                        rsss = pros.get(timeout=int(math.ceil(config.timetorunsecE - (sumIterTime + time.time() - iterStartTime))))
+                        for i in xrange(0, self.num_agents):
+                            xvalues.append(np.array(rsss[i]))
+                    except multiprocessing.TimeoutError:
+                        print("Process timed out")
+                    pools.terminate()
+                    pools.join()
+                    print("Pool terminated")
+
+                    iterEndTime = time.time()
+
+                    oldobj = self.objective(xvals, Rs)
+                    print "\n\nOld Objective: ",oldobj
+                    #print np.size(xvals), np.size(xvalues)
+                    xvals = xvalues
+                    newobj = self.objective(xvals, Rs)
+                    results.append(newobj)
+                    print "New Objective: ", newobj
+                    iterTime = float(iterEndTime-iterStartTime)
+                    totTime = float(iterTime) + float(datot)
+                    times.append(totTime)
+                    print "Iteration %s time: %s\n\n" %(str(iter), str(totTime))
+                    sumIterTime += float(iterTime)
+                    os.system('pkill -f ampl')
+                    os.system('pkill -f minos')
 
 
-                print "\n"
-                if abs(newobj - oldobj) < config.delta:
-                    print "NonLinear Obj: ", nonlinearobj
-                    print "EM Obj: ", newobj
-                    print "AvgIterTime: ", sumIterTime/iter
-                    print "NonLinearTime: ", nlptime
-                    print "Overall EM Time: %s"%(sumIterTime)
-                    print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
-                    if nonlinearobj != 0:
+                    print "\n"
+                    if abs(newobj - oldobj) < config.delta:
+                        print "NonLinear Obj: ", nonlinearobj
+                        print "EM Obj: ", newobj
+                        print "AvgIterTime: ", sumIterTime/iter
+                        print "NonLinearTime: ", nlptime
+                        print "Overall EM Time: %s"%(sumIterTime)
                         print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
-                    break
+                        if nonlinearobj != 0:
+                            print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
+                        break
+                except jnius.JavaException as e:
+                    iter -= 1
+                    print "Rerun"
+                    continue
+
         except TimeoutException as e:
             print e
             print "\n\n EM Time's Up: "
