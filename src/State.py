@@ -549,6 +549,7 @@ class EMMDP:
         self.genConstraints()
 
     def generateMDPs(self):
+        numvars = 0
         if config.flag == 0:
             prs = []
             for i in xrange(0, self.num_agents):
@@ -568,6 +569,9 @@ class EMMDP:
                 print "Generating MDP for Agent"+str(i)
                 a = MDP(config.T[i], config.locs[i], i, config.collectTimes[i], config.transitTimes[i], config.alpha, config.flag)
                 self.mdps.append(a)
+        for i in xrange(0, self.num_agents):
+            numvars += len(self.mdps[i].states)*len(self.mdps[i].actions)
+        print numvars
 
     def genPrimitiveEvents(self):
         print "Generating Primitive Events"
@@ -976,14 +980,7 @@ class EMMDP:
         return xstar_val
 
     def doSuccIter(self, arg):
-        i,ampl, xvalsParamFinal = arg
-
-        paramx = ampl.getParameter("x")
-        paramx_val = paramx.getValues()
-        paramx_val.setColumn('val', xvalsParamFinal)
-        paramx.setValues(paramx_val)
-
-
+        i,ampl = arg
         ampl.solve()
         var = ampl.getVariable("xstar")
         var_vals = var.getValues()
@@ -1037,6 +1034,7 @@ class EMMDP:
         return ampls
 
     def EMJavaAMPL(self):
+        fails = 0
         AMPL = autoclass('com.ampl.AMPL')
         Double = autoclass('java.lang.Double')
         ampl = AMPL()
@@ -1066,10 +1064,11 @@ class EMMDP:
         print "NonLinear:"
         pool = multiprocessing.pool.ThreadPool(processes=1)
         result = pool.apply_async(self.NonLinear)
+        pool.close()
         nonlinearobj = 0
         nlptime = 0
         try:
-            nonlinearobj, nlptime = result.get(timeout=config.timetorunsec)
+            nonlinearobj, nlptime = result.get(timeout=config.timetorunsecN)
         except (Exception, multiprocessing.TimeoutError) as e:
             print e
             print("Process timed out")
@@ -1082,7 +1081,7 @@ class EMMDP:
         signal.signal(signal.SIGALRM, self.timeout_handler)
         sumIterTime = 0
         newobj = 0
-        signal.alarm(config.timetorunsec)
+        signal.alarm(config.timetorunsecE)
         try:
             ampls = []
             xvals = []
@@ -1104,26 +1103,26 @@ class EMMDP:
             sumIterTime += datot
 
             iterStartTime = time.time()
+            iterEndTime = time.time()
             pr = pool.map_async(self.doIter, args)
+            pool.close()
             try:
-                rss = pr.get(timeout=int(math.ceil(config.timetorunsec - sumIterTime)))
+                rss = pr.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
+                iterEndTime = time.time()
                 for i in xrange(0, self.num_agents):
                     xvals.append(np.array(rss[i]))
             except multiprocessing.TimeoutError as e:
                 print e
                 print("Process timed out")
-                pool.terminate()
-                pool.join()
-                print("Pool terminated")
-                os.system('pkill -f ampl')
-                os.system('pkill -f minos')
-
-            iterEndTime = time.time()
+            pool.terminate()
+            pool.join()
+            print("Pool terminated")
+            # os.system('pkill -f ampl')
+            # os.system('pkill -f minos')
 
             newobj = self.objective(xvals, Rs)
             print "\nObjective: ", newobj
             iterTime = float(iterEndTime-iterStartTime)
-
             totTime = float(iterTime) + float(datot)
             times.append(totTime)
             print "Iteration %s time: %s\n\n" %(str(iter), str(totTime))
@@ -1134,35 +1133,39 @@ class EMMDP:
                 try:
                     iter += 1
                     print "Iteration: " + str(iter)
+                    pool = multiprocessing.pool.ThreadPool(processes=self.num_agents)
                     args = []
                     xvalues = []
                     xvalsAsParam = np.concatenate(xvals)
                     xvalsParamFinal = [Double(k) for k in xvalsAsParam]
                     dastart = time.time()
                     for i in xrange(0, self.num_agents):
+                        paramx = ampls[i].getParameter("x")
+                        paramx_val = paramx.getValues()
+                        paramx_val.setColumn('val', xvalsParamFinal)
+                        paramx.setValues(paramx_val)
                         xvalsParamFinal = [Double(k) for k in xvalsAsParam]
-                        args.append((i, ampls[i], xvalsParamFinal))
+                        args.append((i, ampls[i]))
                     daend = time.time()
 
                     datot = 0
                     sumIterTime += datot
 
                     iterStartTime = time.time()
+                    iterEndTime = time.time()
                     pros = pool.map_async(self.doSuccIter, args)
+                    pool.close()
                     try:
-                        rsss = pros.get(timeout=int(math.ceil(config.timetorunsec - sumIterTime)))
+                        rsss = pros.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
+                        iterEndTime = time.time()
                         for i in xrange(0, self.num_agents):
                             xvalues.append(np.array(rsss[i]))
                     except multiprocessing.TimeoutError as e:
                         print e
                         print("Process timed out")
-                        pool.terminate()
-                        pool.join()
-                        print("Pool terminated")
-                        os.system('pkill -f ampl')
-                        os.system('pkill -f minos')
-
-                    iterEndTime = time.time()
+                    pool.terminate()
+                    pool.join()
+                    print("Pool terminated")
 
                     oldobj = self.objective(xvals, Rs)
                     print "\n\nOld Objective: ",oldobj
@@ -1189,13 +1192,15 @@ class EMMDP:
                             print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
                         break
                 except (Exception, jnius.JavaException) as e:
+                    fails += 1
+                    if fails > 5:
+                        break
                     print e
                     pool.terminate()
                     pool.join()
-                    os.system('pkill -f ampl')
-                    os.system('pkill -f minos')
-                    ampls = self.resetAMPLs()
-                    pool = multiprocessing.pool.ThreadPool(processes=self.num_agents)
+                    #os.system('pkill -f ampl')
+                    #os.system('pkill -f minos')
+                    #ampls = self.resetAMPLs()
                     iter -= 1
                     print "Rerun"
                     continue

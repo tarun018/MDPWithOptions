@@ -5,9 +5,10 @@ import math
 solver = 'minos'
 flag = 1
 
-timetorunsec = 500
+timetorunsecE = 500
+timetorunsecN = 500
 
-experiment = 1001
+experiment = 1002
 
 offset = 500
 GenRun = 1
