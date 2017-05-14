@@ -14,9 +14,9 @@ offset = 500
 GenRun = 1
 workDir = "/home/tarun/PycharmProjects/MDPWithOptions/"
 
-theta = 0.1
+theta = 0.001
 gamma = 0.8
-initialxval = 0.1
+initialxval = 0.001
 alpha = 0.8
 delta = 0.00001
 print "theta: ", theta

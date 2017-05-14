@@ -1,14 +1,14 @@
 import csv
 import signal
 import numpy as np
-#import cvxpy
+import cvxpy
 import config
 import itertools
 import copy_reg
 import types
 from copy import deepcopy
-#import pyipopt
-#import algopy
+import pyipopt
+import algopy
 import os
 import matplotlib
 matplotlib.use('Agg')
@@ -21,7 +21,6 @@ import pickle
 import math
 import multiprocessing.pool
 import traceback
-
 
 #from pathos.multiprocessing import ProcessingPool as Pool
 
@@ -444,7 +443,44 @@ class MDP:
         A_mat = []
         if genA is True:
 
-            pass
+            decisionvar = []
+            for x in self.states:
+                triple = []
+                for y in self.states:
+                    triplet = []
+                    for a in y.possibleActions:
+                        if x.index == y.index:
+                            triplet.append(float(1))
+                        else:
+                            triplet.append(float(0))
+                    triple.append(triplet)
+                decisionvar.append(triple)
+
+            for x in self.states:
+                incoming = []
+                for s in self.states:
+                    for t in s.transition:
+                        if t[1]==x.index and t[2]!=0:
+                            incoming.append((s, t[0], t[2]))
+
+                for h in incoming:
+                    decisionvar[x.index][h[0].index][h[1]] -= gamma*float(h[2])
+
+            # for x in decisionvar:
+            #     for y in x:
+            #         for z in y:
+            #             print str(z) + ",",
+            #         print "",
+            #     print
+            #
+            # print
+            # print
+            A_mat = []
+            for x in decisionvar:
+                lit = []
+                for t in x:
+                    lit.extend(t)
+                A_mat.append(lit)
 
         # for x in A_mat:
         #     print x
@@ -452,7 +488,6 @@ class MDP:
         R_mat = []
         for x in self.states:
             for y in x.possibleActions:
-                assert len(x.reward) != 0
                 for r in x.reward:
                     if r[0]==y:
                         R_mat.append(r[1])
@@ -463,7 +498,6 @@ class MDP:
         R_max = config.R_max
         for x in self.states:
             for y in x.possibleActions:
-                assert len(x.reward) != 0
                 for r in x.reward:
                     if r[0]==y:
                         newR.append(float(r[1])/float(R_max-R_min))
@@ -931,7 +965,7 @@ class EMMDP:
                     sd = peves.statedash
                     pesum += self.mdps[agent].transition(s,a,sd)*xvals[agent][(s.index*self.mdps[agent].numerActions)+a.index]
                 prod *= pesum
-            sum += prod
+            sum += np.asscalar(prod)
         #sum += config.theta * len(self.constraints)
         return sum
 
@@ -1220,6 +1254,7 @@ class EMMDP:
                     #os.system('pkill -f ampl')
                     #os.system('pkill -f minos')
                     #ampls = self.resetAMPLs()
+                    xvals = xvalues
                     iter -= 1
                     print "Rerun"
                     traceback.print_exc()
@@ -1240,6 +1275,299 @@ class EMMDP:
             signal.alarm(0)
 
         self.genGraphAndSave(len(results), results, nonlinearobj, times, nlptime)
+
+    def EM(self, NonLinear=False):
+        initial_x = []
+        for i in xrange(0, self.num_agents):
+            numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
+            lst = [config.initialxval] * numvar
+            initial_x.append(lst)
+
+        self.As = []
+        self.Rs = []
+        self.newRs = []
+        self.alphas = []
+        xvals = []
+        pvals = []
+        num_iter = 1
+
+        print "Iteration: " + str(num_iter)
+        for i in xrange(0, self.num_agents):
+            A, R, newR = self.mdps[i].generateLPAc(config.gamma, genA=True)
+            self.As.append(A)
+            self.Rs.append(R)
+            self.newRs.append(newR)
+            self.alphas.append(self.mdps[i].start)
+
+        if NonLinear:
+            x, obj = self.NonLinear(initial_x)
+            print obj
+            return
+
+        sums, products = self.generateEstep(initial_x, self.newRs)
+        for i in xrange(0, self.num_agents):
+            if config.solver == 'ipopt':
+                xstar_val, prob_val = self.Mstep1(sums, products, initial_x, i)
+            elif config.solver == 'cvxpy':
+                xstar_val, prob_val = self.Mstep(sums, products, initial_x, i)
+            xvals.append(xstar_val)
+            pvals.append(prob_val)
+        o = self.objective(xvals, self.Rs)
+        print "Objective: ", o
+
+        while (True):
+            num_iter += 1
+            print "Iteration: " + str(num_iter)
+            xvalues = []
+            pvalues = []
+            sums, products = self.generateEstep(xvals, self.newRs)
+            for i in xrange(0, self.num_agents):
+                if config.solver == 'ipopt':
+                    xstar_val, prob_val = self.Mstep1(sums, products, xvals, i)
+                elif config.solver == 'cvxpy':
+                    xstar_val, prob_val = self.Mstep(sums, products, xvals, i)
+                xvalues.append(xstar_val)
+                pvalues.append(prob_val)
+            prevobj = self.objective(xvals, self.Rs)
+            print "PrevObj: ", prevobj
+            xvals = xvalues
+            pvals = pvalues
+            newobj = self.objective(xvals, self.Rs)
+            print "NewObj: ", newobj
+            if abs(newobj - prevobj) < config.delta:
+                print newobj
+                break
+
+    def generateEstep(self, x, newRs):
+        print "Estep: "
+        sums = []
+        for i in xrange(0, self.num_agents):
+            Rcap = np.array(newRs[i])[np.newaxis].T
+            rdiag = np.diag(Rcap[:, 0])
+            rdiagx = rdiag.dot(x[i])
+            rdiagx = rdiagx * (1 - config.gamma)
+            sums.append(rdiagx)
+
+        products = []
+        for i in xrange(0, len(self.constraints)):
+            prod = float(self.constraints[i].reward) / float(config.R_max - config.R_min)
+            assert prod > 0
+            for eves in self.constraints[i].Events:
+                sum = 0
+                agent = eves.agent
+                for k in eves.pevents:
+                    s = k.state
+                    a = k.action
+                    sd = k.statedash
+                    sum += self.mdps[agent].transition(s, a, sd) * x[agent][(s.index * self.mdps[agent].numerActions) + a.index]
+                prod *= sum
+            products.append(prod)
+        assert all(vals > 0 for vals in products)
+        print "Done"
+        return sums, np.array(products)
+
+    def Mstep1(self, sums, products, initx, agent):
+        print "Mstep: "
+        nvar = self.mdps[agent].numberStates * self.mdps[agent].numerActions
+        x_L = np.ones((nvar), dtype=np.float_) * 0.000001
+        x_U = np.ones((nvar), dtype=np.float_) * (float(1) / float(1-config.gamma))
+
+        ncon = self.mdps[agent].numberStates
+        g_L = np.array(self.alphas[agent])
+        g_U = np.array(self.alphas[agent])
+
+        rdiagx = np.array(sums[agent])
+        A_mat = np.array(self.As[agent])
+
+        nnzj = ncon * nvar
+        nnzh = 0
+
+        def eval_f(x, user_data=None):
+            thetahat = float(config.theta) / float(config.R_max - config.R_min)
+            assert thetahat > 0
+            obj = 0
+            for i in xrange(0, len(self.constraints)):
+                estepvalue = products[i]
+                const = self.constraints[i]
+                sumallevents = 0
+                sumallevents1 = 0
+                sumallevents2 = 0
+                for eves in const.Events:
+                    sumxstar = 0
+                    sumx = 0
+                    if eves.agent != agent:
+                        continue
+                    for pevens in eves.pevents:
+                        s = pevens.state
+                        a = pevens.action
+                        sd = pevens.statedash
+
+                        if type(sumxstar) is int:
+                            sumxstar = self.mdps[agent].transition(s, a, sd) * x[(s.index * self.mdps[agent].numerActions) + a.index]
+                        else:
+                            sumxstar += self.mdps[agent].transition(s, a, sd) * x[(s.index * self.mdps[agent].numerActions) + a.index]
+
+                        if type(sumx) is int:
+                            sumx = self.mdps[agent].transition(s, a, sd) * initx[agent][(s.index * self.mdps[agent].numerActions) + a.index]
+                        else:
+                            sumx += self.mdps[agent].transition(s, a, sd) * initx[agent][(s.index * self.mdps[agent].numerActions) + a.index]
+
+                    if type(sumallevents) is int:
+                        sumallevents = np.log(sumxstar)
+                    else:
+                        sumallevents += np.log(sumxstar)
+
+                    if type(sumallevents1) is int:
+                        sumallevents1 = (1 - sumx) * np.log(1 - sumxstar)
+                    else:
+                        sumallevents1 = (1 - sumx) * np.log(1 - sumxstar)
+
+                    if type(sumallevents2) is int:
+                        sumallevents2 = sumx * np.log(sumxstar)
+                    else:
+                        sumallevents2 += sumx * np.log(sumxstar)
+
+                    #print sumxstar
+
+                if sumallevents != 0:
+                    #print estepvalue * sumallevents
+                    obj += estepvalue * sumallevents
+
+                if sumallevents1 != 0:
+                    #print thetahat * sumallevents1
+                    obj += thetahat * sumallevents1
+
+                if sumallevents2 != 0:
+                    #print thetahat * sumallevents2
+                    obj += thetahat * sumallevents2
+
+            obj += np.dot(rdiagx, np.log(np.array(x)))
+            return -1 * obj
+
+        def eval_grad_f(x, user_data=None):
+            x = algopy.UTPM.init_jacobian(x)
+            return algopy.UTPM.extract_jacobian(eval_f(x))
+
+        def eval_g(x, user_data=None):
+            out = algopy.zeros(ncon, dtype=x)
+            for i in xrange(0, ncon):
+                out[i] = np.dot(A_mat[i, :], x)
+            return out
+
+        def eval_jac_g(x, flag, user_data=None):
+            if flag:
+                rows = []
+                cols = []
+                arr = range(0, nvar)
+                for i in xrange(0, ncon):
+                    rows.extend([i] * nvar)
+                    cols.extend(arr)
+                assert len(rows) == nnzj
+                assert len(cols) == nnzj
+                return (np.array(rows), np.array(cols))
+            else:
+                x = algopy.UTPM.init_jacobian(x)
+                y = algopy.UTPM.extract_jacobian(eval_g(x))
+                return np.concatenate(np.array(y))
+
+        nlp = pyipopt.create(nvar, x_L, x_U, ncon, g_L, g_U, nnzj, nnzh, eval_f, eval_grad_f, eval_g, eval_jac_g)
+        # nlp.str_option('linear_solver', 'mumps')
+        # nlp.num_option('tol', 1e-7)
+        # nlp.int_option('print_level', 0)
+        # nlp.str_option('mehrotra_algorithm', 'yes')
+        # nlp.str_option('print_timing_statistics', 'yes')
+        #nlp.int_option('max_iter', 100)
+        nlp.str_option('mu_strategy', 'adaptive')
+        nlp.str_option('warm_start_init_point', 'yes')
+        x0 = np.array(initx[agent])
+        x, zl, zu, constraint_multipliers, obj, status = nlp.solve(x0)
+        nlp.close()
+        return x, -1 * obj
+
+    def Mstep(self, sums, products, x, agent):
+        print "Mstep: ",
+        num_of_var = self.mdps[agent].numberStates * self.mdps[agent].numerActions
+        xstar = cvxpy.Variable(num_of_var, 1)
+        obj = np.transpose(np.array(sums[agent])) * cvxpy.log(xstar)
+        thetahat = float(config.theta) / float(config.R_max - config.R_min)
+        assert thetahat > 0
+        for i in xrange(0, len(self.constraints)):
+            estepvalue = products[i]
+            const = self.constraints[i]
+            sumallevents = 0
+            sumallevents1 = 0
+            sumallevents2 = 0
+            for eves in const.Events:
+                sumxstar = 0
+                sumx = 0
+                if eves.agent != agent:
+                    continue
+                for pevens in eves.pevents:
+                    s = pevens.state
+                    a = pevens.action
+                    sd = pevens.statedash
+
+                    if type(sumxstar) is int:
+                        sumxstar = self.mdps[agent].transition(s, a, sd) * xstar[
+                            (s.index * self.mdps[agent].numerActions) + a.index]
+                    else:
+                        sumxstar += self.mdps[agent].transition(s, a, sd) * xstar[
+                            (s.index * self.mdps[agent].numerActions) + a.index]
+
+                    if type(sumx) is int:
+                        sumx = self.mdps[agent].transition(s, a, sd) * x[agent][
+                            (s.index * self.mdps[agent].numerActions) + a.index]
+                    else:
+                        sumx += self.mdps[agent].transition(s, a, sd) * x[agent][
+                            (s.index * self.mdps[agent].numerActions) + a.index]
+
+                if type(sumallevents) is int:
+                    sumallevents = cvxpy.log(sumxstar)
+                else:
+                    sumallevents += cvxpy.log(sumxstar)
+
+                if type(sumallevents1) is int:
+                    sumallevents1 = (1 - sumx) * cvxpy.log(1 - sumxstar)
+                else:
+                    sumallevents1 = (1 - sumx) * cvxpy.log(1 - sumxstar)
+
+                if type(sumallevents2) is int:
+                    sumallevents2 = sumx * cvxpy.log(sumxstar)
+                else:
+                    sumallevents2 += sumx * cvxpy.log(sumxstar)
+
+            if sumallevents != 0:
+                # print estepvalue * sumallevents
+                obj += estepvalue * sumallevents
+
+            if sumallevents1 != 0:
+                # print thetahat * sumallevents1
+                obj += thetahat * sumallevents1
+
+            if sumallevents2 != 0:
+                # print thetahat * sumallevents2
+                obj += thetahat * sumallevents2
+
+        obj = cvxpy.Maximize(obj)
+        A_mat = np.array(self.As[agent])
+        alpha = self.alphas[agent]
+        cons = [A_mat * xstar == alpha, xstar >= 0.000001]
+        # for evecon in xrange(0, len(self.agentwise[agent])):
+        #     mt = np.zeros((num_of_var, 1))
+        #     event = self.agentwise[agent][evecon][0]
+        #     con = self.agentwise[agent][evecon][1]
+        #     for peven in event.pevents:
+        #         s = peven.state
+        #         a = peven.action
+        #         sd = peven.statedash
+        #         ind = (s.index*self.mdps[agent].numerActions)+a.index
+        #         mt[ind] = self.mdps[agent].transition(s,a,sd)
+        #     cons.append(zstar[evecon] == np.transpose(mt)*xstar)
+        #
+        prob = cvxpy.Problem(objective=obj, constraints=cons)
+        prob.solve(solver=cvxpy.ECOS, verbose=False, max_iters=10000000)
+        print "Done"
+        return xstar.value, prob.value
 
 class TimeoutException(Exception):   # Custom exception class
     pass
