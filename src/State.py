@@ -20,6 +20,9 @@ import multiprocessing
 import pickle
 import math
 import multiprocessing.pool
+import traceback
+
+
 #from pathos.multiprocessing import ProcessingPool as Pool
 
 class State:
@@ -381,7 +384,7 @@ class MDP:
         if s.dold == 0 and s.dvals[s.location] == 1:
             return config.rewardCollection[self.agent][s.location]
         else:
-            return 0
+            return 0.1
 
     def writeTransitions(self):
         print "     Writing Transitions for Agent " +str(self.agent)
@@ -928,7 +931,7 @@ class EMMDP:
                     sd = peves.statedash
                     pesum += self.mdps[agent].transition(s,a,sd)*xvals[agent][(s.index*self.mdps[agent].numerActions)+a.index]
                 prod *= pesum
-            sum += np.asscalar(prod)
+            sum += prod
         #sum += config.theta * len(self.constraints)
         return sum
 
@@ -1086,7 +1089,8 @@ class EMMDP:
             ampls = []
             xvals = []
             args = []
-            pool = multiprocessing.pool.ThreadPool(processes=self.num_agents)
+            noOfProcess = multiprocessing.cpu_count() - 1
+            pool = multiprocessing.pool.ThreadPool(noOfProcess)
             dastart = time.time()
             print "Iteration: " + str(iter)
             for i in xrange(0, self.num_agents):
@@ -1104,13 +1108,21 @@ class EMMDP:
 
             iterStartTime = time.time()
             iterEndTime = time.time()
-            pr = pool.map_async(self.doIter, args)
-            pool.close()
+
             try:
-                rss = pr.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
+                print noOfProcess
+                if self.num_agents <= noOfProcess:
+                    pr = pool.map_async(self.doIter, args)
+                    rss = pr.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
+                    xvals.extend(np.array(rss))
+                    pool.close()
+                else:
+                    for i in xrange(0, self.num_agents, noOfProcess):
+                        pr = pool.map_async(self.doIter, args[i:i+noOfProcess])
+                        rss = pr.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
+                        xvals.extend(np.array(rss))
+                    pool.close()
                 iterEndTime = time.time()
-                for i in xrange(0, self.num_agents):
-                    xvals.append(np.array(rss[i]))
             except multiprocessing.TimeoutError as e:
                 print e
                 print("Process timed out")
@@ -1119,7 +1131,6 @@ class EMMDP:
             print("Pool terminated")
             # os.system('pkill -f ampl')
             # os.system('pkill -f minos')
-
             newobj = self.objective(xvals, Rs)
             print "\nObjective: ", newobj
             iterTime = float(iterEndTime-iterStartTime)
@@ -1153,13 +1164,21 @@ class EMMDP:
 
                     iterStartTime = time.time()
                     iterEndTime = time.time()
-                    pros = pool.map_async(self.doSuccIter, args)
-                    pool.close()
+
                     try:
-                        rsss = pros.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
+                        print noOfProcess
+                        if self.num_agents <= noOfProcess:
+                            pr = pool.map_async(self.doSuccIter, args)
+                            rss = pr.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
+                            xvalues.extend(np.array(rss))
+                            pool.close()
+                        else:
+                            for i in xrange(0, self.num_agents, noOfProcess):
+                                pr = pool.map_async(self.doSuccIter, args[i:i + noOfProcess])
+                                rss = pr.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
+                                xvalues.extend(np.array(rss))
+                            pool.close()
                         iterEndTime = time.time()
-                        for i in xrange(0, self.num_agents):
-                            xvalues.append(np.array(rsss[i]))
                     except multiprocessing.TimeoutError as e:
                         print e
                         print("Process timed out")
@@ -1203,6 +1222,8 @@ class EMMDP:
                     #ampls = self.resetAMPLs()
                     iter -= 1
                     print "Rerun"
+                    traceback.print_exc()
+                    traceback.print_stack()
                     continue
 
         except TimeoutException as e:
