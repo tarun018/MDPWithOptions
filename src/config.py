@@ -2,7 +2,7 @@ import random, csv
 import pickle
 import math
 #flag=1 fileread
-solver = 'minos'
+solver = 'bonmin'
 flag = 1
 
 timetorunsecE = 500

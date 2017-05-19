@@ -895,7 +895,7 @@ class EMMDP:
     def runConfig(self, agent):
         print  "    Writting Running Config for Agent " + str(agent) + ": ",
         runf = open(config.workDir+'Data/single'+str(agent)+'_exp_'+str(config.experiment)+'.run', 'w')
-        runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
+        runf.write("option solver '../ampl/"+str(config.solver)+"';\n")
         runf.write("option solver_msg 0;\n")
         #runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 Completion=full';\n")
         runf.close()
@@ -909,6 +909,18 @@ class EMMDP:
         runf.write("data " + config.workDir+ 'Data/nl2_exp_'+str(config.experiment)+'.dat' + ";\n")
         runf.write("option solver_msg 0;\n")
         runf.write("write \"g/"+config.workDir+"Data/myfile"+str(config.experiment)+"\";\n")
+        runf.close()
+        print "Done"
+
+
+    def updateRunConfigNonLinear(self):
+        print  "    Writting Running Config for Non Linear"
+        runf = open(config.workDir+'Data/nl2_exp_'+str(config.experiment)+'.run', 'w')
+        runf.write("reset;\n")
+        runf.write("model try.mod;\n")
+        runf.write("data " + config.workDir+ 'Data/nl2_exp_'+str(config.experiment)+'.dat' + ";\n")
+        runf.write("option solver_msg 0;\n")
+        runf.write("solution \""+config.workDir+"Data/myfile"+str(config.experiment)+".sol\";\n")
         runf.close()
         print "Done"
 
@@ -1002,20 +1014,15 @@ class EMMDP:
             os.system("rm -rf "+config.workDir+"Data/myfile"+str(config.experiment)+".sol")
             ampl.read(config.workDir+"Data/nl2_exp_"+str(config.experiment)+".run")
             os.system("pkill -f ampl")
-            os.system("./ampl/minos -s "+config.workDir+"Data/myfile"+str(config.experiment)+".nl")
+            os.system("../ampl/"+config.solver+" -s "+config.workDir+"Data/myfile"+str(config.experiment)+".nl > nonLinearout")
+            self.updateRunConfigNonLinear()
+            ampl = AMPL()
+            ampl.read(config.workDir + "Data/nl2_exp_" + str(config.experiment) + ".run")
+            nonlinearobj = ampl.getObjective("ER").value()
             end = time.time()
-            nlptime = end-start
-            g = open(config.workDir+"Data/myfile"+str(config.experiment)+".sol")
-            for line in g:
-                if line.find("objective") != -1:
-                    row = line.split(" ")
-                    row = row[-1]
-                    row = float(row)
-                    nonlinearobj = row
-                    print nonlinearobj
-                    print "Non Linear Time:  %s seconds \n\n\n\n\n\n" % nlptime
-                    break
-            g.close()
+            nlptime = end - start
+            print "Non Linear Took: ", nlptime
+            print "Non Linear Obj: ", nonlinearobj
         except Exception as e:
             print "Non Linear Not Able"
             print e
