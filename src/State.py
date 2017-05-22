@@ -1,7 +1,7 @@
 import csv
 import signal
 import numpy as np
-#import cvxpy
+import cvxpy
 import config
 import itertools
 import copy_reg
@@ -101,7 +101,7 @@ class MDP:
 
     def AfterWasteRemoval(self):
         self.reindexStates()
-        # self.checkTransitionProbabilitySumTo1()
+        #self.checkTransitionProbabilitySumTo1()
         self.writeStatesToFile()
         self.writeActionsToFile()
         self.writeTransitions()
@@ -206,7 +206,7 @@ class MDP:
         if s.time == 0 and sd == self.terminal:
             return 1
 
-        if ld != dest:
+        if ld != dest and ld != l:
             return 0
 
         if td != t - self.transitTimes[l][ld]:
@@ -224,10 +224,13 @@ class MDP:
         if dold == 1 and s.dvals[l] == 0:
             return 0
 
-        if doldd == 1 and sd.dvals[ld] == 0:
-            return 0
+        if ld == l and ld == dest:
+            return 1
+        elif ld == l:
+            return 1-config.beta
+        elif ld == dest:
+            return config.beta
 
-        return 1
 
     def waste(self):
         iter = 1
@@ -444,7 +447,47 @@ class MDP:
         A_mat = []
         if genA is True:
 
-            pass
+            decisionvar = []
+            for x in self.states:
+                triple = []
+                for y in self.states:
+                    triplet = []
+                    for a in y.possibleActions:
+                        if x.index == y.index:
+                            triplet.append(float(1))
+                        else:
+                            triplet.append(float(0))
+                    triple.append(triplet)
+                decisionvar.append(triple)
+
+            for x in self.states:
+                incoming = []
+                for s in self.states:
+                    for t in s.transition:
+                        if t[1]==x.index and t[2]!=0:
+                            incoming.append((s, t[0], t[2]))
+
+                for h in incoming:
+                    decisionvar[x.index][h[0].index][h[1]] -= gamma*float(h[2])
+
+            # for x in decisionvar:
+            #     for y in x:
+            #         for z in y:
+            #             print str(z) + ",",
+            #         print "",
+            #     print
+            #
+            # print
+            # print
+            A_mat = []
+            for x in decisionvar:
+                lit = []
+                for t in x:
+                    lit.extend(t)
+                A_mat.append(lit)
+
+        # for x in A_mat:
+        #     print x
 
         # for x in A_mat:
         #     print x
@@ -897,7 +940,7 @@ class EMMDP:
         runf = open(config.workDir+'Data/single'+str(agent)+'_exp_'+str(config.experiment)+'.run', 'w')
         runf.write("option solver '../ampl/"+str(config.solver)+"';\n")
         runf.write("option solver_msg 0;\n")
-        #runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 Completion=full';\n")
+        #runf.write("option minos_options 'optimality_tolerance=1.0e-12';\n")
         runf.close()
         print "Done"
 
@@ -961,7 +1004,7 @@ class EMMDP:
         #plt.legend([line1, line2, line3, line4, line5, line6, line7],
         #          ["Speed 0.2", "Speed 0.5", "Speed 0.8", "Speed 1.0", "Speed 1.2", "Speed 1.5", "Speed 1.8"], loc=2)
         #plt.show()
-        plt.legend([line1, line2] , ["EM", "NonLinear"], loc=4)
+        plt.legend([line1, line2] , ["EM: "+str(max(results)), "NonLinear: "+str(nonLinear)], loc=4)
 
         plt.savefig('../Results/ObjGraph'+str(config.experiment)+'.png')
         plt.clf()
@@ -987,7 +1030,6 @@ class EMMDP:
 
     def doIter(self, arg):
         i, ampl = arg
-
         ampl.solve()
         var = ampl.getVariable("xstar")
         var_vals = var.getValues()
@@ -995,12 +1037,85 @@ class EMMDP:
         return xstar_val
 
     def doSuccIter(self, arg):
-        i,ampl = arg
+        i,ampl,greedy,oldX,A = arg
         ampl.solve()
+        A = np.array(A)[np.newaxis].T
+        A = np.transpose(A)
         var = ampl.getVariable("xstar")
         var_vals = var.getValues()
         xstar_val = var_vals.getColumn('val')
-        return xstar_val
+        alpha = np.array(self.mdps[i].start)
+        if greedy:
+            from decimal import Decimal
+            pi_old = []
+            pi_new = []
+            ratios = []
+            maxQ = [0]*self.mdps[i].numberStates
+            for sts in self.mdps[i].states:
+                sumProb_old = 0
+                sumProb_new = 0
+                maxQS = Decimal('-Infinity')
+                for acts in self.mdps[i].actions:
+                    sumProb_old += oldX[(sts.index * self.mdps[i].numerActions)+acts.index]
+                    sumProb_new += xstar_val[(sts.index * self.mdps[i].numerActions)+acts.index]
+                for acts in self.mdps[i].actions:
+                    norm_val_old = oldX[(sts.index * self.mdps[i].numerActions)+acts.index] / float(sumProb_old)
+                    norm_val_new = xstar_val[(sts.index * self.mdps[i].numerActions) + acts.index] / float(sumProb_new)
+                    pi_old.append(norm_val_old)
+                    pi_new.append(norm_val_new)
+                    ratio = float(norm_val_new) / float(norm_val_old)
+                    ratios.append(ratio)
+                    if ratio > maxQS:
+                        maxQS = ratio
+                        maxQ[sts.index] = acts
+
+            pi_new = []
+            c = 0.1
+            epsilon = self.PosNormal(0, 2)[0]
+            for sts in self.mdps[i].states:
+                ex_pi_new = []
+                sum_new = 0
+                for acts in self.mdps[i].actions:
+                    if maxQ[sts.index]==acts:
+                        indicator = 1
+                    else:
+                        indicator = 0
+                    value = pi_old[(sts.index * self.mdps[i].numerActions)+acts.index]*(indicator+c+epsilon)
+                    sum_new += value
+                    ex_pi_new.append(value)
+                for vals in ex_pi_new:
+                    pi_new.append(float(vals)/float(sum_new))
+
+            for sts in self.mdps[i].states:
+                sum_new = 0
+                for acts in self.mdps[i].actions:
+                    sum_new += pi_new[(sts.index * self.mdps[i].numerActions)+acts.index]
+                assert abs(float(1)-sum_new) < 0.0000001
+
+            cons = []
+            obj = cvxpy.Maximize(1)
+            xnew = cvxpy.Variable(self.mdps[i].numberStates * self.mdps[i].numerActions, 1)
+            for sts in self.mdps[i].states:
+                sum = 0
+                for acts in self.mdps[i].actions:
+                    ind = (sts.index * self.mdps[i].numerActions)+acts.index
+                    sum += xnew[ind]
+                for acts in self.mdps[i].actions:
+                    ind = (sts.index * self.mdps[i].numerActions)+acts.index
+                    cons.append(xnew[ind] == sum*pi_new[ind])
+            cons.append(A*xnew == alpha)
+            cons.append(xnew >= 0)
+            prob = cvxpy.Problem(obj, cons)
+            prob.solve()
+            #print abs(np.concatenate(np.array(xnew.value)) - xstar_val)
+            return np.concatenate(np.array(xnew.value))
+        else:
+            return xstar_val
+
+    def PosNormal(self, mean, sigma):
+        x = np.random.normal(mean, sigma, 1)
+        return (x if x >= 0 else self.PosNormal(mean, sigma))
+
 
     def NonLinear(self):
         AMPL = autoclass('com.ampl.AMPL')
@@ -1051,14 +1166,16 @@ class EMMDP:
         ampl.reset()
 
         Rs = []
+        As = []
         results = []
         times = []
         iter = 1
         initial_x = []
 
         for i in xrange(0, self.num_agents):
-            A, R, newR = self.mdps[i].generateLPAc(config.gamma, genA=False)
+            A, R, newR = self.mdps[i].generateLPAc(config.gamma, genA=True)
             Rs.append(R)
+            As.append(A)
             numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
             lst = [config.initialxval]*numvar
             initial_x.append(lst)
@@ -1145,7 +1262,7 @@ class EMMDP:
             times.append(totTime)
             print "Iteration %s time: %s\n\n" %(str(iter), str(totTime))
             sumIterTime += float(iterTime)
-
+            greedy = False
             results.append(newobj)
             while(True):
                 try:
@@ -1163,7 +1280,7 @@ class EMMDP:
                         paramx_val.setColumn('val', xvalsParamFinal)
                         paramx.setValues(paramx_val)
                         xvalsParamFinal = [Double(k) for k in xvalsAsParam]
-                        args.append((i, ampls[i]))
+                        args.append((i, ampls[i], greedy, xvals[i], As[i]))
                     daend = time.time()
 
                     datot = 0
@@ -1195,7 +1312,7 @@ class EMMDP:
 
                     oldobj = self.objective(xvals, Rs)
                     print "\n\nOld Objective: ",oldobj
-                    #print np.size(xvals), np.size(xvalues)
+                    print np.size(xvals), np.size(xvalues)
                     xvals = xvalues
                     newobj = self.objective(xvals, Rs)
                     results.append(newobj)
@@ -1205,9 +1322,18 @@ class EMMDP:
                     times.append(totTime)
                     print "Iteration %s time: %s\n\n" %(str(iter), str(totTime))
                     sumIterTime += float(iterTime)
+                    #greedy = False
+
+                    def signal_handler(signal, frame):
+                        print('You pressed Ctrl+C!')
+                        self.genGraphAndSave(len(results), results, nonlinearobj, times, nlptime)
+                        import sys
+                        sys.exit(0)
+
+                    signal.signal(signal.SIGINT, signal_handler)
 
                     print "\n"
-                    if abs(newobj - oldobj) < config.delta:
+                    if abs(newobj - oldobj) < config.deltaFinal:
                         print "NonLinear Obj: ", nonlinearobj
                         print "EM Obj: ", newobj
                         print "AvgIterTime: ", sumIterTime/iter
@@ -1217,7 +1343,13 @@ class EMMDP:
                         if nonlinearobj != 0:
                             print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
                         break
-                except (Exception, jnius.JavaException) as e:
+                    # elif newobj < oldobj:
+                    #     greedy = False
+                    #     print "---------------Setting Greedy to False---------------"
+                    #elif abs(newobj - oldobj) < config.deltaIter:
+                    #    greedy = True
+                    #    print "---------------Setting Greedy to True---------------"
+                except (jnius.JavaException) as e:
                     fails += 1
                     if fails > 5:
                         break

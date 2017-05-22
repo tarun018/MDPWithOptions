@@ -2,13 +2,13 @@ import random, csv
 import pickle
 import math
 #flag=1 fileread
-solver = 'bonmin'
+solver = 'minos'
 flag = 1
 
-timetorunsecE = 500
-timetorunsecN = 500
+timetorunsecE = 600
+timetorunsecN = 600
 
-experiment = 1002
+experiment = 1031
 
 offset = 500
 GenRun = 1
@@ -18,12 +18,15 @@ theta = 0.1
 gamma = 0.8
 initialxval = 0.1
 alpha = 0.8
-delta = 0.00001
+beta = 0.7
+deltaFinal = 1e-7 #For Convergence
+deltaIter =1e-4 #For greedy Approach
 print "theta: ", theta
 print "gamma: ", gamma
 print "initialx: ", initialxval
 print "alpha: ", alpha
-print "delta: ", delta
+print "deltaFinal: ", deltaFinal
+print "deltaIter: ", deltaIter
 
 if flag == 0:
 
@@ -34,8 +37,8 @@ if flag == 0:
     maxSharing = 2
     minT = 6
     maxT = 6
-    minTaction = 3
-    maxTaction = 3
+    minTaction = 1
+    maxTaction = 1
     agentMax = [math.ceil(float(nShared*maxSharing)/float(agents))]*agents
     nLocs = (agents*nPrivatePerAgent) + nShared
     auction = [-1]*nLocs
