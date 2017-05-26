@@ -1,7 +1,7 @@
 import csv
 import signal
 import numpy as np
-import cvxpy
+#import cvxpy
 import config
 import itertools
 import copy_reg
@@ -91,10 +91,11 @@ class MDP:
             self.readStates(config.workDir+"Data/DomainStateData"+str(self.agent)+"_exp_"+str(config.experiment)+".pickle")
             self.terminal = self.states[0]
             self.writeTransitions()
-            self.writeRewards()
+            self.readRewards(config.workDir+"Data/DomainRewardData"+str(self.agent)+"_exp_"+str(config.experiment)+".pickle")
             self.defineStart()
             self.numberStates = len(self.states)
             self.numerActions = len(self.actions)
+            self.numvariables = self.numberStates * self.numerActions
 
     def wasteRemovalParallel(self):
         self.waste()
@@ -109,6 +110,7 @@ class MDP:
         self.defineStart()
         self.numberStates = len(self.states)
         self.numerActions = len(self.actions)
+        self.numvariables = self.numberStates * self.numerActions
 
     def initiateActions(self):
         index = 0
@@ -383,11 +385,11 @@ class MDP:
         fp.close()
 
     def rewardFunction(self, s, a):
-
+        import random
         if s.dold == 0 and s.dvals[s.location] == 1:
-            return config.rewardCollection[self.agent][s.location]
+            return config.rewardCollection[self.agent][s.location] + random.random()
         else:
-            return 0.1
+            return 0.1 + random.random()
 
     def writeTransitions(self):
         print "     Writing Transitions for Agent " +str(self.agent)
@@ -400,10 +402,13 @@ class MDP:
 
     def writeRewards(self):
         print "     Writing Rewards for Agent " +str(self.agent)
+        rew = open(config.workDir + "Data/DomainRewardData" + str(self.agent) + "_exp_" + str(config.experiment) + ".pickle",'w')
         for i in self.states:
             for j in self.actions:
                 re = self.rewardFunction(i,j)
                 i.reward.append((j, re))
+            pickle.dump(i.reward, rew)
+        rew.close()
 
     def writeStatesToFile(self):
         print "     Writing States for Agent " +str(self.agent)
@@ -416,6 +421,13 @@ class MDP:
         act = open(config.workDir+"Data/DomainActionData" + str(self.agent) +"_exp_"+str(config.experiment)+ ".pickle", 'w')
         pickle.dump(self.actions,act)
         act.close()
+
+    def readRewards(self, filename):
+        print "     Reading Rewards for Agent " +str(self.agent)
+        f = open(filename, 'rb')
+        for i in self.states:
+            i.reward = pickle.load(f)
+        f.close()
 
     def readActions(self, filename):
         print "     Reading Actions for Agent " +str(self.agent)
@@ -595,7 +607,7 @@ class EMMDP:
         self.genConstraints()
 
     def generateMDPs(self):
-        numvars = 0
+        self.numvars = 0
         if config.flag == 0:
             prs = []
             for i in xrange(0, self.num_agents):
@@ -616,8 +628,8 @@ class EMMDP:
                 a = MDP(config.T[i], config.locs[i], i, config.collectTimes[i], config.transitTimes[i], config.alpha, config.flag)
                 self.mdps.append(a)
         for i in xrange(0, self.num_agents):
-            numvars += len(self.mdps[i].states)*len(self.mdps[i].actions)
-        print numvars
+            self.numvars += len(self.mdps[i].states)*len(self.mdps[i].actions)
+        print self.numvars
 
     def genPrimitiveEvents(self):
         print "Generating Primitive Events"
@@ -944,6 +956,16 @@ class EMMDP:
         runf.close()
         print "Done"
 
+    def runConfigALLEM(self):
+        runf = open(config.workDir+'Data/All2_exp_'+str(config.experiment)+'.run', 'w')
+        runf.write("option solver '../ampl/"+str(config.solver)+"';\n")
+        runf.write("option solver_msg 0;\n")
+        runf.write("solve;\n")
+        runf.write("display xstar > xstarvals;\n")
+        #runf.write("option minos_options 'optimality_tolerance=1.0e-12';\n")
+        runf.close()
+        print "Done"
+
     def runConfigNonLinear(self):
         print  "    Writting Running Config for Non Linear"
         runf = open(config.workDir+'Data/nl2_exp_'+str(config.experiment)+'.run', 'w')
@@ -969,14 +991,20 @@ class EMMDP:
 
     def objective(self, xvals, Rs):
         sum = 0
+        #print all(np.array(xvals[0]) == np.array(xvals[1]))
+        #print all(np.array(xvals[2]) == np.array(xvals[1]))
+        print "------------------------------------------"
         for i in xrange(0, self.num_agents):
             sum += np.dot(Rs[i], np.array(xvals[i]))
-            if abs(np.sum(np.array(xvals[i])) - (float(1) / float(1-config.gamma))) > 0.01:
+            print "MDP: ", np.dot(Rs[i], np.array(xvals[i]))
+            if abs(np.sum(np.array(xvals[i])) - (float(1) / float(1-config.gamma))) > 1e-5:
                 print "Warning", np.sum(xvals[i])
+        print "Overall N MDP: ",sum
 
         for i in xrange(0, len(self.constraints)):
             cons = self.constraints[i]
             prod = cons.reward
+            print "prodRew: ",prod
             for eves in cons.Events:
                 pesum = 0
                 agent = eves.agent
@@ -984,7 +1012,9 @@ class EMMDP:
                     s = peves.state
                     a = peves.action
                     sd = peves.statedash
+                    #print "Here "+str(agent)+" "+str((s.index*self.mdps[agent].numerActions)+a.index)+" "+str(xvals[agent][(s.index*self.mdps[agent].numerActions)+a.index]) + " "
                     pesum += self.mdps[agent].transition(s,a,sd)*xvals[agent][(s.index*self.mdps[agent].numerActions)+a.index]
+                print str(pesum) + " " + str(agent)
                 prod *= pesum
             sum += prod
         #sum += config.theta * len(self.constraints)
@@ -1010,6 +1040,7 @@ class EMMDP:
         plt.clf()
         plt.figure()
 
+        iterations = range(1, len(times) + 1)
         line1, = plt.plot(iterations, times, marker='^', linestyle='-', color='b')
         plt.xlabel('Number of Iterations')
         plt.ylabel('Time in seconds')
@@ -1128,12 +1159,22 @@ class EMMDP:
             os.system("rm -rf "+config.workDir+"Data/myfile"+str(config.experiment)+".nl")
             os.system("rm -rf "+config.workDir+"Data/myfile"+str(config.experiment)+".sol")
             ampl.read(config.workDir+"Data/nl2_exp_"+str(config.experiment)+".run")
-            os.system("pkill -f ampl")
+            #os.system("pkill -f ampl")
             os.system("../ampl/"+config.solver+" -s "+config.workDir+"Data/myfile"+str(config.experiment)+".nl > nonLinearout")
             self.updateRunConfigNonLinear()
             ampl = AMPL()
             ampl.read(config.workDir + "Data/nl2_exp_" + str(config.experiment) + ".run")
             nonlinearobj = ampl.getObjective("ER").value()
+            var = ampl.getVariable("x")
+            var_vals = var.getValues()
+            xstar_val = var_vals.getColumn('val')
+            #print len(xstar_val)
+            #for vals in xstar_val:
+            #    print vals
+            vars = ampl.getVariable("z")
+            vars_vals = vars.getValues()
+            z_val = vars_vals.getColumn('val')
+            print z_val
             end = time.time()
             nlptime = end - start
             print "Non Linear Took: ", nlptime
@@ -1144,7 +1185,7 @@ class EMMDP:
         except jnius.JavaException as e:
             print "Non Linear Not Able"
             print e
-        return nonlinearobj, nlptime
+        return nonlinearobj, nlptime, xstar_val
 
     def resetAMPLs(self):
         ampls = []
@@ -1152,7 +1193,7 @@ class EMMDP:
         for i in xrange(0, self.num_agents):
             ampl = AMPL()
             ampl.reset()
-            ampl.read("single.mod")
+            ampl.read("single"+str(i)+".mod")
             ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
             ampl.read(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
             ampls.append(ampl)
@@ -1168,6 +1209,7 @@ class EMMDP:
         Rs = []
         As = []
         results = []
+        deltas = []
         times = []
         iter = 1
         initial_x = []
@@ -1195,20 +1237,41 @@ class EMMDP:
         nonlinearobj = 0
         nlptime = 0
         try:
-            nonlinearobj, nlptime = result.get(timeout=config.timetorunsecN)
+            nonlinearobj, nlptime, Nonxv = result.get(timeout=config.timetorunsecN)
         except (Exception, multiprocessing.TimeoutError) as e:
             print e
             print("Process timed out")
         pool.terminate()
         print("Pool terminated")
-        os.system('pkill -f ampl')
-        os.system('pkill -f minos')
+        #os.system('pkill -f ampl')
+        #os.system('pkill -f minos')
+
+        assert len(Nonxv) == self.numvars
+        NonVals = []
+        sumbb = 0
+        sumdd = 0
+        for i in xrange(0, self.num_agents):
+            for sts in self.mdps[i].states:
+                for acts in self.mdps[i].actions:
+                    sumdd += 1
+            NonVals.append(Nonxv[sumbb:sumdd])
+            sumbb = sumdd
+        print "------------------Onjasdasd----------------"
+        print self.objective(NonVals, Rs)
 
         print "EM-AMPL: "
         signal.signal(signal.SIGALRM, self.timeout_handler)
         sumIterTime = 0
         newobj = 0
         signal.alarm(config.timetorunsecE)
+
+        if config.GenRun == 1:
+            for i in xrange(0, self.num_agents):
+                self.genAMPLSingle(i, NonVals)
+                self.runConfig(i)
+            self.genAMPL()
+            self.runConfigNonLinear()
+
         try:
             ampls = []
             xvals = []
@@ -1322,18 +1385,32 @@ class EMMDP:
                     times.append(totTime)
                     print "Iteration %s time: %s\n\n" %(str(iter), str(totTime))
                     sumIterTime += float(iterTime)
+
+                    self.prRed("New: " + str(newobj))
+                    self.prGreen("NonLinearObj: " + str(nonlinearobj))
+                    if nonlinearobj != 0:
+                        self.prYellow("PercentError: " + str(
+                            (float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%")
+                    print
+                    print
                     #greedy = False
 
                     def signal_handler(signal, frame):
                         print('You pressed Ctrl+C!')
                         self.genGraphAndSave(len(results), results, nonlinearobj, times, nlptime)
                         import sys
+                        os.system("pkill -f python")
                         sys.exit(0)
 
                     signal.signal(signal.SIGINT, signal_handler)
 
-                    print "\n"
-                    if abs(newobj - oldobj) < config.deltaFinal:
+                    deltas.append(abs(newobj - oldobj))
+                    lastX = deltas[-config.noiterConvergence:len(deltas)]
+                    avgChange = sum(lastX) / float(len(lastX))
+                    print "AvgChange: ", avgChange
+                    if (abs(avgChange) < config.deltaFinal):
+                        #self.genAMPLSingle(0,xvals)
+                        #self.genAMPLSingle(1,xvals)
                         print "NonLinear Obj: ", nonlinearobj
                         print "EM Obj: ", newobj
                         print "AvgIterTime: ", sumIterTime/iter
@@ -1380,13 +1457,374 @@ class EMMDP:
 
         self.genGraphAndSave(len(results), results, nonlinearobj, times, nlptime)
 
+    def prRed(self, prt):
+        print("\033[91m {}\033[00m".format(prt))
+
+    def prGreen(self, prt):
+        print("\033[92m {}\033[00m".format(prt))
+
+    def prYellow(self, prt):
+        print("\033[93m {}\033[00m".format(prt))
+
+    def prLightPurple(self, prt):
+        print("\033[94m {}\033[00m".format(prt))
+
+    def prPurple(self, prt):
+        print("\033[95m {}\033[00m".format(prt))
+
+    def prCyan(self, prt):
+        print("\033[96m {}\033[00m".format(prt))
+
+    def prLightGray(self, prt):
+        print("\033[97m {}\033[00m".format(prt))
+
+    def prBlack(self, prt):
+        print("\033[98m {}\033[00m".format(prt))
+
+    def writeALLEM(self, initx=None):
+        print "     Generating AMPL: ",
+        ampl = open(config.workDir + 'Data/All2_exp_' + str(config.experiment) + '.dat', 'w')
+        ampl.write("param n := " + str(self.num_agents) + ";\n")
+        ampl.write("param gamma := " + str(config.gamma) + ";\n")
+        ampl.write("\n")
+
+        for i in xrange(0, self.num_agents):
+            ampl.write("set S[" + str(i + 1) + "] := ")
+            for x in self.mdps[i].states:
+                ampl.write(str(x.index + 1) + " ")
+            ampl.write(";\n")
+            ampl.write("set A[" + str(i + 1) + "] := ")
+            for x in self.mdps[i].actions:
+                ampl.write(str(x.index + 1) + " ")
+            ampl.write(";\n")
+        ampl.write("\n")
+
+        ampl.write("param: sparseP: sparsePVal:= \n")
+        for i in xrange(0, self.num_agents):
+            for j in xrange(0, len(self.mdps[i].actions)):
+                for k in xrange(0, len(self.mdps[i].states)):
+                    h = self.mdps[i].states[k].transition
+                    hh = [(x[1], x[2]) for x in h if x[0] == self.mdps[i].actions[j].index and x[2] != 0]
+                    for valsac in hh:
+                        ampl.write(str(i + 1) + " " + str(self.mdps[i].actions[j].index + 1) + " " + str(
+                            self.mdps[i].states[k].index + 1) + " " + str(valsac[0] + 1) + " " + str(valsac[1]) + "\n")
+            if i == self.num_agents - 1:
+                ampl.write(";")
+        ampl.write("\n")
+
+        ampl.write("param R := \n")
+        for i in xrange(0, self.num_agents):
+            ampl.write("[" + str(i + 1) + ",*,*] : ")
+            for j in xrange(0, len(self.mdps[i].actions)):
+                ampl.write(str(j + 1) + " ")
+            ampl.write(":= \n")
+            for j in xrange(0, len(self.mdps[i].states)):
+                ampl.write(str(j + 1) + " ")
+                h = self.mdps[i].states[j].reward
+                hh = [x[1] for x in h]
+                for g in hh:
+                    ampl.write(str(g) + " ")
+                ampl.write("\n")
+            if i == self.num_agents - 1:
+                ampl.write(";")
+        ampl.write("\n")
+
+        ampl.write("param alpha := \n")
+        for i in xrange(0, self.num_agents):
+            ampl.write("[" + str(i + 1) + ",*] := ")
+            for gg in xrange(0, len(self.mdps[i].start)):
+                ampl.write(str(gg + 1) + " " + str(self.mdps[i].start[gg]) + " ")
+            ampl.write("\n")
+        ampl.write(";\n")
+
+        ampl.write("set numcons := ")
+        for i in xrange(0, len(self.constraints)):
+            ampl.write(str(i + 1) + " ")
+        ampl.write(";\n")
+
+        ampl.write("set numprims := ")
+        for i in xrange(0, len(self.primitives)):
+            ampl.write(str(i + 1) + " ")
+        ampl.write(";\n")
+
+        ampl.write("set numevents := ")
+        for i in xrange(0, len(self.events)):
+            ampl.write(str(i + 1) + " ")
+        ampl.write(";\n")
+
+        ampl.write("param creward := ")
+        for x in xrange(0, len(self.constraints)):
+            ampl.write(str(x + 1) + " " + str(self.constraints[x].reward) + " ")
+        ampl.write(";\n")
+
+        ampl.write("param primitives : ")
+        for i in xrange(0, 4):
+            ampl.write(str(i + 1) + " ")
+        ampl.write(":= \n")
+        for z in self.primitives:
+            ampl.write(str(z.index + 1) + " " + str(z.agent + 1) + " " + str(z.state.index + 1) + " " +
+                       str(z.action.index + 1) + " " + str(z.statedash.index + 1) + "\n")
+        ampl.write(";\n")
+
+        for i in xrange(0, len(self.events)):
+            ampl.write("set events[" + str(i + 1) + "] := ")
+            for x in self.events[i].pevents:
+                ampl.write(str(x.index + 1) + " ")
+            ampl.write(";\n")
+        ampl.write("\n")
+
+        for i in xrange(0, len(self.constraints)):
+            ampl.write("set cons[" + str(i + 1) + "] := ")
+            for x in self.constraints[i].Events:
+                ampl.write(str(x.index + 1) + " ")
+            ampl.write(";\n")
+        ampl.write("\n")
+
+        ampl.write("param theta := " + str(float(config.theta)) + ";\n")
+        ampl.write("param Rmax := " + str(config.R_max) + ";\n")
+        ampl.write("param Rmin := " + str(config.R_min) + ";\n\n")
+
+        ampl.write("param x := \n")
+        for k in xrange(0, self.num_agents):
+            ampl.write("[" + str(k + 1) + ",*,*] : ")
+            for j in xrange(0, len(self.mdps[k].actions)):
+                ampl.write(str(j + 1) + " ")
+            ampl.write(":= \n")
+            if initx is None:
+                for i in xrange(0, self.mdps[k].numberStates):
+                    ampl.write(str(i + 1) + " ")
+                    for j in xrange(0, self.mdps[k].numerActions):
+                        ampl.write(str(config.initialxval) + " ")
+                    ampl.write("\n")
+            else:
+                for i in xrange(0, self.mdps[k].numberStates):
+                    ampl.write(str(i + 1) + " ")
+                    for j in xrange(0, self.mdps[k].numerActions):
+                        s = self.mdps[k].states[i]
+                        a = self.mdps[k].actions[j]
+                        val = initx[k][(s.index * self.mdps[k].numerActions) + a.index]
+                        ampl.write(str(val) + " ")
+                    ampl.write("\n")
+        ampl.write(";\n")
+
+        ampl.write("for {(i,j,k,l) in sparseP} {	let P[i,j,k,l] := sparsePVal[i,j,k,l]; }")
+
+        ampl.close()
+        print "Done"
+
+    def AllEM(self):
+        AMPL = autoclass('com.ampl.AMPL')
+        Double = autoclass('java.lang.Double')
+        ampl = AMPL()
+        ampl.reset()
+
+        Rs = []
+        As = []
+        results = []
+        times = [5]
+        deltas = []
+        times = []
+        iter = 1
+        initial_x = []
+
+        for i in xrange(0, self.num_agents):
+            A, R, newR = self.mdps[i].generateLPAc(config.gamma, genA=True)
+            Rs.append(R)
+            A = np.array(A)
+            As.append(A)
+            numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
+            lst = [config.initialxval] * numvar
+            initial_x.append(lst)
+        Rs = np.array(Rs)
+
+        if config.GenRun == 1:
+            self.writeALLEM(initial_x)
+            self.genAMPL()
+            #self.runConfigALLEM()
+            self.runConfigNonLinear()
+
+        nonlinearobj, nlptime, Nonxv = self.NonLinear()
+        iter = 1
+        print "Iteration: " + str(iter)
+
+        assert len(Nonxv) == self.numvars
+        NonVals = []
+        sumbb = 0
+        sumdd = 0
+        for i in xrange(0, self.num_agents):
+            for sts in self.mdps[i].states:
+                for acts in self.mdps[i].actions:
+                    sumdd += 1
+            NonVals.append(Nonxv[sumbb:sumdd])
+            sumbb = sumdd
+        print "------------------Onjasdasd----------------"
+        print self.objective(NonVals, Rs)
+
+        raw_input("Enter Yes/No: ")
+
+        if config.GenRun == 1:
+            self.writeALLEM(NonVals)
+            self.genAMPL()
+            #self.runConfigALLEM()
+            self.runConfigNonLinear()
+
+        for i in xrange(0, self.num_agents):
+            something = np.array(NonVals[i])[np.newaxis].T
+            start = np.array(self.mdps[i].start)
+            print As[i].shape, something.shape
+            diff = np.dot(As[i],something)
+            for vals in xrange(0, len(diff)):
+                assert abs(diff[vals]-start[vals]) < 1e-5
+                #print abs(diff[vals]-start[vals]) < 1e-5
+        ampl = AMPL()
+        ampl.reset()
+        ampl.read("EMALL.mod")
+        ampl.readData(config.workDir + 'Data/All2_exp_' + str(config.experiment) + '.dat')
+        #ampl.read(config.workDir + 'Data/All2_exp_' + str(config.experiment) + '.run')
+        ampl.solve()
+        print "--------------------Done------------------"
+        xvals = []
+        var = ampl.getVariable("xstar")
+        var_val = var.getValues()
+        var_vals = var_val.getColumn('val')
+        sumbb = 0
+        sumdd = 0
+        for i in xrange(0, self.num_agents):
+            sumdd += self.mdps[i].numvariables
+            xvals.append(var_vals[sumbb:sumdd])
+            sumbb = sumdd
+        xvals = np.array(xvals)
+
+        # for i in xrange(0, self.num_agents):
+        #    for sts in self.mdps[i].states:
+        #        for acts in self.mdps[i].actions:
+        #            print str(xvals[i][(sts.index*self.mdps[i].numerActions)+acts.index]) + " ",
+        #        print
+        #    print
+        #    print
+                   #nonlval = NonVals[i][(sts.index*self.mdps[i].numerActions)+acts.index]
+                   #emval = xvals[i][(sts.index*self.mdps[i].numerActions)+acts.index]
+                   #print abs(nonlval - emval), i, sts, acts
+                   #assert abs(nonlval - emval) < 1e-5print
+        #oldobj = self.objective(xvals, Rs)
+        oldobj = ampl.getObjective("ER").value()
+        results.append(oldobj)
+        print oldobj
+
+
+        while (True):
+            raw_input("Enter Yes/No: ")
+
+            self.writeALLEM(xvals)
+            iter += 1
+            oldobj = ampl.getObjective("ER").value()
+            print "Iteration: " + str(iter)
+            for i in xrange(0, self.num_agents):
+                something = np.array(xvals[i])[np.newaxis].T
+                start = np.array(self.mdps[i].start)
+                print As[i].shape, something.shape
+                diff = np.dot(As[i],something)
+                for vals in xrange(0, len(diff)):
+                    assert abs(diff[vals]-start[vals]) < 1e-5
+
+            xvalues = []
+            xvalsAsParam = np.concatenate(xvals)
+            xvalsParamFinal = [Double(k) for k in xvalsAsParam]
+
+            paramx = ampl.getParameter("x")
+            paramx_val = paramx.getValues()
+            paramx_val.setColumn('val', xvalsParamFinal)
+            paramx.setValues(paramx_val)
+
+            paramx = ampl.getParameter("x")
+            paramx_val = paramx.getValues()
+            lendframe = paramx_val.getColumn('val')
+
+            injk = 0
+            for i in xrange(0, self.num_agents):
+                for sts in self.mdps[i].states:
+                    for acts in self.mdps[i].actions:
+                        tobeparamval = xvals[i][(sts.index*self.mdps[i].numerActions)+acts.index]
+                        actparamval = paramx_val.getRowByIndex(injk)[-1]
+                        assert abs(tobeparamval-actparamval) < 1e-4
+                        injk += 1
+
+            ampl.solve()
+            newobj = ampl.getObjective("ER").value()
+
+            var = ampl.getVariable("xstar")
+            var_val = var.getValues()
+            var_vals = var_val.getColumn('val')
+            sumbb = 0
+            sumdd = 0
+            for i in xrange(0, self.num_agents):
+                sumdd += self.mdps[i].numvariables
+                xvalues.append(var_vals[sumbb:sumdd])
+                sumbb = sumdd
+            xvalues = np.array(xvalues)
+
+            # for i in xrange(0, self.num_agents):
+            #     for sts in self.mdps[i].states:
+            #         for acts in self.mdps[i].actions:
+            #             oldeval = xvals[i][(sts.index * self.mdps[i].numerActions) + acts.index]
+            #             neweval = xvalues[i][(sts.index * self.mdps[i].numerActions) + acts.index]
+            #             # print abs(nonlval - emval), i, sts, acts
+            #             assert abs(oldeval - neweval) < 1
+
+
+            #oldobj = self.objective(xvals, Rs)
+
+            print "Old: ", oldobj
+            xvals = xvalues
+            #newobj = self.objective(xvals, Rs)
+
+            results.append(newobj)
+            self.prRed("Old: "+str(oldobj))
+            self.prRed("New: "+str(newobj))
+            self.prYellow("Change: "+str(newobj-oldobj))
+            self.prGreen("NonLinearObj: "+str(nonlinearobj))
+            if nonlinearobj != 0:
+                self.prYellow("PercentError: " + str(
+                    (float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%")
+            print
+            print
+
+            self.writeALLEM(xvals)
+
+            def signal_handler(signal, frame):
+                print('You pressed Ctrl+C!')
+                self.genGraphAndSave(len(results), results, nonlinearobj, times, nlptime)
+                import sys
+                os.system("pkill -f python")
+                sys.exit(0)
+
+            signal.signal(signal.SIGINT, signal_handler)
+
+            deltas.append(abs(newobj - oldobj))
+            # if(float(newobj-oldobj) < -0.001):
+            #     break
+
+            lastX = deltas[-config.noiterConvergence:len(deltas)]
+            avgChange = sum(lastX)/float(len(lastX))
+            print "AvgChange: ", avgChange
+            if(abs(avgChange) < config.deltaFinal):
+                print "NonLinear Obj: ", nonlinearobj
+                print "EM Obj: ", newobj
+                print "NonLinearTime: ", nlptime
+                if nonlinearobj != 0:
+                    print "PercentError: " + str(
+                        (float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
+                break
+
+        self.genGraphAndSave(len(results), results, nonlinearobj, times, nlptime)
+
 class TimeoutException(Exception):   # Custom exception class
     pass
 
 class Driver:
     #print cvxpy.installed_solvers()
     a = EMMDP(config.agents)
-
+    a.AllEM()
     # for x in a.constraints:
     #     print x.num_agent
     #     for y in x.Events:
@@ -1404,6 +1842,6 @@ class Driver:
     #     sum += a.mdps[i].solveLP(config.gamma)
     # print sum
     #a.EMAMPL()
-    a.EMJavaAMPL()
+    #a.EMJavaAMPL()
     #a.EMAMPL()
     #a.EM(NonLinear=False)

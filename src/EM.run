@@ -1,0 +1,53 @@
+reset;
+model try.mod;
+data ../Data/nl2_exp_10383.dat;
+option solver '../ampl/minos';
+solve;
+param nonlin;
+param MDPR;
+param CONR;
+let MDPR := sum{i in 1..n, j in S[i], k in A[i]} x[i,j,k]*R[i,j,k];
+let CONR := sum{l in 1..numcons} creward[l] * prod{m in cons[l]} z[l,m];
+let nonlin := ER;
+printf "\n\nNon Linear Value: %.10f MDP: %.10f CONR: %.10f \n\n", ER, MDPR, CONR;
+
+reset;
+model EMALL.mod;
+data ../Data/All2_exp_10383.dat;
+
+param iter := 0;
+param citer;
+param MDPR;
+param CONR;
+let citer := iter;
+printf "\n%d\n", citer;
+let MDPR := sum{i in 1..n, j in S[i], k in A[i]} x[i,j,k]*R[i,j,k];
+let CONR := sum{l in numcons} creward[l] * prod{m in cons[l]} z[l,m];
+printf "\nIteration %d Value: %.10f MDP: %.10f CONR: %.10f\n", citer, sum{i in 1..n, j in S[i], k in A[i]} x[i,j,k]*R[i,j,k] + sum{l in numcons} creward[l] * prod{m in cons[l]} z[l,m], MDPR, CONR;
+let citer := citer + 1;
+solve;
+
+param olditer;
+param newiter;
+let newiter := ER;
+#let newiter := sum{i in 1..n, j in S[i], k in A[i]} xstar[i,j,k]*R[i,j,k] + sum{l in numcons} creward[l] * prod{m in cons[l]} zstar[l,m];
+let MDPR := sum{i in 1..n, j in S[i], k in A[i]} xstar[i,j,k]*R[i,j,k];
+let CONR := sum{l in numcons} creward[l] * prod{m in cons[l]} zstar[l,m];
+printf "\nIter %d Value: %10f MDP: %.10f CONR: %.10f\n", citer, newiter, MDPR, CONR; 
+repeat { 
+	let citer := citer + 1;
+	printf "\n%d\n", citer;
+	for {i in 1..n, j in S[i], k in A[i]} { let x[i,j,k] := xstar[i,j,k]; }  
+	solve;
+	let olditer := newiter;
+	let newiter := sum{i in 1..n, j in S[i], k in A[i]} xstar[i,j,k]*R[i,j,k] + sum{l in numcons} creward[l] * prod{m in cons[l]} zstar[l,m];
+	let MDPR := sum{i in 1..n, j in S[i], k in A[i]} xstar[i,j,k]*R[i,j,k];
+	let CONR := sum{l in numcons} creward[l] * prod{m in cons[l]} zstar[l,m];
+	printf "\nIter %d Value: %.10f MDP: %.10f CONR: %.10f \n", citer, newiter, MDPR, CONR; 
+
+	let olditer := newiter;
+	let newiter := ER;
+	#printf "\nPercent Error: %.10f\n", abs(newiter-nonlin)/nonlin;
+	printf "\nIter %d Value: %.10f \n", citer, newiter; 
+} until abs(newiter - olditer) < 1e-8;
+
