@@ -3,7 +3,7 @@ import pickle
 import math
 #flag=1 fileread
 solver = 'minos'
-flag = 0
+flag = 1
 
 timetorunsecE = 600
 timetorunsecN = 600
@@ -19,8 +19,9 @@ gamma = 0.8
 initialxval = 0.1
 alpha = 0.8
 beta = 0.7
-deltaFinal = 1e-7 #For Convergence
+deltaFinal = 1e-5 #For Convergence
 deltaIter =1e-4 #For greedy Approach
+deltaError = 1e-5
 noiterConvergence = 10
 print "Experiment: ", experiment
 print "theta: ", theta
@@ -34,13 +35,13 @@ if flag == 0:
 
     agents = 4
     nPrivatePerAgent = 2
-    nShared = 2
+    nShared = 1
     minSharing = 3
     maxSharing = 3
     minT = 6
     maxT = 6
-    minTaction = 5
-    maxTaction = 5
+    minTaction = 3
+    maxTaction = 3
     agentMax = [math.ceil(float(nShared*maxSharing)/float(agents))]*agents
     nLocs = (agents*nPrivatePerAgent) + nShared
     auction = [-1]*nLocs

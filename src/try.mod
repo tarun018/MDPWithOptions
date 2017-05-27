@@ -1,5 +1,5 @@
 param n;
-param gamma default 0.8;
+param gamma;
 set S{1..n} ordered;
 set A{1..n} ordered;
 
@@ -28,8 +28,10 @@ sum{l in 1..numcons} creward[l] * prod{m in cons[l]} z[l,m];
 
 subject to Flow {i in 1..n, j in S[i]}:
 sum{k in A[i]} x[i,j,k] - 
-gamma * sum{l in S[i], m in A[i]} x[i,l,m]*P[i,m,l,j] = alpha[i,j];
-subject to Positive {i in 1..n, j in S[i], k in A[i]}: x[i,j,k] >= 0;
+gamma * sum{l in S[i], m in A[i]} x[i,l,m]*P[i,m,l,j] == alpha[i,j];
+subject to Positive {i in 1..n, j in S[i], k in A[i]}: x[i,j,k] >= 0.000001;
+
+
 subject to defineZ{i in 1..numcons, j in cons[i]}:
-z[i,j] = sum{k in events[j]} x[primitives[k,1],primitives[k,2],primitives[k,3]]*
-P[primitives[k,1], primitives[k,3], primitives[k,2], primitives[k,4]];
+#z[i,j] == sum{k in events[j]} ( x[primitives[k,1], primitives[k,2], primitives[k,3]] / sum{acts in A[primitives[k,1]]} x[primitives[k,1],primitives[k,2],acts] ) * P[primitives[k,1], primitives[k,3], primitives[k,2], primitives[k,4]];
+z[i,j] == sum{k in events[j]} x[primitives[k,1], primitives[k,2], primitives[k,3]] * P[primitives[k,1], primitives[k,3], primitives[k,2], primitives[k,4]];

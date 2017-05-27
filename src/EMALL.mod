@@ -25,6 +25,7 @@ param theta;
 param thetahat = (theta) / (Rmax - Rmin);
 param Rcap{i in 1..n, j in S[i], k in A[i]} = (R[i,j,k]) / (Rmax - Rmin);
 param crewardcap{i in numcons} = (creward[i]) / (Rmax - Rmin);
+param iter_value default 0;
 
 param x{i in 1..n, j in S[i], k in A[i]};
 var xstar{i in 1..n, j in S[i], k in A[i]};
@@ -42,7 +43,6 @@ subject to Flow {i in 1..n, j in S[i]}:
 sum{k in A[i]} xstar[i,j,k] - 
 gamma * sum{l in S[i], m in A[i]} xstar[i,l,m]*P[i,m,l,j] == alpha[i,j];
 subject to Positive {i in 1..n, j in S[i], k in A[i]}: xstar[i,j,k] >= 0.000001;
-
 
 subject to defineZ{i in numcons, j in cons[i]}:
 zstar[i,j] == sum{k in events[j]} xstar[primitives[k,1], primitives[k,2], primitives[k,3]] * P[primitives[k,1], primitives[k,3], primitives[k,2], primitives[k,4]];
