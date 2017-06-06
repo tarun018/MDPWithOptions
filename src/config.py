@@ -3,7 +3,7 @@ import pickle
 import math
 #flag=1 fileread
 solver = 'minos'
-flag = 1
+flag = 0
 
 timetorunsecE = 600
 timetorunsecN = 600
@@ -33,15 +33,15 @@ print "deltaIter: ", deltaIter
 
 if flag == 0:
 
-    agents = 4
+    agents = 3
     nPrivatePerAgent = 2
     nShared = 1
     minSharing = 3
     maxSharing = 3
     minT = 6
     maxT = 6
-    minTaction = 3
-    maxTaction = 3
+    minTaction = 4
+    maxTaction = 4
     agentMax = [math.ceil(float(nShared*maxSharing)/float(agents))]*agents
     nLocs = (agents*nPrivatePerAgent) + nShared
     auction = [-1]*nLocs

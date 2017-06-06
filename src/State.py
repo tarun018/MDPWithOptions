@@ -155,6 +155,9 @@ class MDP:
         sameds = all([s.dvals[j] == sd.dvals[j] for j in xrange(0, self.nlocs) if j != s.location])
         # print sameds
 
+        if sameds==False:
+            return 0
+
         # Location should be same
         if s.location != sd.location:
             return 0
@@ -165,9 +168,6 @@ class MDP:
 
         # Time should not be negative after subtraction
         if sd.time < 0:
-            return 0
-
-        if sameds==False:
             return 0
 
         if sd.dold != s.dvals[s.location]:
@@ -200,6 +200,9 @@ class MDP:
         if s.time == 0 and sd == self.terminal:
             return 1
 
+        if sameds == False:
+            return 0
+
         if ld != dest and ld != l:
             return 0
 
@@ -207,9 +210,6 @@ class MDP:
             return 0
 
         if td < 0:
-            return 0
-
-        if sameds == False:
             return 0
 
         if doldd != sd.dvals[ld]:
@@ -310,7 +310,7 @@ class MDP:
                 ntimes = float(sum / offset)
                 avg = float(val) / float(ntimes)
                 timerem = (float(tots - sum) / float(offset)) * avg
-                print "["+str(self.agent)+","+str(iter)+"] Done. "+str(sum)+" Out of: "+str(tots)+ " Avg: "+str(avg) + " Rem: "+str(timerem)
+                print "["+str(self.agent)+","+str(iter)+"] Done. "+str(sum)+" Out of: "+str(tots)+ " Avg: "+str(avg) + " Rem: "+str(timerem)    
                 start = time.time()
             if i == self.terminal:
                 continue
@@ -979,20 +979,14 @@ class EMMDP:
 
     def objective(self, xvals, Rs):
         sum = 0
-        #print all(np.array(xvals[0]) == np.array(xvals[1]))
-        #print all(np.array(xvals[2]) == np.array(xvals[1]))
-        #print "------------------------------------------"
         for i in xrange(0, self.num_agents):
             sum += np.dot(Rs[i], np.array(xvals[i]))
-            #print "MDP: ", np.dot(Rs[i], np.array(xvals[i]))
             if abs(np.sum(np.array(xvals[i])) - (float(1) / float(1-config.gamma))) > 1e-5:
                 print "Warning", np.sum(xvals[i])
-        #print "Overall N MDP: ",sum
 
         for i in xrange(0, len(self.constraints)):
             cons = self.constraints[i]
             prod = cons.reward
-            print "prodRew: ",prod
             for eves in cons.Events:
                 pesum = 0
                 agent = eves.agent
@@ -1000,12 +994,9 @@ class EMMDP:
                     s = peves.state
                     a = peves.action
                     sd = peves.statedash
-                    #print "Here "+str(agent)+" "+str((s.index*self.mdps[agent].numerActions)+a.index)+" "+str(xvals[agent][(s.index*self.mdps[agent].numerActions)+a.index]) + " "
                     pesum += self.mdps[agent].transition(s,a,sd)*xvals[agent][(s.index*self.mdps[agent].numerActions)+a.index]
-                #print str(pesum) + " " + str(agent)
                 prod *= pesum
             sum += prod
-        #sum += config.theta * len(self.constraints)
         return sum
 
     def genGraphAndSave(self, iters, results, nonLinear, times, nlptime):
@@ -1055,85 +1046,85 @@ class EMMDP:
         xstar_val = var_vals.getColumn('val')
         return xstar_val
 
-    # def doSuccIter(self, arg):
-    #     i,ampl,greedy,oldX,A = arg
-    #     ampl.solve()
-    #     A = np.array(A)[np.newaxis].T
-    #     A = np.transpose(A)
-    #     var = ampl.getVariable("xstar")
-    #     var_vals = var.getValues()
-    #     xstar_val = var_vals.getColumn('val')
-    #     alpha = np.array(self.mdps[i].start)
-    #     if greedy:
-    #         from decimal import Decimal
-    #         pi_old = []
-    #         pi_new = []
-    #         ratios = []
-    #         maxQ = [0]*self.mdps[i].numberStates
-    #         for sts in self.mdps[i].states:
-    #             sumProb_old = 0
-    #             sumProb_new = 0
-    #             maxQS = Decimal('-Infinity')
-    #             for acts in self.mdps[i].actions:
-    #                 sumProb_old += oldX[(sts.index * self.mdps[i].numerActions)+acts.index]
-    #                 sumProb_new += xstar_val[(sts.index * self.mdps[i].numerActions)+acts.index]
-    #             for acts in self.mdps[i].actions:
-    #                 norm_val_old = oldX[(sts.index * self.mdps[i].numerActions)+acts.index] / float(sumProb_old)
-    #                 norm_val_new = xstar_val[(sts.index * self.mdps[i].numerActions) + acts.index] / float(sumProb_new)
-    #                 pi_old.append(norm_val_old)
-    #                 pi_new.append(norm_val_new)
-    #                 ratio = float(norm_val_new) / float(norm_val_old)
-    #                 ratios.append(ratio)
-    #                 if ratio > maxQS:
-    #                     maxQS = ratio
-    #                     maxQ[sts.index] = acts
-    # 
-    #         pi_new = []
-    #         c = 0.1
-    #         epsilon = self.PosNormal(0, 2)[0]
-    #         for sts in self.mdps[i].states:
-    #             ex_pi_new = []
-    #             sum_new = 0
-    #             for acts in self.mdps[i].actions:
-    #                 if maxQ[sts.index]==acts:
-    #                     indicator = 1
-    #                 else:
-    #                     indicator = 0
-    #                 value = pi_old[(sts.index * self.mdps[i].numerActions)+acts.index]*(indicator+c+epsilon)
-    #                 sum_new += value
-    #                 ex_pi_new.append(value)
-    #             for vals in ex_pi_new:
-    #                 pi_new.append(float(vals)/float(sum_new))
-    # 
-    #         for sts in self.mdps[i].states:
-    #             sum_new = 0
-    #             for acts in self.mdps[i].actions:
-    #                 sum_new += pi_new[(sts.index * self.mdps[i].numerActions)+acts.index]
-    #             assert abs(float(1)-sum_new) < 0.0000001
-    # 
-    #         cons = []
-    #         obj = cvxpy.Maximize(1)
-    #         xnew = cvxpy.Variable(self.mdps[i].numberStates * self.mdps[i].numerActions, 1)
-    #         for sts in self.mdps[i].states:
-    #             sum = 0
-    #             for acts in self.mdps[i].actions:
-    #                 ind = (sts.index * self.mdps[i].numerActions)+acts.index
-    #                 sum += xnew[ind]
-    #             for acts in self.mdps[i].actions:
-    #                 ind = (sts.index * self.mdps[i].numerActions)+acts.index
-    #                 cons.append(xnew[ind] == sum*pi_new[ind])
-    #         cons.append(A*xnew == alpha)
-    #         cons.append(xnew >= 0)
-    #         prob = cvxpy.Problem(obj, cons)
-    #         prob.solve()
-    #         #print abs(np.concatenate(np.array(xnew.value)) - xstar_val)
-    #         return np.concatenate(np.array(xnew.value))
-    #     else:
-    #         return xstar_val
+    def doSuccIter(self, arg):
+        i,ampl,greedy,oldX,A = arg
+        ampl.solve()
+        A = np.array(A)[np.newaxis].T
+        A = np.transpose(A)
+        var = ampl.getVariable("xstar")
+        var_vals = var.getValues()
+        xstar_val = var_vals.getColumn('val')
+        alpha = np.array(self.mdps[i].start)
+        if greedy:
+            from decimal import Decimal
+            pi_old = []
+            pi_new = []
+            ratios = []
+            maxQ = [0]*self.mdps[i].numberStates
+            for sts in self.mdps[i].states:
+                sumProb_old = 0
+                sumProb_new = 0
+                maxQS = Decimal('-Infinity')
+                for acts in self.mdps[i].actions:
+                    sumProb_old += oldX[(sts.index * self.mdps[i].numerActions)+acts.index]
+                    sumProb_new += xstar_val[(sts.index * self.mdps[i].numerActions)+acts.index]
+                for acts in self.mdps[i].actions:
+                    norm_val_old = oldX[(sts.index * self.mdps[i].numerActions)+acts.index] / float(sumProb_old)
+                    norm_val_new = xstar_val[(sts.index * self.mdps[i].numerActions) + acts.index] / float(sumProb_new)
+                    pi_old.append(norm_val_old)
+                    pi_new.append(norm_val_new)
+                    ratio = float(norm_val_new) / float(norm_val_old)
+                    ratios.append(ratio)
+                    if ratio > maxQS:
+                        maxQS = ratio
+                        maxQ[sts.index] = acts
 
-    # def PosNormal(self, mean, sigma):
-    #     x = np.random.normal(mean, sigma, 1)
-    #     return (x if x >= 0 else self.PosNormal(mean, sigma))
+            pi_new = []
+            c = 0.1
+            epsilon = self.PosNormal(0, 2)[0]
+            for sts in self.mdps[i].states:
+                ex_pi_new = []
+                sum_new = 0
+                for acts in self.mdps[i].actions:
+                    if maxQ[sts.index]==acts:
+                        indicator = 1
+                    else:
+                        indicator = 0
+                    value = pi_old[(sts.index * self.mdps[i].numerActions)+acts.index]*(indicator+c+epsilon)
+                    sum_new += value
+                    ex_pi_new.append(value)
+                for vals in ex_pi_new:
+                    pi_new.append(float(vals)/float(sum_new))
+
+            for sts in self.mdps[i].states:
+                sum_new = 0
+                for acts in self.mdps[i].actions:
+                    sum_new += pi_new[(sts.index * self.mdps[i].numerActions)+acts.index]
+                assert abs(float(1)-sum_new) < 0.0000001
+
+            cons = []
+            obj = cvxpy.Maximize(1)
+            xnew = cvxpy.Variable(self.mdps[i].numberStates * self.mdps[i].numerActions, 1)
+            for sts in self.mdps[i].states:
+                sum = 0
+                for acts in self.mdps[i].actions:
+                    ind = (sts.index * self.mdps[i].numerActions)+acts.index
+                    sum += xnew[ind]
+                for acts in self.mdps[i].actions:
+                    ind = (sts.index * self.mdps[i].numerActions)+acts.index
+                    cons.append(xnew[ind] == sum*pi_new[ind])
+            cons.append(A*xnew == alpha)
+            cons.append(xnew >= 0)
+            prob = cvxpy.Problem(obj, cons)
+            prob.solve()
+            #print abs(np.concatenate(np.array(xnew.value)) - xstar_val)
+            return np.concatenate(np.array(xnew.value))
+        else:
+            return xstar_val
+
+    def PosNormal(self, mean, sigma):
+        x = np.random.normal(mean, sigma, 1)
+        return (x if x >= 0 else self.PosNormal(mean, sigma))
 
     def NonLinear(self):
         AMPL = autoclass('com.ampl.AMPL')
@@ -1278,7 +1269,7 @@ class EMMDP:
             iterEndTime = time.time()
 
             try:
-                print noOfProcess
+                #print noOfProcess
                 if self.num_agents <= noOfProcess:
                     pr = pool.map_async(self.doIter, args)
                     rss = pr.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
@@ -1334,7 +1325,7 @@ class EMMDP:
                     iterEndTime = time.time()
 
                     try:
-                        print noOfProcess
+                        #print noOfProcess
                         if self.num_agents <= noOfProcess:
                             pr = pool.map_async(self.doSuccIter, args)
                             rss = pr.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
@@ -1356,7 +1347,7 @@ class EMMDP:
 
                     oldobj = self.objective(xvals, Rs)
                     print "\n\nOld Objective: ",oldobj
-                    print np.size(xvals), np.size(xvalues)
+                    #print np.size(xvals), np.size(xvalues)
                     xvals = xvalues
                     newobj = self.objective(xvals, Rs)
                     results.append(newobj)
@@ -1728,3 +1719,4 @@ class TimeoutException(Exception):   # Custom exception class
 class Driver:
     a = EMMDP(config.agents)
     #a.AllEM()
+    a.EMJavaAMPL()
