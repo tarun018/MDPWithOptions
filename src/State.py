@@ -1345,7 +1345,6 @@ class EMMDP:
             Rcap = np.array(newRs[i])[np.newaxis].T
             rdiag = np.diag(Rcap[:, 0])
             rdiagx = rdiag.dot(x[i])
-            rdiagx = rdiagx * (1 - config.gamma)
             sums.append(rdiagx)
 
         products = []

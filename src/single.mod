@@ -43,7 +43,7 @@ param z{i in all_numcons, j in all_cons[i]} = sum{k in all_events[j]} x[all_prim
 var zstar{i in agent_numcons, j in agent_cons[i]};
 
 maximize ER: 
-( sum{i in S[agent], j in A[agent]} x[agent,i,j] * Rcap[i,j] * (1-gamma) * log(xstar[i,j])) +
+( sum{i in S[agent], j in A[agent]} x[agent,i,j] * Rcap[i,j] * log(xstar[i,j])) +
 ( sum{l in agent_numcons} crewardcap[l] * (prod{m in all_cons[l]} z[l,m]) * sum{o in agent_cons[l]} log(zstar[l,o]) ) +
 ( sum{l in agent_numcons}  thetahat * sum{o in agent_cons[l]} (1-z[l,o]) * log(1-zstar[l,o]) ) + 
 ( sum{l in agent_numcons}  thetahat * sum{o in agent_cons[l]} (z[l,o]) * log(zstar[l,o]) ) ;
