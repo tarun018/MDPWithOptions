@@ -7,20 +7,14 @@ import itertools
 import copy_reg
 import types
 from copy import deepcopy
-import pyipopt
-import algopy
-import os
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import jnius
-from jnius import autoclass
 import time
 import multiprocessing
 import pickle
-import math
 import multiprocessing.pool
-import traceback
+import madopt
 
 #from pathos.multiprocessing import ProcessingPool as Pool
 
@@ -651,301 +645,6 @@ class EMMDP:
             index = index + 1
             self.constraints.append(c)
 
-    def genAMPL(self):
-        print "     Generating AMPL: ",
-        ampl = open(config.workDir+'Data/nl2_exp_'+str(config.experiment)+'.dat', 'w')
-        ampl.write("param n := " + str(self.num_agents) + ";\n")
-        ampl.write("\n")
-        for i in xrange(0, self.num_agents):
-            ampl.write("set S[" + str(i+1) + "] := ")
-            for x in self.mdps[i].states:
-                ampl.write(str(x.index+1)+" ")
-            ampl.write(";\n")
-            ampl.write("set A[" + str(i+1) + "] := ")
-            for x in self.mdps[i].actions:
-                ampl.write(str(x.index+1)+" ")
-            ampl.write(";\n")
-        ampl.write("\n")
-        ampl.write("param numcons := "+str(len(self.constraints))+";\n")
-        ampl.write("param numprims := "+str(len(self.primitives))+";\n")
-        ampl.write("param numevents := "+str(len(self.events))+";\n")
-        ampl.write("param gamma := " + str(config.gamma) + ";\n")
-        ampl.write("\n")
-
-        ampl.write("param: sparseP: sparsePVal:= \n")
-        for i in xrange(0, self.num_agents):
-            for j in xrange(0, len(self.mdps[i].actions)):
-                for k in xrange(0, len(self.mdps[i].states)):
-                    h = self.mdps[i].states[k].transition
-                    hh = [(x[1],x[2]) for x in h if x[0] == self.mdps[i].actions[j].index and x[2] != 0 ]
-                    for valsac in hh:
-                        ampl.write(str(i+1) + " " + str(self.mdps[i].actions[j].index+1) + " " + str(self.mdps[i].states[k].index+1) + " " +str(valsac[0]+1) + " " + str(valsac[1]) + "\n")
-            if i == self.num_agents - 1:
-                ampl.write(";")
-        ampl.write("\n")
-
-        ampl.write("param R := \n")
-        for i in xrange(0, self.num_agents):
-            ampl.write("[" + str(i + 1) + ",*,*] : ")
-            for j in xrange(0, len(self.mdps[i].actions)):
-                ampl.write(str(j + 1) + " ")
-            ampl.write(":= \n")
-            for j in xrange(0, len(self.mdps[i].states)):
-                ampl.write(str(j + 1) + " ")
-                h = self.mdps[i].states[j].reward
-                hh = [x[1] for x in h]
-                for g in hh:
-                    ampl.write(str(g) + " ")
-                ampl.write("\n")
-            if i == self.num_agents - 1:
-                ampl.write(";")
-        ampl.write("\n")
-
-        ampl.write("param alpha := \n")
-        for i in xrange(0,self.num_agents):
-            ampl.write("[" + str(i + 1) + ",*] := ")
-            for gg in xrange(0,len(self.mdps[i].start)):
-                ampl.write(str(gg+1) + " " + str(self.mdps[i].start[gg]) + " ")
-            ampl.write("\n")
-        ampl.write(";\n")
-
-        ampl.write("param creward := ")
-        for x in xrange(0, len(self.constraints)):
-            ampl.write(str(x+1)+" "+str(self.constraints[x].reward)+" ")
-        ampl.write(";\n")
-
-        ampl.write("param primitives : ")
-        for i in xrange(0, 4):
-            ampl.write(str(i + 1) + " ")
-        ampl.write(":= \n")
-        for z in self.primitives:
-                ampl.write(str(z.index + 1) + " " + str(z.agent + 1) + " " + str(z.state.index + 1) + " " +
-                           str(z.action.index + 1) + " " + str(z.statedash.index + 1) + "\n")
-        ampl.write(";\n")
-
-        for i in xrange(0, len(self.events)):
-            ampl.write("set events["+str(i+1)+"] := ")
-            for x in self.events[i].pevents:
-                ampl.write(str(x.index+1)+" ")
-            ampl.write(";\n")
-        ampl.write("\n")
-
-        for i in xrange(0, len(self.constraints)):
-            ampl.write("set cons["+str(i+1)+"] := ")
-            for x in self.constraints[i].Events:
-                ampl.write(str(x.index+1)+" ")
-            ampl.write(";\n")
-        ampl.write("\n")
-
-        ampl.write("for {(i,j,k,l) in sparseP} {	let P[i,j,k,l] := sparsePVal[i,j,k,l]; }")
-        ampl.close()
-        print "Done"
-
-    def genAMPLSingle(self, agent, initx=None):
-        print "     Generating AMPL for Agent " + str(agent) + " : ",
-        ampl = open(config.workDir+'Data/single'+str(agent)+'_exp_'+str(config.experiment)+'.dat', 'w')
-        ampl.write("param n := " + str(self.num_agents) + ";\n")
-        ampl.write("param agent := " + str(agent+1) + ";\n")
-        ampl.write("param gamma := " + str(config.gamma) + ";\n")
-
-        for i in xrange(0, self.num_agents):
-            ampl.write("set S[" + str(i+1) + "] := ")
-            for x in self.mdps[i].states:
-                ampl.write(str(x.index+1)+" ")
-            ampl.write(";\n")
-            ampl.write("set A[" + str(i+1) + "] := ")
-            for x in self.mdps[i].actions:
-                ampl.write(str(x.index+1)+" ")
-            ampl.write(";\n")
-        ampl.write("\n")
-
-        ampl.write("param: sparseP: sparsePVal:= \n")
-        for i in xrange(0, self.num_agents):
-            for j in xrange(0, len(self.mdps[i].actions)):
-                for k in xrange(0, len(self.mdps[i].states)):
-                    h = self.mdps[i].states[k].transition
-                    hh = [(x[1],x[2]) for x in h if x[0] == self.mdps[i].actions[j].index and x[2] != 0 ]
-                    for valsac in hh:
-                        ampl.write(str(i+1) + " " + str(self.mdps[i].actions[j].index+1) + " " + str(self.mdps[i].states[k].index+1) + " " +str(valsac[0]+1) + " " + str(valsac[1]) + "\n")
-            if i == self.num_agents - 1:
-                ampl.write(";")
-        ampl.write("\n")
-
-        ampl.write("param R := \n")
-        for i in xrange(0, self.num_agents):
-            ampl.write("[" + str(i + 1) + ",*,*] : ")
-            for j in xrange(0, len(self.mdps[i].actions)):
-                ampl.write(str(j + 1) + " ")
-            ampl.write(":= \n")
-            for j in xrange(0, len(self.mdps[i].states)):
-                ampl.write(str(j + 1) + " ")
-                h = self.mdps[i].states[j].reward
-                hh = [x[1] for x in h]
-                for g in hh:
-                    ampl.write(str(g) + " ")
-                ampl.write("\n")
-            if i == self.num_agents - 1:
-                ampl.write(";")
-        ampl.write("\n")
-
-        ampl.write("param alpha := \n")
-        for i in xrange(0, self.num_agents):
-            ampl.write("[" + str(i + 1) + ",*] := ")
-            for gg in xrange(0, len(self.mdps[i].start)):
-                ampl.write(str(gg + 1) + " " + str(self.mdps[i].start[gg]) + " ")
-            ampl.write("\n")
-        ampl.write(";\n")
-
-        ampl.write("set all_numcons := ")
-        for i in xrange(0, len(self.constraints)):
-            ampl.write(str(i+1)+" ")
-        ampl.write(";\n")
-
-        ampl.write("set all_numprims := ")
-        for i in xrange(0, len(self.primitives)):
-            ampl.write(str(i + 1) + " ")
-        ampl.write(";\n")
-
-        ampl.write("set all_numevents := ")
-        for i in xrange(0, len(self.events)):
-            ampl.write(str(i + 1) + " ")
-        ampl.write(";\n")
-
-        ampl.write("param all_creward := ")
-        for x in xrange(0, len(self.constraints)):
-            ampl.write(str(x+1)+" "+str(self.constraints[x].reward)+" ")
-        ampl.write(";\n")
-
-        ampl.write("param all_primitives : ")
-        for i in xrange(0, 4):
-            ampl.write(str(i + 1) + " ")
-        ampl.write(":= \n")
-        for z in self.primitives:
-                ampl.write(str(z.index + 1) + " " + str(z.agent + 1) + " " + str(z.state.index + 1) + " " +
-                           str(z.action.index + 1) + " " + str(z.statedash.index + 1) + "\n")
-        ampl.write(";\n")
-
-        for i in xrange(0, len(self.events)):
-            ampl.write("set all_events["+str(i+1)+"] := ")
-            for x in self.events[i].pevents:
-                ampl.write(str(x.index+1)+" ")
-            ampl.write(";\n")
-        ampl.write("\n")
-
-        for i in xrange(0, len(self.constraints)):
-            ampl.write("set all_cons["+str(i+1)+"] := ")
-            for x in self.constraints[i].Events:
-                ampl.write(str(x.index+1)+" ")
-            ampl.write(";\n")
-        ampl.write("\n")
-
-        events = []
-        consts = set()
-        primits = []
-
-        for cons in self.constraints:
-            for eves in cons.Events:
-                if eves.agent == agent:
-                    events.append(eves)
-                    primits.extend(eves.pevents)
-                    consts.add(cons.index)
-
-        ampl.write("set agent_numcons := ")
-        for con in consts:
-            ampl.write(str(con+1)+" ")
-        ampl.write(";\n")
-
-        ampl.write("set agent_numprims := ")
-        for prims in primits:
-            ampl.write(str(prims.index+1)+" ")
-        ampl.write(";\n")
-
-        ampl.write("set agent_numevents := ")
-        for es in events:
-            ampl.write(str(es.index+1)+" ")
-        ampl.write(";\n")
-
-        ampl.write("param agent_creward := ")
-        for x in consts:
-            ampl.write(str(x+1)+" "+str(self.constraints[x].reward)+" ")
-        ampl.write(";\n\n")
-
-        ampl.write("param agent_primitives : ")
-        for i in xrange(0, 4):
-            ampl.write(str(i + 1) + " ")
-        ampl.write(":= \n")
-        for z in primits:
-                ampl.write(str(z.index + 1) + " " + str(z.agent + 1) + " " + str(z.state.index + 1) + " " +
-                           str(z.action.index + 1) + " " + str(z.statedash.index + 1) + "\n")
-        ampl.write(";\n")
-
-        for es in events:
-            ampl.write("set agent_events["+str(es.index+1)+"] := ")
-            for x in es.pevents:
-                ampl.write(str(x.index+1)+" ")
-            ampl.write(";\n")
-        ampl.write("\n")
-
-        for co in consts:
-            ampl.write("set agent_cons["+str(co+1)+"] := ")
-            for x in self.constraints[co].Events:
-                if x.agent == agent:
-                    ampl.write(str(x.index+1)+" ")
-            ampl.write(";\n")
-        ampl.write("\n\n")
-
-        ampl.write("param theta := " + str(float(config.theta)) + ";\n")
-        ampl.write("param Rmax := " + str(config.R_max) + ";\n")
-        ampl.write("param Rmin := " + str(config.R_min) + ";\n\n")
-
-        ampl.write("param x := \n")
-        for k in xrange(0, self.num_agents):
-            ampl.write("[" + str(k + 1) + ",*,*] : ")
-            for j in xrange(0, len(self.mdps[k].actions)):
-                ampl.write(str(j + 1) + " ")
-            ampl.write(":= \n")
-            if initx is None:
-                for i in xrange(0, self.mdps[k].numberStates):
-                    ampl.write(str(i+1)+" ")
-                    for j in xrange(0, self.mdps[k].numerActions):
-                        ampl.write(str(config.initialxval)+" ")
-                    ampl.write("\n")
-            else:
-                for i in xrange(0, self.mdps[k].numberStates):
-                    ampl.write(str(i+1)+" ")
-                    for j in xrange(0, self.mdps[k].numerActions):
-                        s = self.mdps[k].states[i]
-                        a = self.mdps[k].actions[j]
-                        val = initx[k][(s.index * self.mdps[k].numerActions) + a.index]
-                        ampl.write(str(val)+" ")
-                    ampl.write("\n")
-        ampl.write(";\n")
-
-        ampl.write("for {(i,j,k,l) in sparseP} {	let P[i,j,k,l] := sparsePVal[i,j,k,l]; }")
-
-        ampl.close()
-        print "Done"
-
-    def runConfig(self, agent):
-        print  "    Writting Running Config for Agent " + str(agent) + ": ",
-        runf = open(config.workDir+'Data/single'+str(agent)+'_exp_'+str(config.experiment)+'.run', 'w')
-        runf.write("option solver 'ampl/"+str(config.solver)+"';\n")
-        runf.write("option solver_msg 0;\n")
-        #runf.write("option minos_options 'feasibility_tolerance=1.0e-8 optimality_tolerance=1.0e-8 Completion=full';\n")
-        runf.close()
-        print "Done"
-
-    def runConfigNonLinear(self):
-        print  "    Writting Running Config for Non Linear"
-        runf = open(config.workDir+'Data/nl2_exp_'+str(config.experiment)+'.run', 'w')
-        runf.write("reset;\n")
-        runf.write("model try.mod;\n")
-        runf.write("data " + config.workDir+ 'Data/nl2_exp_'+str(config.experiment)+'.dat' + ";\n")
-        runf.write("option solver_msg 0;\n")
-        runf.write("write \"g/"+config.workDir+"Data/myfile"+str(config.experiment)+"\";\n")
-        runf.close()
-        print "Done"
-
     def objective(self, xvals, Rs):
         sum = 0
         for i in xrange(0, self.num_agents):
@@ -965,7 +664,7 @@ class EMMDP:
                     sd = peves.statedash
                     pesum += self.mdps[agent].transition(s,a,sd)*xvals[agent][(s.index*self.mdps[agent].numerActions)+a.index]
                 prod *= pesum
-            sum += np.asscalar(prod)
+            sum += prod
         #sum += config.theta * len(self.constraints)
         return sum
 
@@ -1007,276 +706,7 @@ class EMMDP:
     def timeout_handler(self, signum, frame):  # Custom signal handler
         raise TimeoutException
 
-    def doIter(self, arg):
-        i, ampl = arg
-
-        ampl.solve()
-        var = ampl.getVariable("xstar")
-        var_vals = var.getValues()
-        xstar_val = var_vals.getColumn('val')
-        return xstar_val
-
-    def doSuccIter(self, arg):
-        i,ampl = arg
-        ampl.solve()
-        var = ampl.getVariable("xstar")
-        var_vals = var.getValues()
-        xstar_val = var_vals.getColumn('val')
-        return xstar_val
-
-    def NonLinear(self):
-        AMPL = autoclass('com.ampl.AMPL')
-        ampl = AMPL()
-        ampl.reset()
-        nonlinearobj = 0
-        nlptime = 0
-        try:
-            start = time.time()
-            os.system("rm -rf "+config.workDir+"Data/myfile"+str(config.experiment)+".nl")
-            os.system("rm -rf "+config.workDir+"Data/myfile"+str(config.experiment)+".sol")
-            ampl.read(config.workDir+"Data/nl2_exp_"+str(config.experiment)+".run")
-            os.system("pkill -f ampl")
-            os.system("./ampl/minos -s "+config.workDir+"Data/myfile"+str(config.experiment)+".nl")
-            end = time.time()
-            nlptime = end-start
-            g = open(config.workDir+"Data/myfile"+str(config.experiment)+".sol")
-            for line in g:
-                if line.find("objective") != -1:
-                    row = line.split(" ")
-                    row = row[-1]
-                    row = float(row)
-                    nonlinearobj = row
-                    print nonlinearobj
-                    print "Non Linear Time:  %s seconds \n\n\n\n\n\n" % nlptime
-                    break
-            g.close()
-        except Exception as e:
-            print "Non Linear Not Able"
-            print e
-        except jnius.JavaException as e:
-            print "Non Linear Not Able"
-            print e
-        return nonlinearobj, nlptime
-
-    def resetAMPLs(self):
-        ampls = []
-        AMPL = autoclass('com.ampl.AMPL')
-        for i in xrange(0, self.num_agents):
-            ampl = AMPL()
-            ampl.reset()
-            ampl.read("single.mod")
-            ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
-            ampl.read(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
-            ampls.append(ampl)
-        return ampls
-
-    def EMJavaAMPL(self):
-        fails = 0
-        AMPL = autoclass('com.ampl.AMPL')
-        Double = autoclass('java.lang.Double')
-        ampl = AMPL()
-        ampl.reset()
-
-        Rs = []
-        results = []
-        times = []
-        iter = 1
-        initial_x = []
-
-        for i in xrange(0, self.num_agents):
-            A, R, newR = self.mdps[i].generateLPAc(config.gamma, genA=False)
-            Rs.append(R)
-            numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
-            lst = [config.initialxval]*numvar
-            initial_x.append(lst)
-        Rs = np.array(Rs)
-
-        if config.GenRun == 1:
-            for i in xrange(0, self.num_agents):
-                self.genAMPLSingle(i, initial_x)
-                self.runConfig(i)
-            self.genAMPL()
-            self.runConfigNonLinear()
-
-        print "NonLinear:"
-        pool = multiprocessing.pool.ThreadPool(processes=1)
-        result = pool.apply_async(self.NonLinear)
-        pool.close()
-        nonlinearobj = 0
-        nlptime = 0
-        try:
-            nonlinearobj, nlptime = result.get(timeout=config.timetorunsecN)
-        except (Exception, multiprocessing.TimeoutError) as e:
-            print e
-            print("Process timed out")
-        pool.terminate()
-        print("Pool terminated")
-        os.system('pkill -f ampl')
-        os.system('pkill -f minos')
-
-        print "EM-AMPL: "
-        signal.signal(signal.SIGALRM, self.timeout_handler)
-        sumIterTime = 0
-        newobj = 0
-        signal.alarm(config.timetorunsecE)
-        try:
-            ampls = []
-            xvals = []
-            args = []
-            noOfProcess = multiprocessing.cpu_count() - 1
-            pool = multiprocessing.pool.ThreadPool(noOfProcess)
-            dastart = time.time()
-            print "Iteration: " + str(iter)
-            for i in xrange(0, self.num_agents):
-                ampl = AMPL()
-                ampl.reset()
-                ampl.read("single.mod")
-                ampl.readData(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.dat')
-                ampl.read(config.workDir + 'Data/single' + str(i) + '_exp_' + str(config.experiment) + '.run')
-                ampls.append(ampl)
-                args.append((i, ampl))
-            daend = time.time()
-
-            datot = daend - dastart
-            sumIterTime += datot
-
-            iterStartTime = time.time()
-            iterEndTime = time.time()
-
-            try:
-                print noOfProcess
-                if self.num_agents <= noOfProcess:
-                    pr = pool.map_async(self.doIter, args)
-                    rss = pr.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
-                    xvals.extend(np.array(rss))
-                    pool.close()
-                else:
-                    for i in xrange(0, self.num_agents, noOfProcess):
-                        pr = pool.map_async(self.doIter, args[i:i+noOfProcess])
-                        rss = pr.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
-                        xvals.extend(np.array(rss))
-                    pool.close()
-                iterEndTime = time.time()
-            except multiprocessing.TimeoutError as e:
-                print e
-                print("Process timed out")
-            pool.terminate()
-            pool.join()
-            print("Pool terminated")
-            # os.system('pkill -f ampl')
-            # os.system('pkill -f minos')
-            newobj = self.objective(xvals, Rs)
-            print "\nObjective: ", newobj
-            iterTime = float(iterEndTime-iterStartTime)
-            totTime = float(iterTime) + float(datot)
-            times.append(totTime)
-            print "Iteration %s time: %s\n\n" %(str(iter), str(totTime))
-            sumIterTime += float(iterTime)
-
-            results.append(newobj)
-            while(True):
-                try:
-                    iter += 1
-                    print "Iteration: " + str(iter)
-                    pool = multiprocessing.pool.ThreadPool(processes=self.num_agents)
-                    args = []
-                    xvalues = []
-                    xvalsAsParam = np.concatenate(xvals)
-                    xvalsParamFinal = [Double(k) for k in xvalsAsParam]
-                    dastart = time.time()
-                    for i in xrange(0, self.num_agents):
-                        paramx = ampls[i].getParameter("x")
-                        paramx_val = paramx.getValues()
-                        paramx_val.setColumn('val', xvalsParamFinal)
-                        paramx.setValues(paramx_val)
-                        xvalsParamFinal = [Double(k) for k in xvalsAsParam]
-                        args.append((i, ampls[i]))
-                    daend = time.time()
-
-                    datot = 0
-                    sumIterTime += datot
-
-                    iterStartTime = time.time()
-                    iterEndTime = time.time()
-
-                    try:
-                        print noOfProcess
-                        if self.num_agents <= noOfProcess:
-                            pr = pool.map_async(self.doSuccIter, args)
-                            rss = pr.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
-                            xvalues.extend(np.array(rss))
-                            pool.close()
-                        else:
-                            for i in xrange(0, self.num_agents, noOfProcess):
-                                pr = pool.map_async(self.doSuccIter, args[i:i + noOfProcess])
-                                rss = pr.get(timeout=int(math.ceil(config.timetorunsecE - sumIterTime)))
-                                xvalues.extend(np.array(rss))
-                            pool.close()
-                        iterEndTime = time.time()
-                    except multiprocessing.TimeoutError as e:
-                        print e
-                        print("Process timed out")
-                    pool.terminate()
-                    pool.join()
-                    print("Pool terminated")
-
-                    oldobj = self.objective(xvals, Rs)
-                    print "\n\nOld Objective: ",oldobj
-                    #print np.size(xvals), np.size(xvalues)
-                    xvals = xvalues
-                    newobj = self.objective(xvals, Rs)
-                    results.append(newobj)
-                    print "New Objective: ", newobj
-                    iterTime = float(iterEndTime-iterStartTime)
-                    totTime = float(iterTime) + float(datot)
-                    times.append(totTime)
-                    print "Iteration %s time: %s\n\n" %(str(iter), str(totTime))
-                    sumIterTime += float(iterTime)
-
-                    print "\n"
-                    if abs(newobj - oldobj) < config.delta:
-                        print "NonLinear Obj: ", nonlinearobj
-                        print "EM Obj: ", newobj
-                        print "AvgIterTime: ", sumIterTime/iter
-                        print "NonLinearTime: ", nlptime
-                        print "Overall EM Time: %s"%(sumIterTime)
-                        print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
-                        if nonlinearobj != 0:
-                            print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
-                        break
-                except (Exception, jnius.JavaException) as e:
-                    fails += 1
-                    if fails > 5:
-                        break
-                    print e
-                    pool.terminate()
-                    pool.join()
-                    #os.system('pkill -f ampl')
-                    #os.system('pkill -f minos')
-                    #ampls = self.resetAMPLs()
-                    xvals = xvalues
-                    iter -= 1
-                    print "Rerun"
-                    traceback.print_exc()
-                    traceback.print_stack()
-                    continue
-
-        except TimeoutException as e:
-            print e
-            print "\n\n EM Time's Up: "
-            print "NonLinear Obj: ", nonlinearobj
-            print "EM Obj: ", newobj
-            print "AvgIterTime: ", sumIterTime / iter
-            print "NonLinearTime: ", nlptime
-            print "Overall EM Time: %s" % (sumIterTime)
-            if nonlinearobj != 0:
-                print "PercentError: " + str((float(abs(nonlinearobj - newobj)) / float(max(nonlinearobj, newobj))) * 100) + "%"
-        else:
-            signal.alarm(0)
-
-        self.genGraphAndSave(len(results), results, nonlinearobj, times, nlptime)
-
-    def EM(self, NonLinear=False):
+    def EM(self):
         initial_x = []
         for i in xrange(0, self.num_agents):
             numvar = self.mdps[i].numberStates * self.mdps[i].numerActions
@@ -1299,17 +729,14 @@ class EMMDP:
             self.newRs.append(newR)
             self.alphas.append(self.mdps[i].start)
 
-        if NonLinear:
-            x, obj = self.NonLinear(initial_x)
-            print obj
-            return
-
         sums, products = self.generateEstep(initial_x, self.newRs)
         for i in xrange(0, self.num_agents):
             if config.solver == 'ipopt':
                 xstar_val, prob_val = self.Mstep1(sums, products, initial_x, i)
             elif config.solver == 'cvxpy':
                 xstar_val, prob_val = self.Mstep(sums, products, initial_x, i)
+            elif config.solver == 'bonmin':
+                xstar_val, prob_val = self.Mstep2(sums, products, initial_x, i)
             xvals.append(xstar_val)
             pvals.append(prob_val)
         o = self.objective(xvals, self.Rs)
@@ -1326,6 +753,8 @@ class EMMDP:
                     xstar_val, prob_val = self.Mstep1(sums, products, xvals, i)
                 elif config.solver == 'cvxpy':
                     xstar_val, prob_val = self.Mstep(sums, products, xvals, i)
+                elif config.solver == 'bonmin':
+                    xstar_val, prob_val = self.Mstep2(sums, products, initial_x, i)
                 xvalues.append(xstar_val)
                 pvalues.append(prob_val)
             prevobj = self.objective(xvals, self.Rs)
@@ -1483,6 +912,100 @@ class EMMDP:
         nlp.close()
         return x, -1 * obj
 
+    def Mstep2(self, sums, products, x, agent):
+        print "Mstep: ",
+        num_of_var = self.mdps[agent].numberStates * self.mdps[agent].numerActions
+
+        rdiagx = np.array(sums[agent])
+        A_mat = np.array(self.As[agent])
+
+        model = madopt.BonminModel(show_solver=True)
+        xstar = dict()
+        for i in range(num_of_var):
+            xstar[i] = model.addVar(lb=0, init=config.initialxval, name="x" + str(i))
+        obj = madopt.Expr(0)
+
+        for i in range(num_of_var):
+            obj += sums[agent][i] * madopt.log2(xstar[i])
+
+        thetahat = float(config.theta) / float(config.R_max - config.R_min)
+        assert thetahat > 0
+        for i in xrange(0, len(self.constraints)):
+            estepvalue = products[i]
+            const = self.constraints[i]
+            sumallevents = 0
+            sumallevents1 = 0
+            sumallevents2 = 0
+            for eves in const.Events:
+                sumxstar = 0
+                sumx = 0
+                if eves.agent != agent:
+                    continue
+                for pevens in eves.pevents:
+                    s = pevens.state
+                    a = pevens.action
+                    sd = pevens.statedash
+
+                    if type(sumxstar) is int:
+                        sumxstar = self.mdps[agent].transition(s, a, sd) * xstar[
+                            (s.index * self.mdps[agent].numerActions) + a.index]
+                    else:
+                        sumxstar += self.mdps[agent].transition(s, a, sd) * xstar[
+                            (s.index * self.mdps[agent].numerActions) + a.index]
+
+                    if type(sumx) is int:
+                        sumx = self.mdps[agent].transition(s, a, sd) * x[agent][
+                            (s.index * self.mdps[agent].numerActions) + a.index]
+                    else:
+                        sumx += self.mdps[agent].transition(s, a, sd) * x[agent][
+                            (s.index * self.mdps[agent].numerActions) + a.index]
+
+                if type(sumallevents) is int:
+                    sumallevents = madopt.log2(sumxstar)
+                else:
+                    sumallevents += madopt.log2(sumxstar)
+
+                if type(sumallevents1) is int:
+                    sumallevents1 = (1 - sumx) * madopt.log2(1 - sumxstar)
+                else:
+                    sumallevents1 = (1 - sumx) * madopt.log2(1 - sumxstar)
+
+                if type(sumallevents2) is int:
+                    sumallevents2 = sumx * madopt.log2(sumxstar)
+                else:
+                    sumallevents2 += sumx * madopt.log2(sumxstar)
+
+            if sumallevents != 0:
+                # print estepvalue * sumallevents
+                obj += estepvalue * sumallevents
+
+            if sumallevents1 != 0:
+                # print thetahat * sumallevents1
+                obj += thetahat * sumallevents1
+
+            if sumallevents2 != 0:
+                # print thetahat * sumallevents2
+                obj += thetahat * sumallevents2
+        obj = -1*obj
+        model.setObj(obj)
+        ncon = self.mdps[agent].numberStates
+        print A_mat.shape
+        for i in xrange(0, ncon):
+            dot_prod = madopt.Expr(0)
+            for j in xrange(0, num_of_var):
+                dot_prod += A_mat[i][j] * xstar[j]
+            model.addConstr(dot_prod, lb=self.alphas[agent][i], ub=self.alphas[agent][i])
+
+        for i in xrange(0, num_of_var):
+            model.addConstr(xstar[i], lb=0.000001)
+
+        model.solve()
+        ret = []
+        for key, value in xstar.iteritems():
+            temp = [key, value]
+            ret.append(temp[1].x)
+        return ret, model.objValue
+
     def Mstep(self, sums, products, x, agent):
         print "Mstep: ",
         num_of_var = self.mdps[agent].numberStates * self.mdps[agent].numerActions
@@ -1574,24 +1097,4 @@ class TimeoutException(Exception):   # Custom exception class
 class Driver:
     #print cvxpy.installed_solvers()
     a = EMMDP(config.agents)
-
-    # for x in a.constraints:
-    #     print x.num_agent
-    #     for y in x.Events:
-    #         print y.name, y.index
-    #         for z in y.pevents:
-    #             print z.index
-    #             print z.state
-    #             print z.action
-    #             print z.statedash
-    #     print x.reward
-    #     print
-    #print a.mdps[0].states[4].transition
-    # sum = 0
-    # for i in xrange(0, a.num_agents):
-    #     sum += a.mdps[i].solveLP(config.gamma)
-    # print sum
-    #a.EMAMPL()
-    a.EMJavaAMPL()
-    #a.EMAMPL()
-    #a.EM(NonLinear=False)
+    a.EM()

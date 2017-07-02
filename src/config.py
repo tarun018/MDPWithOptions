@@ -2,8 +2,8 @@ import random, csv
 import pickle
 import math
 #flag=1 fileread
-solver = 'minos'
-flag = 1
+solver = 'bonmin'
+flag = 0
 
 timetorunsecE = 500
 timetorunsecN = 500
@@ -14,9 +14,9 @@ offset = 500
 GenRun = 1
 workDir = "/home/tarun/PycharmProjects/MDPWithOptions/"
 
-theta = 0.001
-gamma = 0.8
-initialxval = 0.001
+theta = 0.1
+gamma = 0.99
+initialxval = 0.000001
 alpha = 0.8
 delta = 0.00001
 print "theta: ", theta
