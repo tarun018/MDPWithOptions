@@ -734,9 +734,10 @@ class EMMDP:
             self.newRs.append(newR)
             self.alphas.append(self.mdps[i].start)
 
+        self.NonLinear()
         sums, products = self.generateEstep(initial_x, self.newRs)
         for i in xrange(0, self.num_agents):
-            model = madopt.BonminModel(show_solver=True)
+            model = madopt.BonminModel()
             models.append(model)
             args.append((sums, products, initial_x, i, model))
             # if config.solver == 'ipopt':
@@ -819,124 +820,6 @@ class EMMDP:
         print "Done"
         return sums, np.array(products)
 
-    def Mstep1(self, sums, products, initx, agent):
-        print "Mstep: "
-        nvar = self.mdps[agent].numberStates * self.mdps[agent].numerActions
-        x_L = np.ones((nvar), dtype=np.float_) * 0.000001
-        x_U = np.ones((nvar), dtype=np.float_) * (float(1) / float(1-config.gamma))
-
-        ncon = self.mdps[agent].numberStates
-        g_L = np.array(self.alphas[agent])
-        g_U = np.array(self.alphas[agent])
-
-        rdiagx = np.array(sums[agent])
-        A_mat = np.array(self.As[agent])
-
-        nnzj = ncon * nvar
-        nnzh = 0
-
-        def eval_f(x, user_data=None):
-            thetahat = float(config.theta) / float(config.R_max - config.R_min)
-            assert thetahat > 0
-            obj = 0
-            for i in xrange(0, len(self.constraints)):
-                estepvalue = products[i]
-                const = self.constraints[i]
-                sumallevents = 0
-                sumallevents1 = 0
-                sumallevents2 = 0
-                for eves in const.Events:
-                    sumxstar = 0
-                    sumx = 0
-                    if eves.agent != agent:
-                        continue
-                    for pevens in eves.pevents:
-                        s = pevens.state
-                        a = pevens.action
-                        sd = pevens.statedash
-
-                        if type(sumxstar) is int:
-                            sumxstar = self.mdps[agent].transition(s, a, sd) * x[(s.index * self.mdps[agent].numerActions) + a.index]
-                        else:
-                            sumxstar += self.mdps[agent].transition(s, a, sd) * x[(s.index * self.mdps[agent].numerActions) + a.index]
-
-                        if type(sumx) is int:
-                            sumx = self.mdps[agent].transition(s, a, sd) * initx[agent][(s.index * self.mdps[agent].numerActions) + a.index]
-                        else:
-                            sumx += self.mdps[agent].transition(s, a, sd) * initx[agent][(s.index * self.mdps[agent].numerActions) + a.index]
-
-                    if type(sumallevents) is int:
-                        sumallevents = np.log(sumxstar)
-                    else:
-                        sumallevents += np.log(sumxstar)
-
-                    if type(sumallevents1) is int:
-                        sumallevents1 = (1 - sumx) * np.log(1 - sumxstar)
-                    else:
-                        sumallevents1 = (1 - sumx) * np.log(1 - sumxstar)
-
-                    if type(sumallevents2) is int:
-                        sumallevents2 = sumx * np.log(sumxstar)
-                    else:
-                        sumallevents2 += sumx * np.log(sumxstar)
-
-                    #print sumxstar
-
-                if sumallevents != 0:
-                    #print estepvalue * sumallevents
-                    obj += estepvalue * sumallevents
-
-                if sumallevents1 != 0:
-                    #print thetahat * sumallevents1
-                    obj += thetahat * sumallevents1
-
-                if sumallevents2 != 0:
-                    #print thetahat * sumallevents2
-                    obj += thetahat * sumallevents2
-
-            obj += np.dot(rdiagx, np.log(np.array(x)))
-            return -1 * obj
-
-        def eval_grad_f(x, user_data=None):
-            x = algopy.UTPM.init_jacobian(x)
-            return algopy.UTPM.extract_jacobian(eval_f(x))
-
-        def eval_g(x, user_data=None):
-            out = algopy.zeros(ncon, dtype=x)
-            for i in xrange(0, ncon):
-                out[i] = np.dot(A_mat[i, :], x)
-            return out
-
-        def eval_jac_g(x, flag, user_data=None):
-            if flag:
-                rows = []
-                cols = []
-                arr = range(0, nvar)
-                for i in xrange(0, ncon):
-                    rows.extend([i] * nvar)
-                    cols.extend(arr)
-                assert len(rows) == nnzj
-                assert len(cols) == nnzj
-                return (np.array(rows), np.array(cols))
-            else:
-                x = algopy.UTPM.init_jacobian(x)
-                y = algopy.UTPM.extract_jacobian(eval_g(x))
-                return np.concatenate(np.array(y))
-
-        nlp = pyipopt.create(nvar, x_L, x_U, ncon, g_L, g_U, nnzj, nnzh, eval_f, eval_grad_f, eval_g, eval_jac_g)
-        # nlp.str_option('linear_solver', 'mumps')
-        # nlp.num_option('tol', 1e-7)
-        # nlp.int_option('print_level', 0)
-        # nlp.str_option('mehrotra_algorithm', 'yes')
-        # nlp.str_option('print_timing_statistics', 'yes')
-        #nlp.int_option('max_iter', 100)
-        nlp.str_option('mu_strategy', 'adaptive')
-        nlp.str_option('warm_start_init_point', 'yes')
-        x0 = np.array(initx[agent])
-        x, zl, zu, constraint_multipliers, obj, status = nlp.solve(x0)
-        nlp.close()
-        return x, -1 * obj
-
     def Mstep2(self, args):
         sums, products, x, agent, model = args
         print "Mstep-----------------------------------: ",
@@ -993,7 +876,7 @@ class EMMDP:
                 if type(sumallevents1) is int:
                     sumallevents1 = (1 - sumx) * madopt.log2(1 - sumxstar)
                 else:
-                    sumallevents1 = (1 - sumx) * madopt.log2(1 - sumxstar)
+                    sumallevents1 += (1 - sumx) * madopt.log2(1 - sumxstar)
 
                 if type(sumallevents2) is int:
                     sumallevents2 = sumx * madopt.log2(sumxstar)
@@ -1115,6 +998,71 @@ class EMMDP:
         prob.solve(solver=cvxpy.ECOS, verbose=False, max_iters=10000000)
         print "Done"
         return xstar.value, prob.value
+
+    def NonLinear(self):
+
+        model = madopt.BonminModel(show_solver=False)
+        var_dict = []
+        for agent in xrange(0, self.num_agents):
+            num_of_var = num_of_var = self.mdps[agent].numberStates * self.mdps[agent].numerActions
+            xstar = dict()
+            for i in range(num_of_var):
+                xstar[i] = model.addVar(lb=0, init=config.initialxval, name="x"+str(agent)+"_"+str(i))
+            var_dict.append(list(xstar.values()))
+
+        obj = madopt.Expr(0)
+
+        for i in xrange(0, self.num_agents):
+            obj += np.dot(self.Rs[i], np.array(var_dict[i]))
+
+        for i in xrange(0, len(self.constraints)):
+            cons = self.constraints[i]
+            prod = cons.reward
+            for eves in cons.Events:
+                pesum = 0
+                agent = eves.agent
+                for peves in eves.pevents:
+                    s = peves.state
+                    a = peves.action
+                    sd = peves.statedash
+                    pesum += self.mdps[agent].transition(s, a, sd) * var_dict[agent][
+                        (s.index * self.mdps[agent].numerActions) + a.index]
+                prod *= pesum
+            obj += prod
+
+        obj = -1 * obj
+        model.setObj(obj)
+
+        for agent in xrange(0, self.num_agents):
+            ncon = self.mdps[agent].numberStates
+            num_of_var = self.mdps[agent].numberStates * self.mdps[agent].numerActions
+            for i in xrange(0, ncon):
+                dot_prod = madopt.Expr(0)
+                for j in xrange(0, num_of_var):
+                    print self.As[agent][i][j]
+                    print var_dict[agent][j]
+                    dot_prod += self.As[agent][i][j] * var_dict[agent][j]
+                model.addConstr(dot_prod, lb=self.alphas[agent][i], ub=self.alphas[agent][i])
+
+        for agent in xrange(0, self.num_agents):
+            for var in var_dict[agent]:
+                model.addConstr(var, lb=0.000001)
+
+        model.solve()
+        print model.stat
+        if model.has_solution:
+            print(model.nx, model.ng, model.objValue, model.stat)
+
+        ret = []
+        for agent in xrange(0, self.num_agents):
+            lst = []
+            for value in var_dict[agent]:
+                lst.append(value.x)
+            ret.append(lst)
+
+        ret = np.array(ret)
+        print self.objective(ret, self.Rs)
+
 
 class TimeoutException(Exception):   # Custom exception class
     pass
