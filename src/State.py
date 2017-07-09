@@ -721,6 +721,11 @@ class EMMDP:
         pvals = []
         num_iter = 1
 
+        noOfProcess = multiprocessing.cpu_count()
+        pool = multiprocessing.pool.ThreadPool(noOfProcess)
+        args = []
+        models = []
+
         print "Iteration: " + str(num_iter)
         for i in xrange(0, self.num_agents):
             A, R, newR = self.mdps[i].generateLPAc(config.gamma, genA=True)
@@ -731,32 +736,50 @@ class EMMDP:
 
         sums, products = self.generateEstep(initial_x, self.newRs)
         for i in xrange(0, self.num_agents):
-            if config.solver == 'ipopt':
-                xstar_val, prob_val = self.Mstep1(sums, products, initial_x, i)
-            elif config.solver == 'cvxpy':
-                xstar_val, prob_val = self.Mstep(sums, products, initial_x, i)
-            elif config.solver == 'bonmin':
-                xstar_val, prob_val = self.Mstep2(sums, products, initial_x, i)
-            xvals.append(xstar_val)
-            pvals.append(prob_val)
+            model = madopt.BonminModel(show_solver=True)
+            models.append(model)
+            args.append((sums, products, initial_x, i, model))
+            # if config.solver == 'ipopt':
+            #     xstar_val = self.Mstep1(sums, products, initial_x, i)
+            # elif config.solver == 'cvxpy':
+            #     xstar_val = self.Mstep(sums, products, initial_x, i)
+            # elif config.solver == 'bonmin':
+            #     xstar_val = self.Mstep2(sums, products, initial_x, i)
+
+        try:
+            pr = pool.map_async(self.Mstep2, args)
+            rss = pr.get(timeout=50)
+            xvals.extend(rss)
+        except multiprocessing.TimeoutError as e:
+            print e
+            print("Process timed out")
+
         o = self.objective(xvals, self.Rs)
         print "Objective: ", o
 
         while (True):
             num_iter += 1
             print "Iteration: " + str(num_iter)
+            args = []
             xvalues = []
             pvalues = []
             sums, products = self.generateEstep(xvals, self.newRs)
             for i in xrange(0, self.num_agents):
-                if config.solver == 'ipopt':
-                    xstar_val, prob_val = self.Mstep1(sums, products, xvals, i)
-                elif config.solver == 'cvxpy':
-                    xstar_val, prob_val = self.Mstep(sums, products, xvals, i)
-                elif config.solver == 'bonmin':
-                    xstar_val, prob_val = self.Mstep2(sums, products, initial_x, i)
-                xvalues.append(xstar_val)
-                pvalues.append(prob_val)
+                args.append((sums, products, xvals, i, models[i]))
+                # if config.solver == 'ipopt':
+                #     xstar_val = self.Mstep1(sums, products, xvals, i)
+                # elif config.solver == 'cvxpy':
+                #     xstar_val = self.Mstep(sums, products, xvals, i)
+                # elif config.solver == 'bonmin':
+                #     xstar_val = self.Mstep2(sums, products, xvals, i)
+
+            try:
+                pr = pool.map_async(self.Mstep2, args)
+                rss = pr.get(timeout=50)
+                xvalues.extend(rss)
+            except multiprocessing.TimeoutError as e:
+                print e
+                print("Process timed out")
             prevobj = self.objective(xvals, self.Rs)
             print "PrevObj: ", prevobj
             xvals = xvalues
@@ -765,6 +788,8 @@ class EMMDP:
             print "NewObj: ", newobj
             if abs(newobj - prevobj) < config.delta:
                 print newobj
+                pool.close()
+                pool.terminate()
                 break
 
     def generateEstep(self, x, newRs):
@@ -912,14 +937,14 @@ class EMMDP:
         nlp.close()
         return x, -1 * obj
 
-    def Mstep2(self, sums, products, x, agent):
-        print "Mstep: ",
+    def Mstep2(self, args):
+        sums, products, x, agent, model = args
+        print "Mstep-----------------------------------: ",
         num_of_var = self.mdps[agent].numberStates * self.mdps[agent].numerActions
 
         rdiagx = np.array(sums[agent])
         A_mat = np.array(self.As[agent])
 
-        model = madopt.BonminModel(show_solver=True)
         xstar = dict()
         for i in range(num_of_var):
             xstar[i] = model.addVar(lb=0, init=config.initialxval, name="x" + str(i))
@@ -989,7 +1014,7 @@ class EMMDP:
         obj = -1*obj
         model.setObj(obj)
         ncon = self.mdps[agent].numberStates
-        print A_mat.shape
+
         for i in xrange(0, ncon):
             dot_prod = madopt.Expr(0)
             for j in xrange(0, num_of_var):
@@ -1004,7 +1029,7 @@ class EMMDP:
         for key, value in xstar.iteritems():
             temp = [key, value]
             ret.append(temp[1].x)
-        return ret, model.objValue
+        return ret
 
     def Mstep(self, sums, products, x, agent):
         print "Mstep: ",

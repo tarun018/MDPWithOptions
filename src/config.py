@@ -27,11 +27,11 @@ print "delta: ", delta
 
 if flag == 0:
 
-    agents = 2
+    agents = 25
     nPrivatePerAgent = 1
-    nShared = 1
-    minSharing = 2
-    maxSharing = 2
+    nShared = 10
+    minSharing = 4
+    maxSharing = 4
     minT = 6
     maxT = 6
     minTaction = 3
